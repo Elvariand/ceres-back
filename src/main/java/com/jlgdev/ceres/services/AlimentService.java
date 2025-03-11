@@ -22,12 +22,12 @@ public class AlimentService {
         return alimentRepository.findById(id);
     }
 
-    public Iterable<Aliment> getAlimentByName(String name) {
-        return alimentRepository.findByName(name);
+    public Iterable<Aliment> getAlimentByNameEn(String nameEn) {
+        return alimentRepository.findByNameEn(nameEn);
     }
 
-    public Iterable<Aliment> getAlimentByNameContaining(String name) {
-        return alimentRepository.findByNameContaining(name);
+    public Iterable<Aliment> getAlimentByNameEnContaining(String nameEn) {
+        return alimentRepository.findByNameEnContaining(nameEn);
     }
 
     public Iterable<Aliment> getAlimentByAisle(String aisle) {

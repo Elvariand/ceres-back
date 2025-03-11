@@ -18,7 +18,9 @@ public class Aliment {
 
     @JsonProperty("name")
     @Indexed(unique = true, direction = IndexDirection.ASCENDING)
-    private String name;
+    private String nameEn;
+
+    private String nameFr;
 
     @JsonProperty("aisle")
     private String aisle;
@@ -40,12 +42,20 @@ public class Aliment {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getNameEn() {
+        return nameEn;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNameEn(String nameEn) {
+        this.nameEn = nameEn;
+    }
+
+    public String getNameFr() {
+        return nameFr;
+    }
+
+    public void setNameFr(String nameFr) {
+        this.nameFr = nameFr;
     }
 
     public String getAisle() {
@@ -80,15 +90,14 @@ public class Aliment {
         this.categoryPath = categoryPath;
     }
 
-    public void addCategoryPath(String categoryToAdd) {
-        this.categoryPath.add(categoryToAdd);
-    }
-
     public Aliment() {
     }
 
-    public Aliment(String name, String aisle, String image, Nutrition nutrition, Set<String> categoryPath) {
-        this.name = name;
+    public Aliment(String id, String nameEn, String nameFr, String aisle, String image, Nutrition nutrition,
+            Set<String> categoryPath) {
+        this.id = id;
+        this.nameEn = nameEn;
+        this.nameFr = nameFr;
         this.aisle = aisle;
         this.image = image;
         this.nutrition = nutrition;
@@ -100,7 +109,8 @@ public class Aliment {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((nameEn == null) ? 0 : nameEn.hashCode());
+        result = prime * result + ((nameFr == null) ? 0 : nameFr.hashCode());
         result = prime * result + ((aisle == null) ? 0 : aisle.hashCode());
         result = prime * result + ((image == null) ? 0 : image.hashCode());
         result = prime * result + ((nutrition == null) ? 0 : nutrition.hashCode());
@@ -122,10 +132,15 @@ public class Aliment {
                 return false;
         } else if (!id.equals(other.id))
             return false;
-        if (name == null) {
-            if (other.name != null)
+        if (nameEn == null) {
+            if (other.nameEn != null)
                 return false;
-        } else if (!name.equals(other.name))
+        } else if (!nameEn.equals(other.nameEn))
+            return false;
+        if (nameFr == null) {
+            if (other.nameFr != null)
+                return false;
+        } else if (!nameFr.equals(other.nameFr))
             return false;
         if (aisle == null) {
             if (other.aisle != null)
@@ -152,8 +167,7 @@ public class Aliment {
 
     @Override
     public String toString() {
-        return "Aliment [id=" + id + ", name=" + name + ", aisle=" + aisle + ", image=" + image + ", nutrition="
-                + nutrition + ", categoryPath=" + categoryPath + "]";
+        return "Aliment [id=" + id + ", nameEn=" + nameEn + ", nameFr=" + nameFr + ", aisle=" + aisle + ", image="
+                + image + ", nutrition=" + nutrition + ", categoryPath=" + categoryPath + "]";
     }
-
 }

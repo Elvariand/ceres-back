@@ -12,8 +12,8 @@ public interface AlimentRepository extends MongoRepository<Aliment, String>{
 
     @SuppressWarnings("null")
     Optional<Aliment> findById(@NonNull String id);
-    List<Aliment> findByName(String name);
-    List<Aliment> findByNameContaining(String name);
+    List<Aliment> findByNameEn(String nameEn);
+    List<Aliment> findByNameEnContaining(String nameEn);
     List<Aliment> findByAisle(String aisle);
     List<Aliment> findByAisleContaining(String aisle);
     List<Aliment> findByCategoryPath(String categoryPath);

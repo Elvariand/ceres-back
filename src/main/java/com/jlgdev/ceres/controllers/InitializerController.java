@@ -17,15 +17,22 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jlgdev.ceres.models.mongo.Aliment;
+import com.jlgdev.ceres.models.mongo.Ingredient;
+import com.jlgdev.ceres.models.mongo.Recipe;
+import com.jlgdev.ceres.models.mongo.RecipeTransfer;
 import com.jlgdev.ceres.services.AlimentService;
+import com.jlgdev.ceres.services.RecipeService;
 
 @RestController
 @RequestMapping("/initialize")
 // @Transactional
-public class AlimentController {
+public class InitializerController {
 
     @Autowired
     private AlimentService alimentService;
+
+    @Autowired
+    private RecipeService recipeService;
 
     Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -35,7 +42,7 @@ public class AlimentController {
         return alimentService.getAllAliments();
     }
 
-    @GetMapping("/add/{id}")
+    @GetMapping("aliment/add/{id}")
     public ResponseEntity<Aliment> addAliment(@PathVariable String id) {
         try {
             RestClient defaultClient = RestClient.create();
@@ -69,7 +76,7 @@ public class AlimentController {
         }
     }
 
-    @GetMapping("/addAlimentFrom/{index}")
+    @GetMapping("aliment/addBulkFrom/{index}")
     public ResponseEntity<Aliment> addMultipleAliments(@PathVariable int index) throws InterruptedException {
         boolean canContinue = true;
         int[] idsFromCsv = { 1002002, 11482, 6979, 19912, 15117, 93606, 1002050, 93740, 93607, 12061, 10014534,
@@ -163,7 +170,7 @@ public class AlimentController {
                 } catch (Exception e) {
                     System.err.println("error");
                 }
-            } while (response.contains("does not exist") || response.length()<15);
+            } while (response.contains("does not exist") || response.length() < 15);
 
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -188,4 +195,87 @@ public class AlimentController {
         return null;
     }
 
+    // @GetMapping("recipe/add/{id}")
+    // public ResponseEntity<Recipe> addRecipe(@PathVariable String id) {
+    // try {
+    // RestClient defaultClient = RestClient.create();
+
+    // String response = defaultClient.get().uri(
+    // "https://api.spoonacular.com/recipes/complexSearch?apiKey=6db25c150fbc44eebca76e569f90defc&addRecipeInformation=true&addRecipeInstructions=true&addRecipeNutrition=true&number=100",
+    // id)
+    // .retrieve()
+    // .body(String.class);
+
+    // ObjectMapper mapper = new ObjectMapper();
+    // mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    // Recipe Recipe = new Recipe();
+    // try {
+    // Recipe = mapper.readValue(response, Recipe.class);
+    // } catch (JsonMappingException e) {
+    // e.printStackTrace();
+    // } catch (JsonProcessingException e) {
+    // e.printStackTrace();
+    // }
+    // if (!Recipe.equals(new Recipe())) {
+    // System.out.println("je proc 1");
+    // return new ResponseEntity<Recipe>(recipeService.save(Recipe), HttpStatus.OK);
+    // } else {
+    // return null;
+    // }
+    // } catch (Exception e) {
+    // System.out.println("je proc 4");
+    // e.printStackTrace();
+    // return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    // }
+    // }
+
+    @GetMapping("recipe/addBulkFrom/{index}")
+    // public ResponseEntity<Recipe> addMultipleRecipes(@PathVariable int index)
+    // throws InterruptedException {
+    public String addMultipleRecipes(@PathVariable int index) throws InterruptedException {
+        boolean canContinue = true;
+
+        // while (canContinue) {
+        // Thread.sleep(1001);
+        RestClient defaultClient = RestClient.create();
+        String response = defaultClient.get().uri(
+                "https://api.spoonacular.com/recipes/complexSearch?apiKey=6db25c150fbc44eebca76e569f90defc&addRecipeInformation=true&addRecipeInstructions=true&addRecipeNutrition=true&offset={index}&number=1",
+                index)
+                .retrieve()
+                .body(String.class);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        Recipe recipe = new Recipe();
+        RecipeTransfer recipeTransfer = new RecipeTransfer();
+        // System.out.println(response);
+        // return response;
+        try {
+            recipeTransfer = mapper.readValue(response, RecipeTransfer.class);
+            System.out.println(recipeTransfer);
+            for (Recipe result : recipeTransfer.getResults()) {
+                recipe = result;
+
+                if (recipe.getIngredients() != null) {
+                    for (Ingredient ingredient : recipe.getIngredients()) {
+                        ingredient.setAliment(
+                                alimentService.getAlimentById(ingredient.getIdAliment()).orElse(new Aliment()));
+                    }
+                }
+                if (!recipe.equals(new Recipe())) {
+                    recipeService.save(recipe);
+                } else {
+                    canContinue = false;
+                    // return new ResponseEntity<Recipe>(recipeService.save(recipe),
+                    // HttpStatus.CONFLICT);
+                }
+            }
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        // }
+        return response;
+    }
 }
