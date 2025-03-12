@@ -14,7 +14,7 @@ public class RecipeJTO {
     private String title;
 
     @JsonProperty("nutrition")
-    private List<NutritionRecipeJTO> nutrition;
+    private NutritionRecipeJTO nutrition;
 
     @JsonProperty("dishTypes")
     @JsonAlias({"cuisines","diets","occasions"})
@@ -176,18 +176,18 @@ public class RecipeJTO {
         this.spoonacularURL = spoonacularURL;
     }
 
-    public List<NutritionRecipeJTO> getNutrition() {
+    public NutritionRecipeJTO getNutrition() {
         return nutrition;
     }
 
-    public void setNutrition(List<NutritionRecipeJTO> nutrition) {
+    public void setNutrition(NutritionRecipeJTO nutrition) {
         this.nutrition = nutrition;
     }
 
     public RecipeJTO() {
     }
 
-    public RecipeJTO(String id, String title, List<NutritionRecipeJTO> nutrition, List<String> tags, boolean vegetarian,
+    public RecipeJTO(String id, String title, NutritionRecipeJTO nutrition, List<String> tags, boolean vegetarian,
             boolean vegan, boolean glutenFree, boolean dairyFree, int preparationMinutes, int cookingMinutes, int likes,
             int healthScore, String image, String imageType, String sourceURL, String spoonacularURL) {
         this.id = id;

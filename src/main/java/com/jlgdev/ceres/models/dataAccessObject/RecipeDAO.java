@@ -9,7 +9,9 @@ public class RecipeDAO {
 
     private String id;
 
-    private String title;
+    private String titleEn;
+
+    private String titleFr;
 
     private List<IngredientDAO> ingredients;
 
@@ -49,12 +51,20 @@ public class RecipeDAO {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getTitleEn() {
+        return titleEn;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setTitleEn(String titleEn) {
+        this.titleEn = titleEn;
+    }
+
+    public String getTitleFr() {
+        return titleFr;
+    }
+
+    public void setTitleFr(String titleFr) {
+        this.titleFr = titleFr;
     }
 
     public List<IngredientDAO> getIngredients() {
@@ -172,10 +182,13 @@ public class RecipeDAO {
     public RecipeDAO() {
     }
 
-    public RecipeDAO(String title, List<IngredientDAO> ingredients, List<String> tags, boolean vegetarian, boolean vegan,
-            boolean glutenFree, boolean dairyFree, int preparationMinutes, int cookingMinutes, int likes,
-            int healthScore, String image, String imageType, String sourceURL, String spoonacularURL) {
-        this.title = title;
+    public RecipeDAO(String id, String titleEn, String titleFr, List<IngredientDAO> ingredients, List<String> tags,
+            boolean vegetarian, boolean vegan, boolean glutenFree, boolean dairyFree, int preparationMinutes,
+            int cookingMinutes, int likes, int healthScore, String image, String imageType, String sourceURL,
+            String spoonacularURL) {
+        this.id = id;
+        this.titleEn = titleEn;
+        this.titleFr = titleFr;
         this.ingredients = ingredients;
         this.tags = tags;
         this.vegetarian = vegetarian;
@@ -197,7 +210,8 @@ public class RecipeDAO {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((title == null) ? 0 : title.hashCode());
+        result = prime * result + ((titleEn == null) ? 0 : titleEn.hashCode());
+        result = prime * result + ((titleFr == null) ? 0 : titleFr.hashCode());
         result = prime * result + ((ingredients == null) ? 0 : ingredients.hashCode());
         result = prime * result + ((tags == null) ? 0 : tags.hashCode());
         result = prime * result + (vegetarian ? 1231 : 1237);
@@ -229,10 +243,15 @@ public class RecipeDAO {
                 return false;
         } else if (!id.equals(other.id))
             return false;
-        if (title == null) {
-            if (other.title != null)
+        if (titleEn == null) {
+            if (other.titleEn != null)
                 return false;
-        } else if (!title.equals(other.title))
+        } else if (!titleEn.equals(other.titleEn))
+            return false;
+        if (titleFr == null) {
+            if (other.titleFr != null)
+                return false;
+        } else if (!titleFr.equals(other.titleFr))
             return false;
         if (ingredients == null) {
             if (other.ingredients != null)
@@ -285,11 +304,11 @@ public class RecipeDAO {
 
     @Override
     public String toString() {
-        return "Recipe [id=" + id + ", title=" + title + ", ingredients=" + ingredients + ", tags=" + tags
-                + ", vegetarian=" + vegetarian + ", vegan=" + vegan + ", glutenFree=" + glutenFree + ", dairyFree="
-                + dairyFree + ", preparationMinutes=" + preparationMinutes + ", cookingMinutes=" + cookingMinutes
-                + ", likes=" + likes + ", healthScore=" + healthScore + ", image=" + image + ", imageType=" + imageType
-                + ", sourceURL=" + sourceURL + ", spoonacularURL=" + spoonacularURL + "]";
+        return "RecipeDAO [id=" + id + ", titleEn=" + titleEn + ", titleFr=" + titleFr + ", ingredients=" + ingredients
+                + ", tags=" + tags + ", vegetarian=" + vegetarian + ", vegan=" + vegan + ", glutenFree=" + glutenFree
+                + ", dairyFree=" + dairyFree + ", preparationMinutes=" + preparationMinutes + ", cookingMinutes="
+                + cookingMinutes + ", likes=" + likes + ", healthScore=" + healthScore + ", image=" + image
+                + ", imageType=" + imageType + ", sourceURL=" + sourceURL + ", spoonacularURL=" + spoonacularURL + "]";
     }
 
     

@@ -16,7 +16,7 @@ import com.jlgdev.ceres.models.jsonToObject.NutrientJTO;
 import com.jlgdev.ceres.models.jsonToObject.NutritionJTO;
 import com.jlgdev.ceres.models.jsonToObject.WeightPerServingJTO;
 
-public abstract class Mapper {
+public abstract class MapperAliment {
 
     public static AlimentDAO mapAliment(AlimentJTO alimentJTO) {
 
@@ -26,13 +26,13 @@ public abstract class Mapper {
         alimentDAO.setNameEn(alimentJTO.getName());
         alimentDAO.setAisle(alimentJTO.getAisle());
         alimentDAO.setImage(alimentJTO.getImage());
-        alimentDAO.setNutrition(mapNutrition(alimentJTO.getNutrition()));
+        alimentDAO.setNutrition(mapNutritionAliment(alimentJTO.getNutrition()));
         alimentDAO.setCategoryPath(alimentJTO.getCategoryPath());
 
-        return null;
+        return alimentDAO;
     }
 
-    public static NutritionDAO mapNutrition(NutritionJTO nutritionJTO) {
+    public static NutritionDAO mapNutritionAliment(NutritionJTO nutritionJTO) {
     
         NutritionDAO nutritionDAO = new NutritionDAO();
 

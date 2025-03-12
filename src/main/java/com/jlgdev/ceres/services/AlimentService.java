@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jlgdev.ceres.models.jsonToObject.AlimentJTO;
+import com.jlgdev.ceres.models.dataAccessObject.AlimentDAO;
 import com.jlgdev.ceres.repositories.AlimentRepository;
 
 @Service
@@ -14,39 +14,39 @@ public class AlimentService {
     @Autowired
     private AlimentRepository alimentRepository;
 
-    public Iterable<AlimentJTO> getAllAliments() {
+    public Iterable<AlimentDAO> getAllAliments() {
         return alimentRepository.findAll();
     }
 
-    public Optional<AlimentJTO> getAlimentById(String id) {
+    public Optional<AlimentDAO> getAlimentById(String id) {
         return alimentRepository.findById(id);
     }
 
-    public Iterable<AlimentJTO> getAlimentByNameEn(String nameEn) {
+    public Iterable<AlimentDAO> getAlimentByNameEn(String nameEn) {
         return alimentRepository.findByNameEn(nameEn);
     }
 
-    public Iterable<AlimentJTO> getAlimentByNameEnContaining(String nameEn) {
+    public Iterable<AlimentDAO> getAlimentByNameEnContaining(String nameEn) {
         return alimentRepository.findByNameEnContaining(nameEn);
     }
 
-    public Iterable<AlimentJTO> getAlimentByAisle(String aisle) {
+    public Iterable<AlimentDAO> getAlimentByAisle(String aisle) {
         return alimentRepository.findByAisle(aisle);
     }
 
-    public Iterable<AlimentJTO> getAlimentByAisleContaining(String aisle) {
+    public Iterable<AlimentDAO> getAlimentByAisleContaining(String aisle) {
         return alimentRepository.findByAisleContaining(aisle);
     }
 
-    public Iterable<AlimentJTO> getAlimentByCategoryPath(String categoryPath) {
+    public Iterable<AlimentDAO> getAlimentByCategoryPath(String categoryPath) {
         return alimentRepository.findByCategoryPath(categoryPath);
     }
 
-    public Iterable<AlimentJTO> getAlimentByCategoryPathContaining(String categoryPath) {
+    public Iterable<AlimentDAO> getAlimentByCategoryPathContaining(String categoryPath) {
         return alimentRepository.findByCategoryPathContaining(categoryPath);
     }
 
-    public AlimentJTO save(AlimentJTO aliment) {
+    public AlimentDAO save(AlimentDAO aliment) {
         return alimentRepository.save(aliment);
     }
 }
