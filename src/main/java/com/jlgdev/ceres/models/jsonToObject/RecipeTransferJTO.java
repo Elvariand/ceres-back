@@ -1,19 +1,21 @@
-package com.jlgdev.ceres.models.mongo;
+package com.jlgdev.ceres.models.jsonToObject;
 
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class RecipeTransfer {
+public class RecipeTransferJTO {
 
     @JsonProperty("results")
-    private List<Recipe> results;
+    private List<RecipeJTO> results;
 
-    public List<Recipe> getResults() {
+
+    
+    public List<RecipeJTO> getResults() {
         return results;
     }
 
-    public void setResults(List<Recipe> results) {
+    public void setResults(List<RecipeJTO> results) {
         this.results = results;
     }
 
@@ -33,7 +35,7 @@ public class RecipeTransfer {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        RecipeTransfer other = (RecipeTransfer) obj;
+        RecipeTransferJTO other = (RecipeTransferJTO) obj;
         if (results == null) {
             if (other.results != null)
                 return false;
@@ -47,10 +49,10 @@ public class RecipeTransfer {
         return "RecipeTransfer [results=" + results + "]";
     }
 
-    public RecipeTransfer() {
+    public RecipeTransferJTO() {
     }
 
-    public RecipeTransfer(List<Recipe> results) {
+    public RecipeTransferJTO(List<RecipeJTO> results) {
         this.results = results;
     }
 }

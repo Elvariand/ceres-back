@@ -6,16 +6,16 @@ import java.util.Optional;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.lang.NonNull;
 
-import com.jlgdev.ceres.models.mongo.Aliment;
+import com.jlgdev.ceres.models.jsonToObject.AlimentJTO;
 
-public interface AlimentRepository extends MongoRepository<Aliment, String>{
+public interface AlimentRepository extends MongoRepository<AlimentJTO, String>{
 
     @SuppressWarnings("null")
-    Optional<Aliment> findById(@NonNull String id);
-    List<Aliment> findByNameEn(String nameEn);
-    List<Aliment> findByNameEnContaining(String nameEn);
-    List<Aliment> findByAisle(String aisle);
-    List<Aliment> findByAisleContaining(String aisle);
-    List<Aliment> findByCategoryPath(String categoryPath);
-    List<Aliment> findByCategoryPathContaining(String categoryPath);
+    Optional<AlimentJTO> findById(@NonNull String id);
+    List<AlimentJTO> findByNameEn(String nameEn);
+    List<AlimentJTO> findByNameEnContaining(String nameEn);
+    List<AlimentJTO> findByAisle(String aisle);
+    List<AlimentJTO> findByAisleContaining(String aisle);
+    List<AlimentJTO> findByCategoryPath(String categoryPath);
+    List<AlimentJTO> findByCategoryPathContaining(String categoryPath);
 }

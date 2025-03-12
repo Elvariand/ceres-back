@@ -1,14 +1,11 @@
-package com.jlgdev.ceres.models.mongo;
+package com.jlgdev.ceres.models.jsonToObject;
 
 import java.util.List;
-
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Document("recipes")
-public class Recipe {
+public class RecipeJTO {
 
     @JsonProperty("id")
     private String id;
@@ -16,8 +13,8 @@ public class Recipe {
     @JsonProperty("title")
     private String title;
 
-    @JsonProperty("ingredients")
-    private List<Ingredient> ingredients;
+    @JsonProperty("nutrition")
+    private List<NutritionRecipeJTO> nutrition;
 
     @JsonProperty("dishTypes")
     @JsonAlias({"cuisines","diets","occasions"})
@@ -53,10 +50,10 @@ public class Recipe {
     @JsonProperty("imageType")
     private String imageType;
     
-    @JsonProperty("sourceURL")
+    @JsonProperty("sourceUrl")
     private String sourceURL;
     
-    @JsonProperty("spoonacularURL")
+    @JsonProperty("spoonacularSourceUrl")
     private String spoonacularURL;
 
     public String getId() {
@@ -73,14 +70,6 @@ public class Recipe {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public List<Ingredient> getIngredients() {
-        return ingredients;
-    }
-
-    public void setIngredients(List<Ingredient> ingredients) {
-        this.ingredients = ingredients;
     }
 
     public List<String> getTags() {
@@ -187,14 +176,23 @@ public class Recipe {
         this.spoonacularURL = spoonacularURL;
     }
 
-    public Recipe() {
+    public List<NutritionRecipeJTO> getNutrition() {
+        return nutrition;
     }
 
-    public Recipe(String title, List<Ingredient> ingredients, List<String> tags, boolean vegetarian, boolean vegan,
-            boolean glutenFree, boolean dairyFree, int preparationMinutes, int cookingMinutes, int likes,
+    public void setNutrition(List<NutritionRecipeJTO> nutrition) {
+        this.nutrition = nutrition;
+    }
+
+    public RecipeJTO() {
+    }
+
+    public RecipeJTO(String id, String title, List<NutritionRecipeJTO> nutrition, List<String> tags, boolean vegetarian,
+            boolean vegan, boolean glutenFree, boolean dairyFree, int preparationMinutes, int cookingMinutes, int likes,
             int healthScore, String image, String imageType, String sourceURL, String spoonacularURL) {
+        this.id = id;
         this.title = title;
-        this.ingredients = ingredients;
+        this.nutrition = nutrition;
         this.tags = tags;
         this.vegetarian = vegetarian;
         this.vegan = vegan;
@@ -211,99 +209,8 @@ public class Recipe {
     }
 
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((title == null) ? 0 : title.hashCode());
-        result = prime * result + ((ingredients == null) ? 0 : ingredients.hashCode());
-        result = prime * result + ((tags == null) ? 0 : tags.hashCode());
-        result = prime * result + (vegetarian ? 1231 : 1237);
-        result = prime * result + (vegan ? 1231 : 1237);
-        result = prime * result + (glutenFree ? 1231 : 1237);
-        result = prime * result + (dairyFree ? 1231 : 1237);
-        result = prime * result + preparationMinutes;
-        result = prime * result + cookingMinutes;
-        result = prime * result + likes;
-        result = prime * result + healthScore;
-        result = prime * result + ((image == null) ? 0 : image.hashCode());
-        result = prime * result + ((imageType == null) ? 0 : imageType.hashCode());
-        result = prime * result + ((sourceURL == null) ? 0 : sourceURL.hashCode());
-        result = prime * result + ((spoonacularURL == null) ? 0 : spoonacularURL.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Recipe other = (Recipe) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        if (title == null) {
-            if (other.title != null)
-                return false;
-        } else if (!title.equals(other.title))
-            return false;
-        if (ingredients == null) {
-            if (other.ingredients != null)
-                return false;
-        } else if (!ingredients.equals(other.ingredients))
-            return false;
-        if (tags == null) {
-            if (other.tags != null)
-                return false;
-        } else if (!tags.equals(other.tags))
-            return false;
-        if (vegetarian != other.vegetarian)
-            return false;
-        if (vegan != other.vegan)
-            return false;
-        if (glutenFree != other.glutenFree)
-            return false;
-        if (dairyFree != other.dairyFree)
-            return false;
-        if (preparationMinutes != other.preparationMinutes)
-            return false;
-        if (cookingMinutes != other.cookingMinutes)
-            return false;
-        if (likes != other.likes)
-            return false;
-        if (healthScore != other.healthScore)
-            return false;
-        if (image == null) {
-            if (other.image != null)
-                return false;
-        } else if (!image.equals(other.image))
-            return false;
-        if (imageType == null) {
-            if (other.imageType != null)
-                return false;
-        } else if (!imageType.equals(other.imageType))
-            return false;
-        if (sourceURL == null) {
-            if (other.sourceURL != null)
-                return false;
-        } else if (!sourceURL.equals(other.sourceURL))
-            return false;
-        if (spoonacularURL == null) {
-            if (other.spoonacularURL != null)
-                return false;
-        } else if (!spoonacularURL.equals(other.spoonacularURL))
-            return false;
-        return true;
-    }
-
-    @Override
     public String toString() {
-        return "Recipe [id=" + id + ", title=" + title + ", ingredients=" + ingredients + ", tags=" + tags
+        return "RecipeJTO [id=" + id + ", title=" + title + ", nutrition=" + nutrition + ", tags=" + tags
                 + ", vegetarian=" + vegetarian + ", vegan=" + vegan + ", glutenFree=" + glutenFree + ", dairyFree="
                 + dairyFree + ", preparationMinutes=" + preparationMinutes + ", cookingMinutes=" + cookingMinutes
                 + ", likes=" + likes + ", healthScore=" + healthScore + ", image=" + image + ", imageType=" + imageType

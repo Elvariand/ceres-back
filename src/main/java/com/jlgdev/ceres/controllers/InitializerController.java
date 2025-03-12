@@ -16,10 +16,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jlgdev.ceres.models.mongo.Aliment;
-import com.jlgdev.ceres.models.mongo.Ingredient;
-import com.jlgdev.ceres.models.mongo.Recipe;
-import com.jlgdev.ceres.models.mongo.RecipeTransfer;
+import com.jlgdev.ceres.models.jsonToObject.AlimentJTO;
+import com.jlgdev.ceres.models.jsonToObject.RecipeJTO;
+import com.jlgdev.ceres.models.jsonToObject.RecipeTransferJTO;
 import com.jlgdev.ceres.services.AlimentService;
 import com.jlgdev.ceres.services.RecipeService;
 
@@ -37,13 +36,13 @@ public class InitializerController {
     Logger log = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping("/list")
-    public @ResponseBody Iterable<Aliment> getAllAliments() {
+    public @ResponseBody Iterable<AlimentJTO> getAllAliments() {
         log.info("\n---------------------------- Appel à getAllAliments()\n");
         return alimentService.getAllAliments();
     }
 
     @GetMapping("aliment/add/{id}")
-    public ResponseEntity<Aliment> addAliment(@PathVariable String id) {
+    public ResponseEntity<AlimentJTO> addAliment(@PathVariable String id) {
         try {
             RestClient defaultClient = RestClient.create();
 
@@ -55,17 +54,17 @@ public class InitializerController {
 
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            Aliment aliment = new Aliment();
+            AlimentJTO aliment = new AlimentJTO();
             try {
-                aliment = mapper.readValue(response, Aliment.class);
+                aliment = mapper.readValue(response, AlimentJTO.class);
             } catch (JsonMappingException e) {
                 e.printStackTrace();
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
-            if (!aliment.equals(new Aliment())) {
+            if (!aliment.equals(new AlimentJTO())) {
                 System.out.println("je proc 1");
-                return new ResponseEntity<Aliment>(alimentService.save(aliment), HttpStatus.OK);
+                return new ResponseEntity<AlimentJTO>(alimentService.save(aliment), HttpStatus.OK);
             } else {
                 return null;
             }
@@ -77,7 +76,7 @@ public class InitializerController {
     }
 
     @GetMapping("aliment/addBulkFrom/{index}")
-    public ResponseEntity<Aliment> addMultipleAliments(@PathVariable int index) throws InterruptedException {
+    public ResponseEntity<AlimentJTO> addMultipleAliments(@PathVariable int index) throws InterruptedException {
         boolean canContinue = true;
         int[] idsFromCsv = { 1002002, 11482, 6979, 19912, 15117, 93606, 1002050, 93740, 93607, 12061, 10014534,
                 10211962, 15001, 7064, 18087, 10020420, 93653, 9003, 19294, 1009016, 9016, 1042035, 19719, 9021,
@@ -174,21 +173,21 @@ public class InitializerController {
 
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            Aliment aliment = new Aliment();
+            AlimentJTO aliment = new AlimentJTO();
             try {
-                aliment = mapper.readValue(response, Aliment.class);
+                aliment = mapper.readValue(response, AlimentJTO.class);
             } catch (JsonMappingException e) {
                 e.printStackTrace();
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
-            if (!aliment.equals(new Aliment())) {
+            if (!aliment.equals(new AlimentJTO())) {
                 // return new ResponseEntity<Aliment>(alimentService.save(aliment),
                 // HttpStatus.OK);
                 alimentService.save(aliment);
             } else {
                 canContinue = false;
-                return new ResponseEntity<Aliment>(alimentService.save(aliment), HttpStatus.CONFLICT);
+                return new ResponseEntity<AlimentJTO>(alimentService.save(aliment), HttpStatus.CONFLICT);
 
             }
         }
@@ -246,23 +245,17 @@ public class InitializerController {
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        Recipe recipe = new Recipe();
-        RecipeTransfer recipeTransfer = new RecipeTransfer();
+        RecipeJTO recipe = new RecipeJTO();
+        RecipeTransferJTO recipeTransfer = new RecipeTransferJTO();
         // System.out.println(response);
         // return response;
         try {
-            recipeTransfer = mapper.readValue(response, RecipeTransfer.class);
+            recipeTransfer = mapper.readValue(response, RecipeTransferJTO.class);
             System.out.println(recipeTransfer);
-            for (Recipe result : recipeTransfer.getResults()) {
+            for (RecipeJTO result : recipeTransfer.getResults()) {
                 recipe = result;
 
-                if (recipe.getIngredients() != null) {
-                    for (Ingredient ingredient : recipe.getIngredients()) {
-                        ingredient.setAliment(
-                                alimentService.getAlimentById(ingredient.getIdAliment()).orElse(new Aliment()));
-                    }
-                }
-                if (!recipe.equals(new Recipe())) {
+                if (!recipe.equals(new RecipeJTO())) {
                     recipeService.save(recipe);
                 } else {
                     canContinue = false;

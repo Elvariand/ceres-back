@@ -1,15 +1,9 @@
-package com.jlgdev.ceres.models.mongo;
-
-import org.springframework.data.mongodb.core.index.IndexDirection;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Document;
+package com.jlgdev.ceres.models.jsonToObject;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Document(collection = "nutrient")
-public class Nutrient {
+public class NutrientJTO {
 
-    @Indexed(direction = IndexDirection.ASCENDING)
     @JsonProperty("name")
     private String name;
     
@@ -21,6 +15,8 @@ public class Nutrient {
     
     @JsonProperty("percentOfDailyNeeds")
     private Double percentOfDailyNeed;
+
+
 
     public String getName() {
         return name;
@@ -57,10 +53,10 @@ public class Nutrient {
         this.percentOfDailyNeed = percentOfDailyNeed;
     }
 
-    public Nutrient() {
+    public NutrientJTO() {
     }
 
-    public Nutrient(String name, Double amount, String unit, Double percentOfDailyNeed) {
+    public NutrientJTO(String name, Double amount, String unit, Double percentOfDailyNeed) {
         this.name = name;
         this.amount = amount;
         this.unit = unit;
@@ -86,7 +82,7 @@ public class Nutrient {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Nutrient other = (Nutrient) obj;
+        NutrientJTO other = (NutrientJTO) obj;
         if (name == null) {
             if (other.name != null)
                 return false;

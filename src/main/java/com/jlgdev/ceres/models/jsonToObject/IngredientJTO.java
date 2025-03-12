@@ -1,13 +1,8 @@
-package com.jlgdev.ceres.models.mongo;
-
-import java.util.Optional;
-
-import org.springframework.data.mongodb.core.mapping.Document;
+package com.jlgdev.ceres.models.jsonToObject;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Document("ingredient")
-public class Ingredient {
+public class IngredientJTO {
 
     @JsonProperty("amount")
     private Double quantity;
@@ -15,10 +10,10 @@ public class Ingredient {
     @JsonProperty("id")
     private String idAliment;
 
-    private Aliment aliment;
-
     @JsonProperty("unit")
     private String unit;
+
+
 
     public Double getQuantity() {
         return quantity;
@@ -27,15 +22,6 @@ public class Ingredient {
     public void setQuantity(Double quantity) {
         this.quantity = quantity;
     }
-
-    public Aliment getAliment() {
-        return aliment;
-    }
-
-    public void setAliment(Aliment aliment) {
-        this.aliment = aliment;
-    }
-    
 
     public String getUnit() {
         return unit;
@@ -53,19 +39,12 @@ public class Ingredient {
         this.idAliment = idAliment;
     }
 
-    public Ingredient() {
+    public IngredientJTO() {
     }
 
-    public Ingredient(Double quantity, Aliment aliment, String unit) {
+    public IngredientJTO(Double quantity, String id, String unit) {
         this.quantity = quantity;
-        this.aliment = aliment;
-        this.unit = unit;
-        this.idAliment = aliment.getId();
-    }
-
-    public Ingredient(Double quantity, String id, String unit) {
-        this.quantity = quantity;
-        this.idAliment = aliment.getId();
+        this.idAliment = id;
         this.unit = unit;
     }
 
@@ -74,7 +53,7 @@ public class Ingredient {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((quantity == null) ? 0 : quantity.hashCode());
-        result = prime * result + ((aliment == null) ? 0 : aliment.hashCode());
+        result = prime * result + ((idAliment == null) ? 0 : idAliment.hashCode());
         result = prime * result + ((unit == null) ? 0 : unit.hashCode());
         return result;
     }
@@ -87,16 +66,16 @@ public class Ingredient {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Ingredient other = (Ingredient) obj;
+        IngredientJTO other = (IngredientJTO) obj;
         if (quantity == null) {
             if (other.quantity != null)
                 return false;
         } else if (!quantity.equals(other.quantity))
             return false;
-        if (aliment == null) {
-            if (other.aliment != null)
+        if (idAliment == null) {
+            if (other.idAliment != null)
                 return false;
-        } else if (!aliment.equals(other.aliment))
+        } else if (!idAliment.equals(other.idAliment))
             return false;
         if (unit == null) {
             if (other.unit != null)
@@ -108,8 +87,7 @@ public class Ingredient {
 
     @Override
     public String toString() {
-        return "Ingredient [quantity=" + quantity + ", aliment=" + aliment + ", unit=" + unit + "]";
+        return "IngredientJTO [quantity=" + quantity + ", idAliment=" + idAliment + ", unit=" + unit + "]";
     }
-
 
 }

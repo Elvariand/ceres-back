@@ -1,13 +1,15 @@
-package com.jlgdev.ceres.models.mongo;
+package com.jlgdev.ceres.models.dataAccessObject;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "weightPerServing")
-public class WeightPerServing {
+public class WeightPerServingDAO {
 
     private Double amount;
 
     private String unit;
+
+
 
     public Double getAmount() {
         return amount;
@@ -28,10 +30,10 @@ public class WeightPerServing {
         this.unit = unit;
     }
 
-    public WeightPerServing() {
+    public WeightPerServingDAO() {
     }
 
-    public WeightPerServing(Double amount, String unit) {
+    public WeightPerServingDAO(Double amount, String unit) {
         this.amount = amount;
         this.unit = unit;
     }
@@ -53,7 +55,7 @@ public class WeightPerServing {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        WeightPerServing other = (WeightPerServing) obj;
+        WeightPerServingDAO other = (WeightPerServingDAO) obj;
         if (amount == null) {
             if (other.amount != null)
                 return false;

@@ -1,0 +1,150 @@
+package com.jlgdev.ceres.models.jsonToObject;
+
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class AlimentJTO {
+
+    @JsonProperty("id")
+    private String id;
+
+    @JsonProperty("name")
+    private String name;
+
+    @JsonProperty("aisle")
+    private String aisle;
+
+    @JsonProperty("image")
+    private String image;
+
+    @JsonProperty("nutrition")
+    private NutritionJTO nutrition;
+
+    @JsonProperty("categoryPath")
+    private Set<String> categoryPath;
+
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAisle() {
+        return aisle;
+    }
+
+    public void setAisle(String aisle) {
+        this.aisle = aisle;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public NutritionJTO getNutrition() {
+        return nutrition;
+    }
+
+    public void setNutrition(NutritionJTO nutrition) {
+        this.nutrition = nutrition;
+    }
+
+    public Set<String> getCategoryPath() {
+        return categoryPath;
+    }
+
+    public void setCategoryPath(Set<String> categoryPath) {
+        this.categoryPath = categoryPath;
+    }
+
+    public AlimentJTO() {
+    }
+
+    public AlimentJTO(String id, String name, String aisle, String image, NutritionJTO nutrition,
+            Set<String> categoryPath) {
+        this.id = id;
+        this.name = name;
+        this.aisle = aisle;
+        this.image = image;
+        this.nutrition = nutrition;
+        this.categoryPath = categoryPath;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((aisle == null) ? 0 : aisle.hashCode());
+        result = prime * result + ((image == null) ? 0 : image.hashCode());
+        result = prime * result + ((nutrition == null) ? 0 : nutrition.hashCode());
+        result = prime * result + ((categoryPath == null) ? 0 : categoryPath.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        AlimentJTO other = (AlimentJTO) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        if (aisle == null) {
+            if (other.aisle != null)
+                return false;
+        } else if (!aisle.equals(other.aisle))
+            return false;
+        if (image == null) {
+            if (other.image != null)
+                return false;
+        } else if (!image.equals(other.image))
+            return false;
+        if (nutrition == null) {
+            if (other.nutrition != null)
+                return false;
+        } else if (!nutrition.equals(other.nutrition))
+            return false;
+        if (categoryPath == null) {
+            if (other.categoryPath != null)
+                return false;
+        } else if (!categoryPath.equals(other.categoryPath))
+            return false;
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "Aliment [id=" + id + ", name=" + name + ", aisle=" + aisle + ", image="
+                + image + ", nutrition=" + nutrition + ", categoryPath=" + categoryPath + "]";
+    }
+}

@@ -1,25 +1,16 @@
-package com.jlgdev.ceres.models.mongo;
-
-import org.springframework.data.mongodb.core.mapping.Document;
+package com.jlgdev.ceres.models.jsonToObject;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Document("flavonoids")
-public class Flavonoid {
+public class WeightPerServingJTO {
 
-    @JsonProperty("name")
-    private String name;
-    
     @JsonProperty("amount")
     private Double amount;
 
-    public String getName() {
-        return name;
-    }
+    @JsonProperty("unit")
+    private String unit;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+
 
     public Double getAmount() {
         return amount;
@@ -29,20 +20,31 @@ public class Flavonoid {
         this.amount = amount;
     }
 
-    public Flavonoid() {
+    public String getUnit() {
+        return unit;
     }
 
-    public Flavonoid(Long id, String name, Double amount) {
-        this.name = name;
+    public void setUnit(String unit) {
+        if (unit.charAt(0) == 'Â') {
+            unit.replace("Â", "");
+        }
+        this.unit = unit;
+    }
+
+    public WeightPerServingJTO() {
+    }
+
+    public WeightPerServingJTO(Double amount, String unit) {
         this.amount = amount;
+        this.unit = unit;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + ((amount == null) ? 0 : amount.hashCode());
+        result = prime * result + ((unit == null) ? 0 : unit.hashCode());
         return result;
     }
 
@@ -54,22 +56,24 @@ public class Flavonoid {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Flavonoid other = (Flavonoid) obj;
-        if (name == null) {
-            if (other.name != null)
-                return false;
-        } else if (!name.equals(other.name))
-            return false;
+        WeightPerServingJTO other = (WeightPerServingJTO) obj;
         if (amount == null) {
             if (other.amount != null)
                 return false;
         } else if (!amount.equals(other.amount))
+            return false;
+        if (unit == null) {
+            if (other.unit != null)
+                return false;
+        } else if (!unit.equals(other.unit))
             return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "Flavonoid [name=" + name + ", amount=" + amount + "]";
+        return "WeightPerServing [amount=" + amount + ", unit=" + unit + "]";
     }
+
+    
 }

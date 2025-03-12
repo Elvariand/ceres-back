@@ -1,11 +1,8 @@
-package com.jlgdev.ceres.models.mongo;
-
-import org.springframework.data.mongodb.core.mapping.Document;
+package com.jlgdev.ceres.models.jsonToObject;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Document(collection = "alimentProperties")
-public class AlimentProperties {
+public class AlimentPropertiesJTO {
 
     @JsonProperty("name")
     private String name;
@@ -13,6 +10,8 @@ public class AlimentProperties {
     @JsonProperty("amount")
     private Double amount;
 
+
+    
     public String getName() {
         return name;
     }
@@ -29,10 +28,10 @@ public class AlimentProperties {
         this.amount = amount;
     }
 
-    public AlimentProperties() {
+    public AlimentPropertiesJTO() {
     }
 
-    public AlimentProperties(String name, Double amount) {
+    public AlimentPropertiesJTO(String name, Double amount) {
         this.name = name;
         this.amount = amount;
     }
@@ -54,7 +53,7 @@ public class AlimentProperties {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        AlimentProperties other = (AlimentProperties) obj;
+        AlimentPropertiesJTO other = (AlimentPropertiesJTO) obj;
         if (name == null) {
             if (other.name != null)
                 return false;

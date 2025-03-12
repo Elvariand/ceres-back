@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jlgdev.ceres.models.mongo.Recipe;
+import com.jlgdev.ceres.models.jsonToObject.RecipeJTO;
 import com.jlgdev.ceres.repositories.RecipeRepository;
 
 @Service
@@ -14,23 +14,23 @@ public class RecipeService {
     @Autowired
     private RecipeRepository recipeRepository;
 
-    public Iterable<Recipe> getAllRecipes() {
+    public Iterable<RecipeJTO> getAllRecipes() {
         return recipeRepository.findAll();
     }
 
-    public Optional<Recipe> getRecipeById(String id) {
+    public Optional<RecipeJTO> getRecipeById(String id) {
         return recipeRepository.findById(id);
     }
 
-    public Iterable<Recipe> getRecipeByTitle(String title) {
+    public Iterable<RecipeJTO> getRecipeByTitle(String title) {
         return recipeRepository.findByTitle(title);
     }
 
-    public Iterable<Recipe> getRecipeByTitleContaining(String title) {
+    public Iterable<RecipeJTO> getRecipeByTitleContaining(String title) {
         return recipeRepository.findByTitleContaining(title);
     }
 
-    public Recipe save(Recipe Recipe) {
+    public RecipeJTO save(RecipeJTO Recipe) {
         return recipeRepository.save(Recipe);
     }
 }

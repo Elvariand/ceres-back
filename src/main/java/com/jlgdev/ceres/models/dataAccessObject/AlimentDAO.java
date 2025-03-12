@@ -1,4 +1,4 @@
-package com.jlgdev.ceres.models.mongo;
+package com.jlgdev.ceres.models.dataAccessObject;
 
 import java.util.Set;
 
@@ -7,32 +7,26 @@ import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 @Document(collection = "aliment")
-public class Aliment {
+public class AlimentDAO {
 
-    @JsonProperty("id")
     @Id
     private String id;
 
-    @JsonProperty("name")
     @Indexed(unique = true, direction = IndexDirection.ASCENDING)
     private String nameEn;
 
     private String nameFr;
 
-    @JsonProperty("aisle")
     private String aisle;
 
-    @JsonProperty("image")
     private String image;
 
-    @JsonProperty("nutrition")
-    private Nutrition nutrition;
+    private NutritionDAO nutrition;
 
-    @JsonProperty("categoryPath")
     private Set<String> categoryPath;
+
+
 
     public String getId() {
         return id;
@@ -74,11 +68,11 @@ public class Aliment {
         this.image = image;
     }
 
-    public Nutrition getNutrition() {
+    public NutritionDAO getNutrition() {
         return nutrition;
     }
 
-    public void setNutrition(Nutrition nutrition) {
+    public void setNutrition(NutritionDAO nutrition) {
         this.nutrition = nutrition;
     }
 
@@ -90,10 +84,10 @@ public class Aliment {
         this.categoryPath = categoryPath;
     }
 
-    public Aliment() {
+    public AlimentDAO() {
     }
 
-    public Aliment(String id, String nameEn, String nameFr, String aisle, String image, Nutrition nutrition,
+    public AlimentDAO(String id, String nameEn, String nameFr, String aisle, String image, NutritionDAO nutrition,
             Set<String> categoryPath) {
         this.id = id;
         this.nameEn = nameEn;
@@ -126,7 +120,7 @@ public class Aliment {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Aliment other = (Aliment) obj;
+        AlimentDAO other = (AlimentDAO) obj;
         if (id == null) {
             if (other.id != null)
                 return false;
