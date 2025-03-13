@@ -249,7 +249,4 @@ public class InitializerController {
         return response;
     }
 
-    
-
-    
 }
