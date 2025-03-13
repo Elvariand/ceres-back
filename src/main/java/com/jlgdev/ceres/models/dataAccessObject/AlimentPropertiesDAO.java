@@ -5,7 +5,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "alimentProperties")
 public class AlimentPropertiesDAO {
 
-    private String name;
 
     private String nameEn;
 
@@ -14,14 +13,6 @@ public class AlimentPropertiesDAO {
     private Double amount;
 
     private String unit;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getNameEn() {
         return nameEn;

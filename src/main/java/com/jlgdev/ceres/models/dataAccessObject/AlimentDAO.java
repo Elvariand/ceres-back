@@ -13,16 +13,6 @@ public class AlimentDAO {
     @Id
     private String id;
 
-    private String name;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     @Indexed(unique = true, direction = IndexDirection.ASCENDING)
     private String nameEn;
 

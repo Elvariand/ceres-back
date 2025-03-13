@@ -1,5 +1,10 @@
 package com.jlgdev.ceres.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +23,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jlgdev.ceres.models.jsonToObject.AlimentJTO;
 import com.jlgdev.ceres.models.dataAccessObject.AlimentDAO;
+import com.jlgdev.ceres.models.dataAccessObject.AlimentPropertiesDAO;
+import com.jlgdev.ceres.models.dataAccessObject.FlavonoidDAO;
+import com.jlgdev.ceres.models.dataAccessObject.NutrientDAO;
 import com.jlgdev.ceres.models.dataAccessObject.RecipeDAO;
 import com.jlgdev.ceres.models.jsonToObject.RecipeJTO;
 import com.jlgdev.ceres.models.jsonToObject.RecipeTransferJTO;
@@ -222,7 +230,6 @@ public class InitializerController {
 
         try {
             recipeTransfer = mapper.readValue(response, RecipeTransferJTO.class);
-            // System.out.println(recipeTransfer);
 
             for (RecipeJTO result : recipeTransfer.getResults()) {
 
@@ -242,9 +249,7 @@ public class InitializerController {
         return response;
     }
 
-    @GetMapping("correctingBdd")
-    public void copyNames() {
-        
-    }
+    
+
     
 }

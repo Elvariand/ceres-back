@@ -5,8 +5,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("flavonoids")
 public class FlavonoidDAO {
 
-    private String name;
-
     private String nameEn;
 
     private String nameFr;
@@ -15,16 +13,9 @@ public class FlavonoidDAO {
 
     private String unit;
 
+
     public String getNameEn() {
         return nameEn;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public void setNameEn(String nameEn) {

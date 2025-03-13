@@ -6,17 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 
 @Document(collection = "nutrient")
-public class NutrientDAO {
-
-    private String name;
-    
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+public class NutrientDAO{
 
     @Indexed(direction = IndexDirection.ASCENDING)
     private String nameEn;
