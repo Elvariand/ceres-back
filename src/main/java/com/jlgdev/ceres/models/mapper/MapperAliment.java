@@ -1,7 +1,10 @@
 package com.jlgdev.ceres.models.mapper;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+
+import org.springframework.stereotype.Component;
 
 import com.jlgdev.ceres.models.dataAccessObject.AlimentDAO;
 import com.jlgdev.ceres.models.dataAccessObject.AlimentPropertiesDAO;
@@ -16,16 +19,17 @@ import com.jlgdev.ceres.models.jsonToObject.NutrientJTO;
 import com.jlgdev.ceres.models.jsonToObject.NutritionJTO;
 import com.jlgdev.ceres.models.jsonToObject.WeightPerServingJTO;
 
+@Component
 public abstract class MapperAliment {
 
     public static AlimentDAO mapAliment(AlimentJTO alimentJTO) {
 
         AlimentDAO alimentDAO = new AlimentDAO(); 
 
-        alimentDAO.setId(alimentJTO.getId());
-        alimentDAO.setNameEn(alimentJTO.getName());
-        alimentDAO.setAisle(alimentJTO.getAisle());
-        alimentDAO.setImage(alimentJTO.getImage());
+        alimentDAO.setId(Objects.requireNonNullElse(alimentJTO.getId(),""));
+        alimentDAO.setNameEn(Objects.requireNonNullElse(alimentJTO.getName(),""));
+        alimentDAO.setAisle(Objects.requireNonNullElse(alimentJTO.getAisle(),""));
+        alimentDAO.setImage(Objects.requireNonNullElse(alimentJTO.getImage(),""));
         alimentDAO.setNutrition(mapNutritionAliment(alimentJTO.getNutrition()));
         alimentDAO.setCategoryPath(alimentJTO.getCategoryPath());
 
@@ -52,10 +56,10 @@ public abstract class MapperAliment {
         for (NutrientJTO nutrientJTO : nutrientsJTO) {
             NutrientDAO nutrientDAO = new NutrientDAO();
             
-            nutrientDAO.setNameEn(nutrientJTO.getName());
-            nutrientDAO.setAmount(nutrientJTO.getAmount());
-            nutrientDAO.setUnit(nutrientJTO.getUnit());
-            nutrientDAO.setPercentOfDailyNeed(nutrientJTO.getPercentOfDailyNeed());
+            nutrientDAO.setNameEn(Objects.requireNonNullElse(nutrientJTO.getName(), ""));
+            nutrientDAO.setAmount(Objects.requireNonNullElse(nutrientJTO.getAmount(), -1.0));
+            nutrientDAO.setUnit(Objects.requireNonNullElse(nutrientJTO.getUnit(), ""));
+            nutrientDAO.setPercentOfDailyNeed(Objects.requireNonNullElse(nutrientJTO.getPercentOfDailyNeed(), -1.0));
 
             nutrients.add(nutrientDAO);
         }
@@ -70,24 +74,26 @@ public abstract class MapperAliment {
         for (AlimentPropertiesJTO propertyJTO : propertiesJTO) {
             AlimentPropertiesDAO propertyDAO = new AlimentPropertiesDAO();
             
-            propertyDAO.setNameEn(propertyJTO.getName());
-            propertyDAO.setAmount(propertyJTO.getAmount());
+            propertyDAO.setNameEn(Objects.requireNonNullElse(propertyJTO.getName(), ""));
+            propertyDAO.setAmount(Objects.requireNonNullElse(propertyJTO.getAmount(), -1.0));
+            propertyDAO.setUnit(Objects.requireNonNullElse(propertyJTO.getUnit(), ""));
             
             properties.add(propertyDAO);
         }
-
+        
         return properties;
     }
     
     public static Set<FlavonoidDAO> mapFlavonoids(Set<FlavonoidJTO> flavonoidsJTO) {
-
+        
         Set<FlavonoidDAO> flavonoids = new HashSet<>();
-
+        
         for (FlavonoidJTO flavonoidJTO : flavonoidsJTO) {
             FlavonoidDAO flavonoidDAO = new FlavonoidDAO();
             
-            flavonoidDAO.setNameEn(flavonoidJTO.getName());
-            flavonoidDAO.setAmount(flavonoidJTO.getAmount());
+            flavonoidDAO.setNameEn(Objects.requireNonNullElse(flavonoidJTO.getName(), ""));
+            flavonoidDAO.setAmount(Objects.requireNonNullElse(flavonoidJTO.getAmount(), -1.0));
+            flavonoidDAO.setUnit(Objects.requireNonNullElse(flavonoidJTO.getUnit(), ""));
             
             flavonoids.add(flavonoidDAO);
         }
@@ -97,8 +103,9 @@ public abstract class MapperAliment {
 
     public static WeightPerServingDAO mapWeightPerServing(WeightPerServingJTO weightPerServingJTO) {
 
-        WeightPerServingDAO weightPerServingDAO = new WeightPerServingDAO(weightPerServingJTO.getAmount(), weightPerServingJTO.getUnit());
+        WeightPerServingDAO weightPerServingDAO = new WeightPerServingDAO(Objects.requireNonNullElse(weightPerServingJTO.getAmount(),-1.0), Objects.requireNonNullElse(weightPerServingJTO.getUnit(), ""));
 
         return weightPerServingDAO;
     }
+
 }

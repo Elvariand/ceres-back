@@ -5,13 +5,23 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "alimentProperties")
 public class AlimentPropertiesDAO {
 
+    private String name;
+
     private String nameEn;
 
     private String nameFr;
 
     private Double amount;
 
+    private String unit;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getNameEn() {
         return nameEn;
@@ -37,13 +47,22 @@ public class AlimentPropertiesDAO {
         this.amount = amount;
     }
 
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
     public AlimentPropertiesDAO() {
     }
 
-    public AlimentPropertiesDAO(String nameEn, String nameFr, Double amount) {
+    public AlimentPropertiesDAO(String nameEn, String nameFr, Double amount, String unit) {
         this.nameEn = nameEn;
         this.nameFr = nameFr;
         this.amount = amount;
+        this.unit = unit;
     }
 
     @Override
@@ -53,6 +72,7 @@ public class AlimentPropertiesDAO {
         result = prime * result + ((nameEn == null) ? 0 : nameEn.hashCode());
         result = prime * result + ((nameFr == null) ? 0 : nameFr.hashCode());
         result = prime * result + ((amount == null) ? 0 : amount.hashCode());
+        result = prime * result + ((unit == null) ? 0 : unit.hashCode());
         return result;
     }
 
@@ -80,12 +100,18 @@ public class AlimentPropertiesDAO {
                 return false;
         } else if (!amount.equals(other.amount))
             return false;
+        if (unit == null) {
+            if (other.unit != null)
+                return false;
+        } else if (!unit.equals(other.unit))
+            return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "AlimentPropertiesDAO [nameEn=" + nameEn + ", nameFr=" + nameFr + ", amount=" + amount + "]";
+        return "AlimentPropertiesDAO [nameEn=" + nameEn + ", nameFr=" + nameFr + ", amount=" + amount + ", unit=" + unit
+                + "]";
     }
 
 }

@@ -6,12 +6,12 @@ import java.util.Optional;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.lang.NonNull;
 
-import com.jlgdev.ceres.models.jsonToObject.RecipeJTO;
+import com.jlgdev.ceres.models.dataAccessObject.RecipeDAO;
 
-public interface RecipeRepository extends MongoRepository<RecipeJTO, String>{
+public interface RecipeRepository extends MongoRepository<RecipeDAO, String>{
 
     @SuppressWarnings("null")
-    Optional<RecipeJTO> findById(@NonNull String id);
-    List<RecipeJTO> findByTitle(String title);
-    List<RecipeJTO> findByTitleContaining(String title);
+    Optional<RecipeDAO> findById(@NonNull String id);
+    List<RecipeDAO> findByTitleEn(String title);
+    List<RecipeDAO> findByTitleEnContaining(String title);
 }

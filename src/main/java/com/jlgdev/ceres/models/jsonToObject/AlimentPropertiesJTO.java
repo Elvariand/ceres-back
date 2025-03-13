@@ -10,7 +10,8 @@ public class AlimentPropertiesJTO {
     @JsonProperty("amount")
     private Double amount;
 
-
+    @JsonProperty("unit")
+    private String unit;
     
     public String getName() {
         return name;
@@ -28,12 +29,21 @@ public class AlimentPropertiesJTO {
         this.amount = amount;
     }
 
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
     public AlimentPropertiesJTO() {
     }
 
-    public AlimentPropertiesJTO(String name, Double amount) {
+    public AlimentPropertiesJTO(String name, Double amount, String unit) {
         this.name = name;
         this.amount = amount;
+        this.unit = unit;
     }
 
     @Override
@@ -42,6 +52,7 @@ public class AlimentPropertiesJTO {
         int result = 1;
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + ((amount == null) ? 0 : amount.hashCode());
+        result = prime * result + ((unit == null) ? 0 : unit.hashCode());
         return result;
     }
 
@@ -64,12 +75,17 @@ public class AlimentPropertiesJTO {
                 return false;
         } else if (!amount.equals(other.amount))
             return false;
+        if (unit == null) {
+            if (other.unit != null)
+                return false;
+        } else if (!unit.equals(other.unit))
+            return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "AlimentProperties [name=" + name + ", amount=" + amount + "]";
+        return "AlimentPropertiesJTO [name=" + name + ", amount=" + amount + ", unit=" + unit + "]";
     }
 
     

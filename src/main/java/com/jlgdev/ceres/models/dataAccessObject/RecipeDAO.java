@@ -9,6 +9,16 @@ public class RecipeDAO {
 
     private String id;
 
+    private String title;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     private String titleEn;
 
     private String titleFr;
