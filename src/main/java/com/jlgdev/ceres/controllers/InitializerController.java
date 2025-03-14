@@ -1,9 +1,12 @@
 package com.jlgdev.ceres.controllers;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +28,8 @@ import com.jlgdev.ceres.models.jsonToObject.AlimentJTO;
 import com.jlgdev.ceres.models.dataAccessObject.AlimentDAO;
 import com.jlgdev.ceres.models.dataAccessObject.AlimentPropertiesDAO;
 import com.jlgdev.ceres.models.dataAccessObject.FlavonoidDAO;
+import com.jlgdev.ceres.models.dataAccessObject.IngredientDAO;
+import com.jlgdev.ceres.models.dataAccessObject.MissingIngredients;
 import com.jlgdev.ceres.models.dataAccessObject.NutrientDAO;
 import com.jlgdev.ceres.models.dataAccessObject.RecipeDAO;
 import com.jlgdev.ceres.models.jsonToObject.RecipeJTO;
@@ -32,6 +37,7 @@ import com.jlgdev.ceres.models.jsonToObject.RecipeTransferJTO;
 import com.jlgdev.ceres.models.mapper.MapperAliment;
 import com.jlgdev.ceres.models.mapper.MapperRecipe;
 import com.jlgdev.ceres.services.AlimentService;
+import com.jlgdev.ceres.services.MissingService;
 import com.jlgdev.ceres.services.RecipeService;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -46,6 +52,9 @@ public class InitializerController {
 
     @Autowired
     private RecipeService recipeService;
+
+    @Autowired
+    private MissingService missingService;
 
     @Autowired
     public MapperRecipe mapperRecipe;
@@ -249,4 +258,43 @@ public class InitializerController {
         return response;
     }
 
+    @GetMapping("/missingIngredients/calculate")
+    public MissingIngredients calculateMissingIngredients() {
+
+        Iterable<RecipeDAO> allRecipes = recipeService.getAllRecipes();
+        Set<String> missingSet = new HashSet<>();
+
+        for (RecipeDAO recipe : allRecipes) {
+            List<IngredientDAO> ingredients = recipe.getIngredients();
+
+            for (IngredientDAO ingredient : ingredients) {
+                String idIngredient = ingredient.getAliment().getId();
+                Optional<AlimentDAO> aliment = alimentService.getAlimentById(idIngredient);
+                
+                if (!aliment.isPresent()) {
+                    missingSet.add(idIngredient);
+                }
+            }
+        }
+
+        MissingIngredients missingIngredients = new MissingIngredients(1, missingSet, missingSet.size());
+        missingService.save(missingIngredients);
+
+        return missingIngredients;
+    }
+    
+    @GetMapping("/missingIngredients/cure/{number}")
+    public MissingIngredients cureMissingIngredients(@PathVariable int number) throws InterruptedException {
+
+        Set<String> missingSet = missingService.getMissingById(1).get().getMissingSet();
+
+        for (String idAliment : missingSet.stream().limit(number-1).collect(Collectors.toSet())) {
+            addAliment(idAliment);
+            Thread.sleep(1001);
+        }
+
+        // MissingIngredients missingIngredients = calculateMissingIngredients();
+        return null;
+    }
+    
 }
