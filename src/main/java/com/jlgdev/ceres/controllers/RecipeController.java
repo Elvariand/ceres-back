@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jlgdev.ceres.models.dataAccessObject.RecipeDAO;
 import com.jlgdev.ceres.services.AlimentService;
 import com.jlgdev.ceres.services.RecipeService;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/recipe")
@@ -32,7 +32,7 @@ public class RecipeController {
     Logger log = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping("/{number}")
-    public @ResponseBody List<RecipeDAO> getRecipes(@RequestParam int number) {
+    public @ResponseBody List<RecipeDAO> getRecipes(@PathVariable int number) {
         Iterable<RecipeDAO> recipes = recipeService.getAllRecipes();
         int counter = 0;
         List<RecipeDAO> recipesToFrontend = new ArrayList<>();

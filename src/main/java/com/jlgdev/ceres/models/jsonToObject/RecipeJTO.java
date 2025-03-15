@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 
 public class RecipeJTO {
 
@@ -33,16 +35,24 @@ public class RecipeJTO {
     private boolean dairyFree;
 
     @JsonProperty("preparationMinutes")
-    private int preparationMinutes;
-
+    @JsonSetter(nulls = Nulls.SKIP)
+    private int preparationMinutes = -1;
+    
     @JsonProperty("cookingMinutes")
-    private int cookingMinutes;
-
+    @JsonSetter(nulls = Nulls.SKIP)
+    private int cookingMinutes = -1;
+    
+    @JsonProperty("readyInMinutes")
+    @JsonSetter(nulls = Nulls.SKIP)
+    private int totalMinutes = -1;
+    
     @JsonProperty("aggregateLikes")
-    private int likes;
-
+    @JsonSetter(nulls = Nulls.SKIP)
+    private int likes = -1;
+    
     @JsonProperty("healthScore")
-    private int healthScore;
+    @JsonSetter(nulls = Nulls.SKIP)
+    private int healthScore = -1;
     
     @JsonProperty("image")
     private String image;
@@ -184,12 +194,22 @@ public class RecipeJTO {
         this.nutrition = nutrition;
     }
 
+    
+    public int getTotalMinutes() {
+        return totalMinutes;
+    }
+    
+    public void setTotalMinutes(int totalMinutes) {
+        this.totalMinutes = totalMinutes;
+    }
+    
     public RecipeJTO() {
     }
 
     public RecipeJTO(String id, String title, NutritionRecipeJTO nutrition, List<String> tags, boolean vegetarian,
-            boolean vegan, boolean glutenFree, boolean dairyFree, int preparationMinutes, int cookingMinutes, int likes,
-            int healthScore, String image, String imageType, String sourceURL, String spoonacularURL) {
+            boolean vegan, boolean glutenFree, boolean dairyFree, int preparationMinutes, int cookingMinutes,
+            int totalMinutes, int likes, int healthScore, String image, String imageType, String sourceURL,
+            String spoonacularURL) {
         this.id = id;
         this.title = title;
         this.nutrition = nutrition;
@@ -200,6 +220,7 @@ public class RecipeJTO {
         this.dairyFree = dairyFree;
         this.preparationMinutes = preparationMinutes;
         this.cookingMinutes = cookingMinutes;
+        this.totalMinutes = totalMinutes;
         this.likes = likes;
         this.healthScore = healthScore;
         this.image = image;
@@ -213,9 +234,8 @@ public class RecipeJTO {
         return "RecipeJTO [id=" + id + ", title=" + title + ", nutrition=" + nutrition + ", tags=" + tags
                 + ", vegetarian=" + vegetarian + ", vegan=" + vegan + ", glutenFree=" + glutenFree + ", dairyFree="
                 + dairyFree + ", preparationMinutes=" + preparationMinutes + ", cookingMinutes=" + cookingMinutes
-                + ", likes=" + likes + ", healthScore=" + healthScore + ", image=" + image + ", imageType=" + imageType
-                + ", sourceURL=" + sourceURL + ", spoonacularURL=" + spoonacularURL + "]";
+                + ", totalMinutes=" + totalMinutes + ", likes=" + likes + ", healthScore=" + healthScore + ", image="
+                + image + ", imageType=" + imageType + ", sourceURL=" + sourceURL + ", spoonacularURL=" + spoonacularURL
+                + "]";
     }
-
-    
 }

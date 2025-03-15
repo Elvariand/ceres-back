@@ -35,6 +35,7 @@ public class MapperRecipe {
         recipeDAO.setDairyFree(Objects.requireNonNullElse(recipeJTO.isDairyFree(), false));
         recipeDAO.setPreparationMinutes(Objects.requireNonNullElse(recipeJTO.getPreparationMinutes(), -1));
         recipeDAO.setCookingMinutes(Objects.requireNonNullElse(recipeJTO.getCookingMinutes(), -1));
+        recipeDAO.setTotalMinutes(Objects.requireNonNullElse(recipeJTO.getTotalMinutes(), -1));
         recipeDAO.setLikes(Objects.requireNonNullElse(recipeJTO.getLikes(), -1));
         recipeDAO.setHealthScore(Objects.requireNonNullElse(recipeJTO.getHealthScore(), -1));
         recipeDAO.setImage(Objects.requireNonNullElse(recipeJTO.getImage(), ""));
@@ -54,6 +55,7 @@ public class MapperRecipe {
 
             ingredientDAO.setQuantity(Objects.requireNonNullElse(ingredientJTO.getQuantity(), -1.0));
             ingredientDAO.setUnit(Objects.requireNonNullElse(ingredientJTO.getUnit(), ""));
+            ingredientDAO.setNameFromApi(Objects.requireNonNullElse(ingredientJTO.getNameFromApi(), ""));
             ingredientDAO.setAliment(linkedAliment);
 
             ingredients.add(ingredientDAO);
@@ -61,5 +63,6 @@ public class MapperRecipe {
     
         return ingredients;
     }
+
 
 }

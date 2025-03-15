@@ -227,7 +227,7 @@ public class InitializerController {
 
         RestClient defaultClient = RestClient.create();
         String response = defaultClient.get().uri(
-                "https://api.spoonacular.com/recipes/complexSearch?apiKey=6db25c150fbc44eebca76e569f90defc&addRecipeInformation=true&addRecipeInstructions=true&addRecipeNutrition=true&offset={index}&number=100",
+                "https://api.spoonacular.com/recipes/complexSearch?apiKey=6db25c150fbc44eebca76e569f90defc&addRecipeInformation=true&addRecipeInstructions=true&addRecipeNutrition=true&offset={index}&number=10",
                 index)
                 .retrieve()
                 .body(String.class);
