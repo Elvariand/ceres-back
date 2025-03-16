@@ -21,6 +21,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/**").permitAll()
                                 // autorise les requêtes POST sur /api/auth/**
                                 .requestMatchers(HttpMethod.POST, "/**").permitAll()
+                                .anyRequest().permitAll()
                 );
         return http.build();
     }

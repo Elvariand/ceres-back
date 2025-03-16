@@ -62,54 +62,61 @@ public class RecipeController {
 
         String ingredients = searchForm.getIngredients() ;
         Boolean allIngredient = searchForm.isAllIngredient() ;
-        Boolean atLeastOneIngredient = searchForm.isAtLeastOneIngredient() ;
+        // Boolean atLeastOneIngredient = searchForm.isAtLeastOneIngredient() ;
         String allOrOneIngredient = searchForm.getAllOrOneIngredient() ;
-        String withoutIngredient = searchForm.getWithoutIngredient() ;
-        int preparationTime = searchForm.getPreparationTime() ;
-        int cookingTime = searchForm.getCookingTime() ;
-        int totalTime = searchForm.getTotalTime() ;
-        String restriction = searchForm.getRestriction() ;
-        Boolean signalRestriction = searchForm.isSignalRestriction() ;
-        Boolean filterRestriction = searchForm.isFilterRestriction() ;
-        String signalOrFilterRestriction = searchForm.getSignalOrFilterRestriction() ;
-        String sortBy = searchForm.getSortBy() ;
-        String serving = searchForm.getServing() ;
-
-        String queryString = "{";
+        // String withoutIngredient = searchForm.getWithoutIngredient() ;
+        // int preparationTime = searchForm.getPreparationTime() ;
+        // int cookingTime = searchForm.getCookingTime() ;
+        // int totalTime = searchForm.getTotalTime() ;
+        // String restriction = searchForm.getRestriction() ;
+        // Boolean signalRestriction = searchForm.isSignalRestriction() ;
+        // Boolean filterRestriction = searchForm.isFilterRestriction() ;
+        // String signalOrFilterRestriction = searchForm.getSignalOrFilterRestriction() ;
+        // String sortBy = searchForm.getSortBy() ;
+        // int serving = searchForm.getServing() ;
 
         System.out.println("############################### allOrOne ###########################\n" + allOrOneIngredient);
+        
+        // String queryString = "{ ingredients : { aliment : { nameEn : \"beef\" } } }";
+        String queryString = "{ \"titleEn\" : \"Garlicky Kale\" }";
 
-        if (ingredients != null) {
-            queryString += "{ ingredients.aliment.nameEn : { " + (allIngredient ? "$all" : "$in") + ": [ " + ingredients + " ] } },";
-        }
+        
+        
+        // if (ingredients != null) {
+        //     queryString += "{ \"ingredients.aliment.nameEn\" : { " + (allIngredient ? "$all" : "$in") + ": [ \"" + ingredients + "\" ] } } ";
+        // }
 
-        if (withoutIngredient != null) {
-            queryString += "{ ingredients.aliment.nameEn : { $nin: [ " + withoutIngredient + " ] } },";
-        }
+        // if (withoutIngredient != null) {
+        //     queryString += "{ ingredients.aliment.nameEn : { $nin: [ " + withoutIngredient + " ] } },";
+        // }
 
-        if (preparationTime > -1) {
-            queryString += "{ preparationMinutes : { $lte : " + preparationTime + " } },";
-        }
+        // if (preparationTime > -1) {
+        //     queryString += "{ preparationMinutes : { $lte : " + preparationTime + " } },";
+        // }
 
-        if (cookingTime > -1) {
-            queryString += "{ cookingMinutes : { $lte : " + cookingTime + " } },";
-        }
+        // if (cookingTime > -1) {
+        //     queryString += "{ cookingMinutes : { $lte : " + cookingTime + " } },";
+        // }
 
-        if (totalTime > -1) {
-            queryString += "{ totalMinutes : { $lte : " + totalTime + " } },";
-        }
+        // if (totalTime > -1) {
+        //     queryString += "{ totalMinutes : { $lte : " + totalTime + " } },";
+        // }
 
         int queryLength = queryString.length();
-        if (queryLength > 1 && queryString.charAt(queryLength-1) == ',') {
-            queryString.substring(0, queryLength-1);
-        }
-        queryString += "}";
+
+        // if (queryLength > 1 && queryString.charAt(queryLength-1) == ',') {
+            // queryString.substring(0, queryLength-2);
+        // }
+        System.out.println("=================================================");
+        System.out.println(queryString);
+        System.out.println("=================================================");
 
         BasicQuery query = new BasicQuery(queryString);
 
 
         List<RecipeDAO> filteredRecipes = mongoTemplate.find(query, RecipeDAO.class);
         
+        System.out.println(filteredRecipes);
         return ResponseEntity.ok(filteredRecipes);
     }
     

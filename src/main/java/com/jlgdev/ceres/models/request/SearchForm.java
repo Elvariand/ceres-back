@@ -51,7 +51,8 @@ public class SearchForm {
     private String sortBy;
     
     @JsonProperty("serving")
-    private String serving;
+    @JsonSetter(nulls = Nulls.SKIP)
+    private int serving = 4;
 
     public String getIngredients() {
         return ingredients;
@@ -157,11 +158,11 @@ public class SearchForm {
         this.sortBy = sortBy;
     }
 
-    public String getServing() {
+    public int getServing() {
         return serving;
     }
 
-    public void setServing(String serving) {
+    public void setServing(int serving) {
         this.serving = serving;
     }
 
