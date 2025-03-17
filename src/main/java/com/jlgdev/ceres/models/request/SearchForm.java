@@ -1,7 +1,5 @@
 package com.jlgdev.ceres.models.request;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
@@ -11,41 +9,26 @@ public class SearchForm {
     @JsonProperty("ingredients")
     private String ingredients;
     
-    @JsonProperty("ingredient-radio1")
+    @JsonProperty("allIngredient")
     private boolean allIngredient;
-    
-    @JsonProperty("ingredient-radio2")
-    private boolean atLeastOneIngredient;
-    
-    @JsonProperty("ingredient-radio")
-    private String allOrOneIngredient;
-    
-    @JsonProperty("forbidden")
+
+    @JsonProperty("withoutIngredient")
     private String withoutIngredient;
     
-    @JsonProperty("preparation-time")
+    @JsonProperty("preparationTime")
     @JsonSetter(nulls = Nulls.SKIP)
     private int preparationTime = -1;
     
-    @JsonProperty("cooking-time")
+    @JsonProperty("cookingTime")
     @JsonSetter(nulls = Nulls.SKIP)
     private int cookingTime = -1;
     
-    @JsonProperty("total-time")
+    @JsonProperty("totalTime")
     @JsonSetter(nulls = Nulls.SKIP)
     private int totalTime = -1;
     
     @JsonProperty("restriction")
     private String restriction;
-    
-    @JsonProperty("restriction-signal")
-    private boolean signalRestriction;
-    
-    @JsonProperty("restriction-filter")
-    private boolean filterRestriction;
-    
-    @JsonProperty("restriction-radio")
-    private String signalOrFilterRestriction;
     
     @JsonProperty("sort")
     private String sortBy;
@@ -68,22 +51,6 @@ public class SearchForm {
 
     public void setAllIngredient(boolean allIngredient) {
         this.allIngredient = allIngredient;
-    }
-
-    public boolean isAtLeastOneIngredient() {
-        return atLeastOneIngredient;
-    }
-
-    public void setAtLeastOneIngredient(boolean atLeastOneIngredient) {
-        this.atLeastOneIngredient = atLeastOneIngredient;
-    }
-
-    public String getAllOrOneIngredient() {
-        return allOrOneIngredient;
-    }
-
-    public void setAllOrOneIngredient(String allOrOneIngredient) {
-        this.allOrOneIngredient = allOrOneIngredient;
     }
 
     public String getWithoutIngredient() {
@@ -126,30 +93,6 @@ public class SearchForm {
         this.restriction = restriction;
     }
 
-    public boolean isSignalRestriction() {
-        return signalRestriction;
-    }
-
-    public void setSignalRestriction(boolean signalRestriction) {
-        this.signalRestriction = signalRestriction;
-    }
-
-    public boolean isFilterRestriction() {
-        return filterRestriction;
-    }
-
-    public void setFilterRestriction(boolean filterRestriction) {
-        this.filterRestriction = filterRestriction;
-    }
-
-    public String getSignalOrFilterRestriction() {
-        return signalOrFilterRestriction;
-    }
-
-    public void setSignalOrFilterRestriction(String signalOrFilterRestriction) {
-        this.signalOrFilterRestriction = signalOrFilterRestriction;
-    }
-
     public String getSortBy() {
         return sortBy;
     }
@@ -169,5 +112,16 @@ public class SearchForm {
     public SearchForm() {
     }
 
-    
+    public String getFormattedString(String rawStr) {
+        if (rawStr == null || rawStr.trim().equals("")) {
+            return null;
+        }
+        String[] stringsArray = rawStr.split(",");
+        String formattedString = "";
+
+        for (String string : stringsArray) {
+            formattedString += "/" + string + ( string.equals(stringsArray[stringsArray.length - 1]) ? "/i" : "/i, " ) ;
+        }
+        return formattedString;
+    }
 }

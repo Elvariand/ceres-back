@@ -32,6 +32,7 @@ public abstract class MapperAliment {
         alimentDAO.setImage(Objects.requireNonNullElse(alimentJTO.getImage(),""));
         alimentDAO.setNutrition(mapNutritionAliment(alimentJTO.getNutrition()));
         alimentDAO.setCategoryPath(alimentJTO.getCategoryPath());
+        alimentDAO.setPossibleUnits(alimentJTO.getPossibleUnit());
 
         return alimentDAO;
     }

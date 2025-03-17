@@ -60,53 +60,60 @@ public class RecipeController {
     @PostMapping("/search")
     public ResponseEntity<List<RecipeDAO>> getFilteredRecipes(@RequestBody SearchForm searchForm) {
 
-        String ingredients = searchForm.getIngredients() ;
+        String ingredients = searchForm.getFormattedString(searchForm.getIngredients()) ;
         Boolean allIngredient = searchForm.isAllIngredient() ;
-        // Boolean atLeastOneIngredient = searchForm.isAtLeastOneIngredient() ;
-        String allOrOneIngredient = searchForm.getAllOrOneIngredient() ;
-        // String withoutIngredient = searchForm.getWithoutIngredient() ;
-        // int preparationTime = searchForm.getPreparationTime() ;
-        // int cookingTime = searchForm.getCookingTime() ;
-        // int totalTime = searchForm.getTotalTime() ;
-        // String restriction = searchForm.getRestriction() ;
-        // Boolean signalRestriction = searchForm.isSignalRestriction() ;
-        // Boolean filterRestriction = searchForm.isFilterRestriction() ;
-        // String signalOrFilterRestriction = searchForm.getSignalOrFilterRestriction() ;
-        // String sortBy = searchForm.getSortBy() ;
-        // int serving = searchForm.getServing() ;
+        String withoutIngredient = searchForm.getFormattedString(searchForm.getWithoutIngredient()) ;
+        int preparationTime = searchForm.getPreparationTime() ;
+        int cookingTime = searchForm.getCookingTime() ;
+        int totalTime = searchForm.getTotalTime() ;
+        String restriction = searchForm.getRestriction() ;
+        String sortBy = searchForm.getSortBy() ;
+        int serving = searchForm.getServing() ;
 
-        System.out.println("############################### allOrOne ###########################\n" + allOrOneIngredient);
+        System.out.println("##########################################################");
+        System.out.println("ingredients = " + ingredients);
+        System.out.println("allIngredient = " + allIngredient);
+        System.out.println("withoutIngredient = " + withoutIngredient);
+        System.out.println("preparationTime = " + preparationTime);
+        System.out.println("cookingTime = " + cookingTime);
+        System.out.println("totalTime = " + totalTime);
+        System.out.println("restriction = " + restriction);
+        System.out.println("sortBy = " + sortBy);
+        System.out.println("serving = " + serving);
+        System.out.println("##########################################################");
         
-        // String queryString = "{ ingredients : { aliment : { nameEn : \"beef\" } } }";
-        String queryString = "{ \"titleEn\" : \"Garlicky Kale\" }";
+        String queryString = "{ \"$and\": [\n";
+        // String queryString = "{ \"ingredients.aliment.nameEn\": { \"$in\" : [/chicken/, /beef/] } }";
 
-        
-        
-        // if (ingredients != null) {
-        //     queryString += "{ \"ingredients.aliment.nameEn\" : { " + (allIngredient ? "$all" : "$in") + ": [ \"" + ingredients + "\" ] } } ";
-        // }
+        if (ingredients != null) {
+            queryString += "\t{ \"$or\": [\n\t\t{ \"ingredients.aliment.nameEn\" : { " + (allIngredient ? "\"$all\"" : "\"$in\"") + ": [ " + ingredients + " ] } },\n\t\t{ \"ingredients.nameFromApi\" : { " + (allIngredient ? "\"$all\"" : "\"$in\"") + ": [ " + ingredients + " ] } }\n\t\t] },\n";
+        }
 
-        // if (withoutIngredient != null) {
-        //     queryString += "{ ingredients.aliment.nameEn : { $nin: [ " + withoutIngredient + " ] } },";
-        // }
+        if (withoutIngredient != null) {
+            queryString += "\t{ \"$or\": [\n\t\t{ \"ingredients.aliment.nameEn\" : { \"$nin\": [ " + withoutIngredient + " ] } },\n\t\t{ \"ingredients.nameFromApi\" : { \"$nin\": [ " + withoutIngredient + " ] } }\n\t\t] },\n";
+        }
 
-        // if (preparationTime > -1) {
-        //     queryString += "{ preparationMinutes : { $lte : " + preparationTime + " } },";
-        // }
+        if (preparationTime > -1) {
+            queryString += "\t{\"preparationMinutes\" : { $lte : " + preparationTime + " } },\n";
+        }
 
-        // if (cookingTime > -1) {
-        //     queryString += "{ cookingMinutes : { $lte : " + cookingTime + " } },";
-        // }
+        if (cookingTime > -1) {
+            queryString += "\t{\"cookingMinutes\" : { $lte : " + cookingTime + " } },\n";
+        }
 
-        // if (totalTime > -1) {
-        //     queryString += "{ totalMinutes : { $lte : " + totalTime + " } },";
-        // }
+        if (totalTime > -1) {
+            queryString += "\t{\"totalMinutes\" : { $lte : " + totalTime + " } },\n";
+        }
 
+        queryString = queryString.trim();
         int queryLength = queryString.length();
 
-        // if (queryLength > 1 && queryString.charAt(queryLength-1) == ',') {
-            // queryString.substring(0, queryLength-2);
-        // }
+        if (queryLength > 1 && queryString.charAt(queryLength-1) == ',') {
+            queryString = queryString.substring(0, queryLength-1);
+        }
+
+        queryString = queryString + "\n\t]\n}";
+
         System.out.println("=================================================");
         System.out.println(queryString);
         System.out.println("=================================================");
@@ -116,7 +123,8 @@ public class RecipeController {
 
         List<RecipeDAO> filteredRecipes = mongoTemplate.find(query, RecipeDAO.class);
         
-        System.out.println(filteredRecipes);
+        System.out.println("nombre de recettes trouvees : " + filteredRecipes.size());
+        System.out.println(filteredRecipes.size() > 0 ? filteredRecipes.get(0).getTitleEn() : "none");
         return ResponseEntity.ok(filteredRecipes);
     }
     

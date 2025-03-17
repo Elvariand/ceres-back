@@ -26,6 +26,8 @@ public class AlimentDAO {
 
     private Set<String> categoryPath;
 
+    private Set<String> possibleUnits;
+
 
 
     public String getId() {
@@ -83,6 +85,14 @@ public class AlimentDAO {
     public void setCategoryPath(Set<String> categoryPath) {
         this.categoryPath = categoryPath;
     }
+    
+    public Set<String> getPossibleUnits() {
+        return possibleUnits;
+    }
+    
+    public void setPossibleUnits(Set<String> possibleUnits) {
+        this.possibleUnits = possibleUnits;
+    }
 
     public AlimentDAO() {
     }
@@ -91,81 +101,10 @@ public class AlimentDAO {
         this.id = id;
     }
 
-    public AlimentDAO(String id, String nameEn, String nameFr, String aisle, String image, NutritionDAO nutrition,
-            Set<String> categoryPath) {
-        this.id = id;
-        this.nameEn = nameEn;
-        this.nameFr = nameFr;
-        this.aisle = aisle;
-        this.image = image;
-        this.nutrition = nutrition;
-        this.categoryPath = categoryPath;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((nameEn == null) ? 0 : nameEn.hashCode());
-        result = prime * result + ((nameFr == null) ? 0 : nameFr.hashCode());
-        result = prime * result + ((aisle == null) ? 0 : aisle.hashCode());
-        result = prime * result + ((image == null) ? 0 : image.hashCode());
-        result = prime * result + ((nutrition == null) ? 0 : nutrition.hashCode());
-        result = prime * result + ((categoryPath == null) ? 0 : categoryPath.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        AlimentDAO other = (AlimentDAO) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        if (nameEn == null) {
-            if (other.nameEn != null)
-                return false;
-        } else if (!nameEn.equals(other.nameEn))
-            return false;
-        if (nameFr == null) {
-            if (other.nameFr != null)
-                return false;
-        } else if (!nameFr.equals(other.nameFr))
-            return false;
-        if (aisle == null) {
-            if (other.aisle != null)
-                return false;
-        } else if (!aisle.equals(other.aisle))
-            return false;
-        if (image == null) {
-            if (other.image != null)
-                return false;
-        } else if (!image.equals(other.image))
-            return false;
-        if (nutrition == null) {
-            if (other.nutrition != null)
-                return false;
-        } else if (!nutrition.equals(other.nutrition))
-            return false;
-        if (categoryPath == null) {
-            if (other.categoryPath != null)
-                return false;
-        } else if (!categoryPath.equals(other.categoryPath))
-            return false;
-        return true;
-    }
-
     @Override
     public String toString() {
-        return "Aliment [id=" + id + ", nameEn=" + nameEn + ", nameFr=" + nameFr + ", aisle=" + aisle + ", image="
-                + image + ", nutrition=" + nutrition + ", categoryPath=" + categoryPath + "]";
+        return "AlimentDAO [id=" + id + ", nameEn=" + nameEn + ", nameFr=" + nameFr + ", aisle=" + aisle + ", image="
+                + image + ", nutrition=" + nutrition + ", categoryPath=" + categoryPath + ", possibleUnits="
+                + possibleUnits + "]";
     }
 }
