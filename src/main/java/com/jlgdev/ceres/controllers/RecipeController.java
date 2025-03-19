@@ -58,7 +58,7 @@ public class RecipeController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<List<RecipeDAO>> getFilteredRecipes(@RequestBody SearchForm searchForm) {
+    public List<RecipeDAO> getFilteredRecipes(@RequestBody SearchForm searchForm) {
 
         String ingredients = searchForm.getFormattedString(searchForm.getIngredients()) ;
         Boolean allIngredient = searchForm.isAllIngredient() ;
@@ -125,7 +125,8 @@ public class RecipeController {
         
         System.out.println("nombre de recettes trouvees : " + filteredRecipes.size());
         System.out.println(filteredRecipes.size() > 0 ? filteredRecipes.get(0).getTitleEn() : "none");
-        return ResponseEntity.ok(filteredRecipes);
+        return filteredRecipes;
+        // return ResponseEntity.ok(filteredRecipes);
     }
     
 }

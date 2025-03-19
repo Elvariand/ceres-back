@@ -1,12 +1,17 @@
 package com.jlgdev.ceres.controllers;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +42,7 @@ import com.jlgdev.ceres.models.jsonToObject.RecipeJTO;
 import com.jlgdev.ceres.models.jsonToObject.RecipeTransferJTO;
 import com.jlgdev.ceres.models.mapper.MapperAliment;
 import com.jlgdev.ceres.models.mapper.MapperRecipe;
+import com.jlgdev.ceres.repositories.AlimentRepository;
 import com.jlgdev.ceres.services.AlimentService;
 import com.jlgdev.ceres.services.MissingService;
 import com.jlgdev.ceres.services.RecipeService;
@@ -93,13 +99,11 @@ public class InitializerController {
                 e.printStackTrace();
             }
             if (!alimentDAO.equals(new AlimentDAO())) {
-                System.out.println("je proc 1");
                 return new ResponseEntity<AlimentDAO>(alimentDAO, HttpStatus.OK);
             } else {
                 return null;
             }
         } catch (Exception e) {
-            System.out.println("je proc 4");
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -239,6 +243,7 @@ public class InitializerController {
         RecipeDAO recipeDAO = new RecipeDAO();
         RecipeTransferJTO recipeTransfer = new RecipeTransferJTO();
 
+        System.out.println("offset is : " + index);
         try {
             recipeTransfer = mapper.readValue(response, RecipeTransferJTO.class);
 
@@ -250,6 +255,45 @@ public class InitializerController {
                     recipeService.save(recipeDAO);
                 }
 
+            }
+
+        } catch (JsonMappingException e) {
+            e.printStackTrace();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return response;
+    }
+
+    @GetMapping("recipe/addAll")
+    public String addAllRecipe() throws InterruptedException {
+        for (int i = 0; i < 1000; i += 100) {
+            addMultipleRecipes(i);
+        }
+        return "All Recipes added or updated";
+    }
+    
+
+    @GetMapping("recipe/add/{id}")
+    public String addOneRecipe(@PathVariable String id) throws InterruptedException {
+
+        RestClient defaultClient = RestClient.create();
+        String response = defaultClient.get().uri(
+                "https://api.spoonacular.com/recipes/{id}/information?apiKey=6db25c150fbc44eebca76e569f90defc&includeNutrition=true",
+                id)
+                .retrieve()
+                .body(String.class);
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        RecipeDAO recipeDAO = new RecipeDAO();
+
+        try {
+            RecipeJTO recipeJTO = mapper.readValue(response, RecipeJTO.class);
+            recipeDAO = mapperRecipe.mapRecipe(recipeJTO);
+
+            if (!recipeDAO.equals(new RecipeDAO())) {
+                recipeService.save(recipeDAO);
             }
 
         } catch (JsonMappingException e) {
@@ -284,19 +328,78 @@ public class InitializerController {
 
         return missingIngredients;
     }
+
+    @GetMapping("/missingIngredients/ponderate")
+    public MissingIngredients ponderateMissingIngredients() {
+
+        Iterable<RecipeDAO> allRecipes = recipeService.getAllRecipes();
+        Map<String, Integer> missingMap = new HashMap<>();
+
+        for (RecipeDAO recipe : allRecipes) {
+            List<IngredientDAO> ingredients = recipe.getIngredients();
+
+            for (IngredientDAO ingredient : ingredients) {
+                String idIngredient = ingredient.getAliment().getId();
+                Optional<AlimentDAO> aliment = alimentService.getAlimentById(idIngredient);
+                
+                if (!aliment.isPresent()) {
+                    Integer value = missingMap.get(idIngredient);
+                    missingMap.put(idIngredient, value == null ? 0 : value+1);
+                }
+            }
+        }
+
+        Stream<Map.Entry<String,Integer>> sorted =
+        missingMap.entrySet().stream()
+        .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()));
+
+        LinkedHashMap<String, Integer> sortedMissingMap = sorted.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x,y) -> y, LinkedHashMap::new));
+
+        MissingIngredients missingIngredients = missingService.getMissingById(1).get();
+        missingIngredients.setMissingMap(sortedMissingMap);
+        missingService.save(missingIngredients);
+
+        return missingIngredients;
+    }
     
     @GetMapping("/missingIngredients/cure/{number}")
     public MissingIngredients cureMissingIngredients(@PathVariable int number) throws InterruptedException {
 
-        Set<String> missingSet = missingService.getMissingById(1).get().getMissingSet();
+        Map<String,Integer> missingMap = missingService.getMissingById(1).get().getMissingMap();
 
-        for (String idAliment : missingSet.stream().limit(number-1).collect(Collectors.toSet())) {
-            addAliment(idAliment);
-            Thread.sleep(1001);
+        // for (String idAliment : missingMap.stream().limit(number-1).collect(Collectors.toMap())) {
+        //     addAliment(idAliment);
+        //     Thread.sleep(1001);
+        // }
+
+        for ( Map.Entry<String, Integer> entry : missingMap.entrySet().stream().limit(number-1).collect(Collectors.toSet())) {
+            addAliment(entry.getKey());
         }
 
         // MissingIngredients missingIngredients = calculateMissingIngredients();
         return null;
     }
     
+    @GetMapping("/missingIngredients/patch")
+    public String patchMissingIngredients() {
+
+        Iterable<RecipeDAO> allRecipes = recipeService.getAllRecipes();
+        
+        for (RecipeDAO recipe : allRecipes) {
+            List<IngredientDAO> ingredients = recipe.getIngredients();
+
+            for (IngredientDAO ingredient : ingredients) {
+                String idIngredient = ingredient.getAliment().getId();
+                Optional<AlimentDAO> aliment = alimentService.getAlimentById(idIngredient);
+                
+                if (aliment.isPresent()) {
+                    ingredient.setAliment(aliment.get());
+                }
+            }
+            recipeService.save(recipe);
+        }
+
+
+        return "done";
+    }
 }
