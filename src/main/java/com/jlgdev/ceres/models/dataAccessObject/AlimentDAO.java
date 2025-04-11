@@ -28,7 +28,7 @@ public class AlimentDAO {
 
     private Set<String> possibleUnits;
 
-
+    private Double convertionValue;
 
     public String getId() {
         return id;
@@ -94,6 +94,14 @@ public class AlimentDAO {
         this.possibleUnits = possibleUnits;
     }
 
+    public Double getConvertionValue() {
+        return convertionValue;
+    }
+
+    public void setConvertionValue(Double convertionValue) {
+        this.convertionValue = convertionValue;
+    }
+
     public AlimentDAO() {
     }
 
@@ -105,6 +113,7 @@ public class AlimentDAO {
     public String toString() {
         return "AlimentDAO [id=" + id + ", nameEn=" + nameEn + ", nameFr=" + nameFr + ", aisle=" + aisle + ", image="
                 + image + ", nutrition=" + nutrition + ", categoryPath=" + categoryPath + ", possibleUnits="
-                + possibleUnits + "]";
+                + possibleUnits + ", convertionValue=" + convertionValue + "]";
     }
+
 }

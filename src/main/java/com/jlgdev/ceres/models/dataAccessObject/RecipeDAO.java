@@ -11,14 +11,6 @@ public class RecipeDAO {
 
     private String title;
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     private String titleEn;
 
     private String titleFr;
@@ -63,6 +55,14 @@ public class RecipeDAO {
         this.id = id;
     }
     
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getTitleEn() {
         return titleEn;
     }

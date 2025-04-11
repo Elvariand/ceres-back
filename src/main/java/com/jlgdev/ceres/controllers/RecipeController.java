@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.BasicQuery;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jlgdev.ceres.models.dataAccessObject.RecipeDAO;
 import com.jlgdev.ceres.models.request.SearchForm;
-import com.jlgdev.ceres.services.AlimentService;
+// import com.jlgdev.ceres.services.AlimentService;
 import com.jlgdev.ceres.services.RecipeService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,8 +29,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 // @Transactional
 public class RecipeController {
 
-    @Autowired
-    private AlimentService alimentService;
+    // @Autowired
+    // private AlimentService alimentService;
 
     @Autowired
     private RecipeService recipeService;
@@ -90,7 +89,7 @@ public class RecipeController {
         }
 
         if (withoutIngredient != null) {
-            queryString += "\t{ \"$or\": [\n\t\t{ \"ingredients.aliment.nameEn\" : { \"$nin\": [ " + withoutIngredient + " ] } },\n\t\t{ \"ingredients.nameFromApi\" : { \"$nin\": [ " + withoutIngredient + " ] } }\n\t\t] },\n";
+            queryString += "\t{ \"$and\": [\n\t\t{ \"ingredients.aliment.nameEn\" : { \"$nin\": [ " + withoutIngredient + " ] } },\n\t\t{ \"ingredients.nameFromApi\" : { \"$nin\": [ " + withoutIngredient + " ] } }\n\t\t] },\n";
         }
 
         if (preparationTime > -1) {

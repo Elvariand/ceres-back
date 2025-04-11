@@ -1,18 +1,23 @@
 package com.jlgdev.ceres.controllers;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,29 +30,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClient;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jlgdev.ceres.models.jsonToObject.AlimentJTO;
 import com.jlgdev.ceres.models.dataAccessObject.AlimentDAO;
-import com.jlgdev.ceres.models.dataAccessObject.AlimentPropertiesDAO;
-import com.jlgdev.ceres.models.dataAccessObject.FlavonoidDAO;
 import com.jlgdev.ceres.models.dataAccessObject.IngredientDAO;
 import com.jlgdev.ceres.models.dataAccessObject.MissingIngredients;
-import com.jlgdev.ceres.models.dataAccessObject.NutrientDAO;
 import com.jlgdev.ceres.models.dataAccessObject.RecipeDAO;
 import com.jlgdev.ceres.models.jsonToObject.RecipeJTO;
 import com.jlgdev.ceres.models.jsonToObject.RecipeTransferJTO;
 import com.jlgdev.ceres.models.mapper.MapperAliment;
 import com.jlgdev.ceres.models.mapper.MapperRecipe;
-import com.jlgdev.ceres.repositories.AlimentRepository;
 import com.jlgdev.ceres.services.AlimentService;
 import com.jlgdev.ceres.services.MissingService;
 import com.jlgdev.ceres.services.RecipeService;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 @RestController
 @RequestMapping("/initialize")
@@ -204,7 +202,7 @@ public class InitializerController {
                 } catch (Exception e) {
                     System.err.println("error");
                 }
-            } while ((response.contains("does not exist") || response.length() < 15) && counter<152);
+            } while ((response.contains("does not exist") || response.length() < 15) && counter < 152);
 
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -272,7 +270,6 @@ public class InitializerController {
         }
         return "All Recipes added or updated";
     }
-    
 
     @GetMapping("recipe/add/{id}")
     public String addOneRecipe(@PathVariable String id) throws InterruptedException {
@@ -316,7 +313,7 @@ public class InitializerController {
             for (IngredientDAO ingredient : ingredients) {
                 String idIngredient = ingredient.getAliment().getId();
                 Optional<AlimentDAO> aliment = alimentService.getAlimentById(idIngredient);
-                
+
                 if (!aliment.isPresent()) {
                     missingSet.add(idIngredient);
                 }
@@ -341,19 +338,19 @@ public class InitializerController {
             for (IngredientDAO ingredient : ingredients) {
                 String idIngredient = ingredient.getAliment().getId();
                 Optional<AlimentDAO> aliment = alimentService.getAlimentById(idIngredient);
-                
+
                 if (!aliment.isPresent()) {
                     Integer value = missingMap.get(idIngredient);
-                    missingMap.put(idIngredient, value == null ? 0 : value+1);
+                    missingMap.put(idIngredient, value == null ? 1 : value + 1);
                 }
             }
         }
 
-        Stream<Map.Entry<String,Integer>> sorted =
-        missingMap.entrySet().stream()
-        .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()));
+        Stream<Map.Entry<String, Integer>> sorted = missingMap.entrySet().stream()
+                .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()));
 
-        LinkedHashMap<String, Integer> sortedMissingMap = sorted.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x,y) -> y, LinkedHashMap::new));
+        LinkedHashMap<String, Integer> sortedMissingMap = sorted
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x, y) -> y, LinkedHashMap::new));
 
         MissingIngredients missingIngredients = missingService.getMissingById(1).get();
         missingIngredients.setMissingMap(sortedMissingMap);
@@ -361,37 +358,45 @@ public class InitializerController {
 
         return missingIngredients;
     }
-    
+
     @GetMapping("/missingIngredients/cure/{number}")
     public MissingIngredients cureMissingIngredients(@PathVariable int number) throws InterruptedException {
+        int counter = 0;
+        Map<String, Integer> missingMap = missingService.getMissingById(1).get().getMissingMap();
 
-        Map<String,Integer> missingMap = missingService.getMissingById(1).get().getMissingMap();
-
-        // for (String idAliment : missingMap.stream().limit(number-1).collect(Collectors.toMap())) {
-        //     addAliment(idAliment);
-        //     Thread.sleep(1001);
+        // for (String idAliment :
+        // missingMap.stream().limit(number-1).collect(Collectors.toMap())) {
+        // addAliment(idAliment);
+        // Thread.sleep(1001);
         // }
 
-        for ( Map.Entry<String, Integer> entry : missingMap.entrySet().stream().limit(number-1).collect(Collectors.toSet())) {
+        for (Map.Entry<String, Integer> entry : missingMap.entrySet().stream().limit(number - 1)
+                .collect(Collectors.toSet())) {
             addAliment(entry.getKey());
+            if (++counter == 60) {
+                System.out.println("Début de la pause");
+                Thread.sleep(60000);
+                System.out.println("Fin de la pause");
+                counter = 0;
+            }
         }
 
         // MissingIngredients missingIngredients = calculateMissingIngredients();
         return null;
     }
-    
+
     @GetMapping("/missingIngredients/patch")
     public String patchMissingIngredients() {
 
         Iterable<RecipeDAO> allRecipes = recipeService.getAllRecipes();
-        
+
         for (RecipeDAO recipe : allRecipes) {
             List<IngredientDAO> ingredients = recipe.getIngredients();
 
             for (IngredientDAO ingredient : ingredients) {
                 String idIngredient = ingredient.getAliment().getId();
                 Optional<AlimentDAO> aliment = alimentService.getAlimentById(idIngredient);
-                
+
                 if (aliment.isPresent()) {
                     ingredient.setAliment(aliment.get());
                 }
@@ -399,7 +404,111 @@ public class InitializerController {
             recipeService.save(recipe);
         }
 
-
         return "done";
     }
+
+    @GetMapping("/aliment/all")
+    public Set<String> getAllAlliment() {
+
+        Iterable<AlimentDAO> allAliments = alimentService.getAllAliments();
+        Set<String> foodSet = new HashSet<>();
+
+        for (AlimentDAO aliment : allAliments) {
+            String alimentName = aliment.getNameEn();
+            foodSet.add(alimentName);
+        }
+
+        return foodSet;
+    }
+
+    @GetMapping("/aliment/getConverter")
+    public String getAllConvertionValue() throws IOException, URISyntaxException {
+
+        Iterable<RecipeDAO> allRecipes = recipeService.getAllRecipes();
+        // Optional<RecipeDAO> recipe = recipeService.getRecipeById("640941");
+
+        Document document = null;
+        String uri = null;
+
+        for (RecipeDAO recipe : allRecipes) {
+            List<IngredientDAO> ingredientsRecipe = recipe.getIngredients();
+            uri = recipe.getSpoonacularURL();
+            try {
+                document = Jsoup.connect(uri).get();
+                Elements ingredientsDOM = document.select(".spoonacular-ingredient");
+
+                for (Element ingredient : ingredientsDOM) {
+
+                    String nameDOM = ingredient.select(".spoonacular-name").text();
+
+                    String qtyFr = ingredient.select(".spoonacular-metric").text();
+                    String unitFr = "fail";
+                    Double amountFr = Double.valueOf(ingredient.select(".spoonacular-metric").attr("amount"));
+
+                    String qtyUs = ingredient.select(".spoonacular-us").text();
+                    String unitUs = "fail2";
+                    Double amountUs = Double.valueOf(ingredient.select(".spoonacular-us").attr("amount"));
+
+                    if (qtyFr.split(" ").length < 2 || qtyUs.split(" ").length < 2) {
+                        continue;
+                    } else {
+                        unitFr = qtyFr.split(" ")[1];
+                        unitUs = qtyUs.split(" ")[1];
+                    }
+
+                    Double convertionValue = amountFr / amountUs;
+
+                    if (unitUs.toLowerCase().contains("cup") || unitUs.trim().toLowerCase().equals("c")) {
+                        for (IngredientDAO ingredientDAO : ingredientsRecipe) {
+
+                            AlimentDAO currentAliment = ingredientDAO.getAliment();
+                            String nameDAO = ingredientDAO.getNameFromApi();
+                            String altNameDAO = currentAliment.getNameEn();
+
+                            if ( (nameDAO == null || nameDAO.equals("")) && (altNameDAO == null || altNameDAO.equals(""))) {
+                                break;
+                            } else if (nameDAO == null) {
+                                nameDAO = "fail231345";
+                            } else if (altNameDAO == null) {
+                                altNameDAO = "fail1565478";
+                            }
+                            if ((nameDOM == null || nameDOM.equals(""))) {
+                                nameDOM = "fail also 1456";
+                                System.err.println("BIG PROBLEM");
+                                break;
+                            }
+                        
+                            if (nameDAO.contains(nameDOM)
+                            || altNameDAO.contains(nameDOM)
+                            || nameDOM.contains(nameDAO)
+                            || nameDOM.contains(altNameDAO)) {
+                                if (currentAliment.getConvertionValue() == null || currentAliment.getConvertionValue() == 0) {
+                                    if (unitFr.toLowerCase().contains("g")) {
+                                        currentAliment.setConvertionValue(convertionValue);
+                                    } else {
+                                        currentAliment.setConvertionValue(23.6588);
+                                    }
+                                    alimentService.save(currentAliment);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+                recipe.setIngredients(ingredientsRecipe);
+                recipeService.save(recipe);
+            } catch (IndexOutOfBoundsException oob) {
+                System.err.println("###############################");
+                System.err.println(" ça n'a pas marché avec \n recette : " + recipe.getId());
+                for (IngredientDAO ingredientDAO : ingredientsRecipe) {
+                    System.err.println(ingredientDAO.getNameFromApi());
+                }
+                System.err.println("###############################");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return ("done");
+    }
+
 }
