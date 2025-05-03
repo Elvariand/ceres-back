@@ -241,6 +241,7 @@ public class InitializerController {
         RecipeDAO recipeDAO = new RecipeDAO();
         RecipeTransferJTO recipeTransfer = new RecipeTransferJTO();
 
+//test
         System.out.println("offset is : " + index);
         try {
             recipeTransfer = mapper.readValue(response, RecipeTransferJTO.class);
