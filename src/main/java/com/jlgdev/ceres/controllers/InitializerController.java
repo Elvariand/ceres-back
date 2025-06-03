@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,9 +44,11 @@ import com.jlgdev.ceres.models.jsonToObject.RecipeJTO;
 import com.jlgdev.ceres.models.jsonToObject.RecipeTransferJTO;
 import com.jlgdev.ceres.models.mapper.MapperAliment;
 import com.jlgdev.ceres.models.mapper.MapperRecipe;
+import com.jlgdev.ceres.models.translation.TranslationQuery;
 import com.jlgdev.ceres.services.AlimentService;
 import com.jlgdev.ceres.services.MissingService;
 import com.jlgdev.ceres.services.RecipeService;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/initialize")
@@ -241,7 +244,7 @@ public class InitializerController {
         RecipeDAO recipeDAO = new RecipeDAO();
         RecipeTransferJTO recipeTransfer = new RecipeTransferJTO();
 
-//test
+        // test
         System.out.println("offset is : " + index);
         try {
             recipeTransfer = mapper.readValue(response, RecipeTransferJTO.class);
@@ -466,7 +469,8 @@ public class InitializerController {
                             String nameDAO = ingredientDAO.getNameFromApi();
                             String altNameDAO = currentAliment.getNameEn();
 
-                            if ( (nameDAO == null || nameDAO.equals("")) && (altNameDAO == null || altNameDAO.equals(""))) {
+                            if ((nameDAO == null || nameDAO.equals(""))
+                                    && (altNameDAO == null || altNameDAO.equals(""))) {
                                 break;
                             } else if (nameDAO == null) {
                                 nameDAO = "fail231345";
@@ -478,12 +482,13 @@ public class InitializerController {
                                 System.err.println("BIG PROBLEM");
                                 break;
                             }
-                        
+
                             if (nameDAO.contains(nameDOM)
-                            || altNameDAO.contains(nameDOM)
-                            || nameDOM.contains(nameDAO)
-                            || nameDOM.contains(altNameDAO)) {
-                                if (currentAliment.getConvertionValue() == null || currentAliment.getConvertionValue() == 0) {
+                                    || altNameDAO.contains(nameDOM)
+                                    || nameDOM.contains(nameDAO)
+                                    || nameDOM.contains(altNameDAO)) {
+                                if (currentAliment.getConvertionValue() == null
+                                        || currentAliment.getConvertionValue() == 0) {
                                     if (unitFr.toLowerCase().contains("g")) {
                                         currentAliment.setConvertionValue(convertionValue);
                                     } else {
@@ -510,6 +515,36 @@ public class InitializerController {
             }
         }
         return ("done");
+    }
+
+    @GetMapping("/aliment/translation/names")
+    public String getMethodName() {
+
+        Iterable<AlimentDAO> allAliments = alimentService.getAllAliments();
+        RestClient defaultClient = RestClient.create();
+        String nameEn = "";
+        String nameFr = "";
+
+        for (AlimentDAO aliment : allAliments) {
+            nameEn = aliment.getNameEn();
+
+            TranslationQuery query = new TranslationQuery(nameEn);
+            
+            String response = defaultClient.post()
+            .uri("http://localhost:5000/translate")
+            .contentType(MediaType.APPLICATION_JSON)
+            .body( query )
+            .retrieve()
+            .body(String.class);
+            
+            if (response != null) {
+                nameFr = response.indexOf("\"alternatives\":[]") != -1 ? response.substring(37, response.indexOf("}")-1) : response.substring(response.indexOf("[")+2, response.indexOf("]")-1);
+                aliment.setNameFr(nameFr);
+                alimentService.save(aliment);
+            }
+        }
+
+        return nameFr;
     }
 
 }
