@@ -25,6 +25,34 @@ public class RecipeDAO {
 
     private boolean glutenFree;
 
+    private boolean eggfree;
+
+    private boolean nutfree;
+
+    private boolean shellfishfree;
+
+    private boolean seefoodfree;
+
+    private boolean mustardfree;
+
+    private boolean fishfree;
+
+    private boolean celeryfree;
+
+    private boolean soyfree;
+
+    private boolean sulfiltfree;
+
+    private boolean sesamefree;
+
+    private boolean lupinefree;
+
+    private boolean judaism;
+
+    private boolean islam;
+
+    private boolean seasonal;
+    
     private boolean dairyFree;
 
     private int preparationMinutes;

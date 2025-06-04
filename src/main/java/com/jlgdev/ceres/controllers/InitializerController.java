@@ -234,7 +234,7 @@ public class InitializerController {
 
         RestClient defaultClient = RestClient.create();
         String response = defaultClient.get().uri(
-                "https://api.spoonacular.com/recipes/complexSearch?apiKey=6db25c150fbc44eebca76e569f90defc&addRecipeInformation=true&addRecipeInstructions=true&addRecipeNutrition=true&offset={index}&number=10",
+                "https://api.spoonacular.com/recipes/complexSearch?apiKey=6db25c150fbc44eebca76e569f90defc&addRecipeInformation=true&addRecipeInstructions=true&addRecipeNutrition=true&offset={index}&number=100",
                 index)
                 .retrieve()
                 .body(String.class);
@@ -517,34 +517,5 @@ public class InitializerController {
         return ("done");
     }
 
-    @GetMapping("/aliment/translation/names")
-    public String getMethodName() {
-
-        Iterable<AlimentDAO> allAliments = alimentService.getAllAliments();
-        RestClient defaultClient = RestClient.create();
-        String nameEn = "";
-        String nameFr = "";
-
-        for (AlimentDAO aliment : allAliments) {
-            nameEn = aliment.getNameEn();
-
-            TranslationQuery query = new TranslationQuery(nameEn);
-            
-            String response = defaultClient.post()
-            .uri("http://localhost:5000/translate")
-            .contentType(MediaType.APPLICATION_JSON)
-            .body( query )
-            .retrieve()
-            .body(String.class);
-            
-            if (response != null) {
-                nameFr = response.indexOf("\"alternatives\":[]") != -1 ? response.substring(37, response.indexOf("}")-1) : response.substring(response.indexOf("[")+2, response.indexOf("]")-1);
-                aliment.setNameFr(nameFr);
-                alimentService.save(aliment);
-            }
-        }
-
-        return nameFr;
-    }
 
 }

@@ -66,6 +66,9 @@ public class RecipeJTO {
     @JsonProperty("spoonacularSourceUrl")
     private String spoonacularURL;
 
+
+
+
     public String getId() {
         return id;
     }
