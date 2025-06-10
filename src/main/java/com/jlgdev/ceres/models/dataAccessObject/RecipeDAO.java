@@ -6,6 +6,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document("recipes")
 public class RecipeDAO {
+    public static final byte OK = 1;
+    public static final byte WARNING = 2;
+    public static final byte FORBIDDEN = 0;
 
     private String id;
 
@@ -19,41 +22,43 @@ public class RecipeDAO {
 
     private List<String> tags;
 
-    private boolean vegetarian;
+    private byte vegetarian;
 
-    private boolean vegan;
+    private byte vegan;
 
-    private boolean glutenFree;
+    private byte arachidfree;
 
-    private boolean eggfree;
+    private byte glutenfree;
 
-    private boolean nutfree;
+    private byte eggfree;
 
-    private boolean shellfishfree;
+    private byte nutfree;
 
-    private boolean seefoodfree;
+    private byte shellfishfree;
 
-    private boolean mustardfree;
+    private byte seefoodfree;
 
-    private boolean fishfree;
+    private byte mustardfree;
 
-    private boolean celeryfree;
+    private byte fishfree;
 
-    private boolean soyfree;
+    private byte celeryfree;
 
-    private boolean sulfiltfree;
+    private byte soyfree;
 
-    private boolean sesamefree;
+    private byte sulfitfree;
 
-    private boolean lupinefree;
+    private byte sesamefree;
 
-    private boolean judaism;
+    private byte lupinefree;
 
-    private boolean islam;
+    private byte judaism;
 
-    private boolean seasonal;
+    private byte islam;
+
+    private byte seasonal;
     
-    private boolean dairyFree;
+    private byte dairyfree;
 
     private int preparationMinutes;
 
@@ -121,38 +126,6 @@ public class RecipeDAO {
     
     public void setTags(List<String> tags) {
         this.tags = tags;
-    }
-    
-    public boolean isVegetarian() {
-        return vegetarian;
-    }
-    
-    public void setVegetarian(boolean vegetarian) {
-        this.vegetarian = vegetarian;
-    }
-    
-    public boolean isVegan() {
-        return vegan;
-    }
-    
-    public void setVegan(boolean vegan) {
-        this.vegan = vegan;
-    }
-    
-    public boolean isGlutenFree() {
-        return glutenFree;
-    }
-    
-    public void setGlutenFree(boolean glutenFree) {
-        this.glutenFree = glutenFree;
-    }
-    
-    public boolean isDairyFree() {
-        return dairyFree;
-    }
-    
-    public void setDairyFree(boolean dairyFree) {
-        this.dairyFree = dairyFree;
     }
     
     public int getPreparationMinutes() {
@@ -227,42 +200,179 @@ public class RecipeDAO {
         this.spoonacularURL = spoonacularURL;
     }
 
-    public RecipeDAO() {
+
+    
+
+    public byte getVegetarian() {
+        return vegetarian;
     }
 
-    public RecipeDAO(String id, String title, String titleEn, String titleFr, List<IngredientDAO> ingredients,
-            List<String> tags, boolean vegetarian, boolean vegan, boolean glutenFree, boolean dairyFree,
-            int preparationMinutes, int cookingMinutes, int totalMinutes, int likes, int healthScore, String image,
-            String imageType, String sourceURL, String spoonacularURL) {
-        this.id = id;
-        this.title = title;
-        this.titleEn = titleEn;
-        this.titleFr = titleFr;
-        this.ingredients = ingredients;
-        this.tags = tags;
+    public void setVegetarian(byte vegetarian) {
         this.vegetarian = vegetarian;
+    }
+
+    public byte getVegan() {
+        return vegan;
+    }
+
+    public void setVegan(byte vegan) {
         this.vegan = vegan;
-        this.glutenFree = glutenFree;
-        this.dairyFree = dairyFree;
-        this.preparationMinutes = preparationMinutes;
-        this.cookingMinutes = cookingMinutes;
-        this.totalMinutes = totalMinutes;
-        this.likes = likes;
-        this.healthScore = healthScore;
-        this.image = image;
-        this.imageType = imageType;
-        this.sourceURL = sourceURL;
-        this.spoonacularURL = spoonacularURL;
+    }
+
+    public byte getArachidfree() {
+        return arachidfree;
+    }
+
+    public void setArachidfree(byte arachidfree) {
+        this.arachidfree = arachidfree;
+    }
+
+    public byte getGlutenfree() {
+        return glutenfree;
+    }
+
+    public void setGlutenfree(byte glutenfree) {
+        this.glutenfree = glutenfree;
+    }
+
+    public byte getEggfree() {
+        return eggfree;
+    }
+
+    public void setEggfree(byte eggfree) {
+        this.eggfree = eggfree;
+    }
+
+    public byte getNutfree() {
+        return nutfree;
+    }
+
+    public void setNutfree(byte nutfree) {
+        this.nutfree = nutfree;
+    }
+
+    public byte getShellfishfree() {
+        return shellfishfree;
+    }
+
+    public void setShellfishfree(byte shellfishfree) {
+        this.shellfishfree = shellfishfree;
+    }
+
+    public byte getSeefoodfree() {
+        return seefoodfree;
+    }
+
+    public void setSeefoodfree(byte seefoodfree) {
+        this.seefoodfree = seefoodfree;
+    }
+
+    public byte getMustardfree() {
+        return mustardfree;
+    }
+
+    public void setMustardfree(byte mustardfree) {
+        this.mustardfree = mustardfree;
+    }
+
+    public byte getFishfree() {
+        return fishfree;
+    }
+
+    public void setFishfree(byte fishfree) {
+        this.fishfree = fishfree;
+    }
+
+    public byte getCeleryfree() {
+        return celeryfree;
+    }
+
+    public void setCeleryfree(byte celeryfree) {
+        this.celeryfree = celeryfree;
+    }
+
+    public byte getSoyfree() {
+        return soyfree;
+    }
+
+    public void setSoyfree(byte soyfree) {
+        this.soyfree = soyfree;
+    }
+
+    public byte getSulfitfree() {
+        return sulfitfree;
+    }
+
+    public void setSulfitfree(byte sulfitfree) {
+        this.sulfitfree = sulfitfree;
+    }
+
+    public byte getSesamefree() {
+        return sesamefree;
+    }
+
+    public void setSesamefree(byte sesamefree) {
+        this.sesamefree = sesamefree;
+    }
+
+    public byte getLupinefree() {
+        return lupinefree;
+    }
+
+    public void setLupinefree(byte lupinefree) {
+        this.lupinefree = lupinefree;
+    }
+
+    public byte getJudaism() {
+        return judaism;
+    }
+
+    public void setJudaism(byte judaism) {
+        this.judaism = judaism;
+    }
+
+    public byte getIslam() {
+        return islam;
+    }
+
+    public void setIslam(byte islam) {
+        this.islam = islam;
+    }
+
+    public byte getSeasonal() {
+        return seasonal;
+    }
+
+    public void setSeasonal(byte seasonal) {
+        this.seasonal = seasonal;
+    }
+
+    public byte getDairyfree() {
+        return dairyfree;
+    }
+
+    public void setDairyfree(byte dairyfree) {
+        this.dairyfree = dairyfree;
+    }
+
+    public RecipeDAO() {
     }
 
     @Override
     public String toString() {
-        return "RecipeDAO [id=" + id + ", title=" + title + ", titleEn=" + titleEn + ", titleFr=" + titleFr
+        return "RecipeDAO [id=" + id + ", title=" + title + ", titleEn=" + titleEn + ", titlefr=" + titleFr
                 + ", ingredients=" + ingredients + ", tags=" + tags + ", vegetarian=" + vegetarian + ", vegan=" + vegan
-                + ", glutenFree=" + glutenFree + ", dairyFree=" + dairyFree + ", preparationMinutes="
-                + preparationMinutes + ", cookingMinutes=" + cookingMinutes + ", totalMinutes=" + totalMinutes
-                + ", likes=" + likes + ", healthScore=" + healthScore + ", image=" + image + ", imageType=" + imageType
-                + ", sourceURL=" + sourceURL + ", spoonacularURL=" + spoonacularURL + "]";
+                + ", arachidfree=" + arachidfree + ", glutenfree=" + glutenfree + ", eggfree=" + eggfree + ", nutfree="
+                + nutfree + ", shellfishfree=" + shellfishfree + ", seefoodfree=" + seefoodfree + ", mustardfree="
+                + mustardfree + ", fishfree=" + fishfree + ", celeryfree=" + celeryfree + ", soyfree=" + soyfree
+                + ", sulfiltfree=" + sulfitfree + ", sesamefree=" + sesamefree + ", lupinefree=" + lupinefree
+                + ", judaism=" + judaism + ", islam=" + islam + ", seasonal=" + seasonal + ", dairyfree=" + dairyfree
+                + ", preparationMinutes=" + preparationMinutes + ", cookingMinutes=" + cookingMinutes
+                + ", totalMinutes=" + totalMinutes + ", likes=" + likes + ", healthScore=" + healthScore + ", image="
+                + image + ", imageType=" + imageType + ", sourceURL=" + sourceURL + ", spoonacularURL=" + spoonacularURL
+                + "]";
     }
+
+
 
 }

@@ -1,0 +1,526 @@
+chips -> copeaux
+egg -> œuf
+white fish -> poisson blanc
+sparkling wine -> vin mousseux
+beef short ribs -> côtes de bœuf
+blueberries -> myrtilles
+long grain rice -> riz à grains longs
+beef -> bœuf
+sauce -> sauce
+pale ale -> bière pâle
+mackerel -> maquereau
+unsweetened cocoa powder -> cacao en poudre non sucré
+hot drink -> boisson chaude
+tea -> thé
+flat leaf parsley -> persil plat
+flatbread -> pain plat
+snack mix -> mélange à grignoter
+pudding mix -> mélange pour pudding
+pectin -> pectine
+olive oil -> huile d'olive
+beet -> betterave
+beer -> bière
+pork roast -> rôti de porc
+marinade -> marinade
+chicken breast -> blanc de poulet
+short pasta -> pâtes courtes
+water chestnuts -> châtaignes d'eau
+natural food coloring -> colorant alimentaire naturel
+refrigerated tortellini -> tortellini réfrigérés
+milk -> lait
+sweetener -> édulcorant
+salsa -> salsa
+macaroni -> macaronis
+no calorie sweetener -> édulcorant sans calorie
+chicken broth -> bouillon de poulet
+deli meat -> charcuterie
+asparagus -> asperges
+wine -> le vin
+breadcrumbs -> chapelure
+spaghetti -> spaghetti
+balsamic vinegar -> vinaigre balsamique
+radish -> radis
+roll -> rouleau
+tomato -> tomate
+cocoa powder -> poudre de cacao
+pork -> porc
+liquor -> liqueur
+ice cream topping -> garniture pour crème glacée
+red meat -> viande rouge
+gluten free pasta -> pâtes sans gluten
+mint -> menthe
+parsley -> persil
+mixed baby greens -> Jeunes pousses mélangées
+bran -> son
+wheat -> blé
+pastry flour -> farine pour pâtisserie
+nutritional yeast -> levure nutritionnelle
+seafood -> fruits de mer
+salt -> sel
+pork shoulder -> épaule de porc
+chinese cabbage -> chou chinois
+peppercorns -> grains de poivre
+baking mix category -> catégorie des mélanges pour pâtisserie
+vegan cheese -> fromage végétalien
+sweet onion -> oignon doux
+amaranth -> amarante
+brown rice -> riz brun
+unrefined sweetener -> édulcorant non raffiné
+swiss cheese -> fromage suisse
+citrus fruit -> agrumes
+chutney -> chutney
+fennel -> fenouil
+coconut milk -> lait de coco
+brandy -> cognac
+wrap -> envelopper
+shallot -> échalote
+ricotta cheese -> fromage ricotta
+wing sauce -> sauce pour ailes
+dip -> trempette
+endive -> endive
+chicken thighs -> cuisses de poulet
+marshmallows -> guimauves
+side dish -> plat d'accompagnement
+hersheys kisses -> baisers d'hivers
+jalapeno pepper -> piment jalapeno
+duck -> canard
+mexican cheese -> fromage mexicain
+whole chicken -> poulet entier
+melon -> melon
+tart apple -> pomme acidulée
+chili pepper -> piment
+chocolate candies -> bonbons au chocolat
+dumpling wrappers -> emballages de boulettes
+elk -> élan
+fruit juice concentrate -> concentré de jus de fruits
+boneless chicken thighs -> cuisses de poulet désossées
+crackers -> craquelins
+baking powder -> poudre à lever
+marmalade -> marmelade
+coffee creamer -> crème à café
+rosemary -> romarin
+red lentils -> lentilles rouges
+plain yogurt -> yaourt nature
+marjoram -> marjolaine
+brown lentils -> lentilles brunes
+summer squash -> courge d'été
+tofu -> tofu
+brown sauce -> sauce brune
+cooking oil -> huile de cuisson
+cinnamon -> cannelle
+hard candy -> bonbons durs
+sour cream -> crème fraîche
+fresh mozzarella -> mozzarella fraîche
+miso -> miso
+berries -> baies
+ground beef -> bœuf haché
+dried cranberries -> canneberges séchées
+pickle relish -> relish aux cornichons
+lemon -> citron
+pear -> poire
+pinto beans -> haricots pinto
+peas -> pois
+light mayonnaise -> mayonnaise légère
+pasta -> pâtes
+pork ribs -> côtes de porc
+salami -> salami
+polenta -> polenta
+tagliatelle -> tagliatelles
+syrup -> sirop
+milk substitute -> substitut de lait
+dill -> aneth
+rice -> riz
+sheep cheese -> fromage de brebis
+cream cheese spread -> fromage frais à tartiner
+blackeyed peas -> pois noirs
+starch -> amidon
+cashews -> noix de cajou
+smoked fish -> poisson fumé
+anchovies -> anchois
+crab -> crabe
+lasagne noodles -> nouilles de lasagne
+cannellini beans -> haricots cannellini
+shredded cheese -> fromage râpé
+cilantro -> coriandre
+couscous -> couscous
+cumin -> cumin
+soy sauce -> sauce soja
+relish -> relish
+reduced fat cream of celery soup -> crème de céleri allégée
+cranberries -> canneberges
+lean ground beef -> bœuf haché maigre
+mozzarella -> mozzarella
+refined sweetener -> édulcorant raffiné
+pigeon peas -> Pois d'Angole
+processed pork -> viande de porc transformée
+lime leaves -> feuilles de lime
+crabmeat -> chair de crabe
+fruit juice -> jus de fruits
+wheat protein concentrate -> concentré de protéines de blé
+sea vegetable -> légume de mer
+tomato sauce -> sauce tomate
+cream -> crème
+powdered milk -> lait en poudre
+drink -> boire
+yeast -> levure
+shredded coconut -> noix de coco râpée
+fresh corn -> maïs frais
+tarragon -> estragon
+hot cereal -> céréales chaudes
+dry red wine -> vin rouge sec
+supplement -> supplément
+gluten free flour -> farine sans gluten
+curry paste -> pâte de curry
+lemon juice -> jus de citron
+seasoning mix -> mélange d'assaisonnements
+parmesan -> parmesan
+dried red chili pepper -> piment rouge séché
+kidney beans -> haricots rouges
+mixed greens -> légumes verts mélangés
+wafer cookies -> biscuits gaufrés
+broth -> bouillon
+bone in chicken thighs -> cuisses de poulet avec os
+coleslaw -> salade de chou
+white beans -> haricots blancs
+soybeans -> soja
+corn tortilla -> tortilla de maïs
+bread loaf -> pain
+tortellini -> tortellini
+potato -> pomme de terre
+emulsifier -> émulsifiant
+green apple -> pomme verte
+cooking fat -> graisse de cuisson
+bread -> pain
+chocolate chips -> pépites de chocolat
+dried sage -> sauge séchée
+vinegar -> vinaigre
+dessert mix -> mélange pour dessert
+dessert wine -> vin de dessert
+pastry dough -> pâte à tarte
+mustard seeds -> graines de moutarde
+poultry seasoning -> assaisonnement pour volailles
+grains -> grains
+dried onion -> oignon séché
+mushrooms -> champignons
+shredded cheese blend -> mélange de fromages râpés
+bacon -> lard
+sun dried tomatoes -> tomates séchées au soleil
+salad dressing -> vinaigrette
+cod -> morue
+dry couscous -> couscous sec
+kale -> chou frisé
+nutmeg -> noix de muscade
+cooking spray -> spray de cuisson
+spinach -> épinards
+pork sausage -> saucisse de porc
+artichoke -> artichaut
+cardamom -> cardamome
+tuna steak -> steak de thon
+ice cream -> crème glacée
+chickpeas -> pois chiches
+flavored milk -> lait aromatisé
+plantain -> plantain
+canned tuna -> thon en conserve
+glaze -> glaçage
+canned pineapple -> ananas en conserve
+ale -> ale
+alcoholic drink -> boisson alcoolisée
+stock -> stock
+vegan buttery spread -> pâte à tartiner végétalienne
+cream of celery soup -> crème de céleri
+tomato concentrate -> concentré de tomates
+plum -> prune
+avocado -> avocat
+whole wheat pasta -> pâtes au blé complet
+dried kidney beans -> haricots rouges séchés
+basil -> basilic
+stevia -> stévia
+dried thyme -> thym séché
+seedless cucumber -> concombre sans pépins
+low fat yogurt -> yaourt allégé
+coconut flakes -> flocons de noix de coco
+nut butter cups -> coupes de beurre de noix
+sherry -> sherry
+cooked long pasta -> pâtes longues cuites
+ginger -> gingembre
+chili powder -> poudre de chili
+spices -> épices
+chicken -> poulet
+soup -> soupe
+red pepper -> poivre rouge
+candy -> bonbons
+fruit -> fruits
+dried mushrooms -> champignons séchés
+raw sugar -> sucre brut
+mixed vegetables -> légumes mélangés
+green beans -> haricots verts
+bell pepper -> poivron
+grilling sauce -> sauce pour grillades
+fresh tuna -> thon frais
+canned diced tomatoes -> tomates en dés en conserve
+salad topping -> garniture de salade
+garlic -> ail
+biscuits -> biscuits
+poultry -> la volaille
+peppers -> poivrons
+seaweed -> algues
+barley -> orge
+mango -> mangue
+lentils -> lentilles
+winter squash -> courge d'hiver
+orange -> orange
+apricot -> abricot
+dinner rolls -> petits pains
+canned corn -> maïs en conserve
+pineapple -> ananas
+lamb -> agneau
+lamb chop -> côte d'agneau
+bouillon cube -> cube de bouillon
+sea salt -> sel de mer
+pumpkin -> citrouille
+butter beans -> haricots beurre
+cooked chicken -> poulet cuit
+mayonnaise -> mayonnaise
+dried coconut -> noix de coco séchée
+cheese crumbles -> fromage en miettes
+pork chops -> côtelettes de porc
+soft cheese -> fromage à pâte molle
+rye flour -> farine de seigle
+cheese -> fromage
+greek yogurt -> yaourt grec
+pita -> pita
+tapioca -> tapioca
+seitan -> seitan
+jam -> confiture
+blue cheese -> fromage bleu
+canned kidney beans -> haricots rouges en conserve
+shredded cheddar cheese -> fromage cheddar râpé
+soy lecithin -> lécithine de soja
+main dish -> plat principal
+infused oil -> huile infusée
+turkey -> dinde
+dehydrated garlic -> ail déshydraté
+pesto -> pesto
+seasoning -> assaisonnement
+flaxseed -> graines de lin
+pork tenderloin -> filet de porc
+wine vinegar -> vinaigre de vin
+allspice -> piment de la Jamaïque
+cookies -> biscuits
+thyme -> thym
+dried chili pepper -> piment séché
+pop -> pop
+celery -> céleri
+white wine -> vin blanc
+baking potato -> cuisson des pommes de terre
+concentrated juice -> jus concentré
+chives -> ciboulette
+farro -> farro
+brown sugar -> sucre roux
+cream of mushroom soup -> crème de champignons
+dried herbs -> herbes séchées
+green lentils -> lentilles vertes
+green tea -> thé vert
+sesame oil -> huile de sésame
+pepperoni -> pepperoni
+paprika -> paprika
+nut butter -> beurre de noix
+whole grain pasta -> pâtes complètes
+olives -> olives
+cheddar cheese -> fromage cheddar
+fish -> poisson
+wheat flour -> farine de blé
+processed meat -> viande transformée
+lecithin -> lécithine
+tropical fruit -> fruits tropicaux
+sandwich bun -> pain de mie
+trout -> truite
+vegetable oil -> huile végétale
+buttermilk -> babeurre
+ice -> glace
+pie filling -> garniture de tarte
+cottage cheese -> fromage blanc
+dried beans -> haricots secs
+bouillon granules -> granulés de bouillon
+ham -> jambon
+sugar alcohol -> alcool de sucre
+tortilla chips -> chips tortilla
+baked goods -> produits de boulangerie
+fiber supplement -> supplément de fibres
+sauce mix -> mélange de sauces
+rice flour -> farine de riz
+greek olives -> olives grecques
+seeds -> semences
+organ meat -> viande d'organe
+dried strawberries -> fraises séchées
+quinoa -> quinoa
+fava beans -> fèves
+coconut -> noix de coco
+extract -> extraire
+smoked sausage -> saucisse fumée
+nuts -> écrous
+bok choy -> bok choy
+whiskey -> whisky
+grapes -> raisins
+tamarind -> tamarin
+pepper -> poivre
+pecans -> noix de pécan
+snack -> collation
+cream cheese -> fromage à la crème
+broccoli -> brocoli
+penne -> penne
+fresh parsley -> persil frais
+vegetable -> légume
+apple -> pomme
+currants -> groseilles
+white corn -> maïs blanc
+honey -> miel
+walnuts -> noix
+unrefined sugar -> sucre non raffiné
+food color -> colorant alimentaire
+added sugar -> sucre ajouté
+bone -> os
+almonds -> amandes
+sugar substitute -> substitut de sucre
+chocolate sandwich cookies -> biscuits sandwichs au chocolat
+Halloween candy -> Bonbons d'Halloween
+cream sauce -> sauce à la crème
+steak seasoning -> assaisonnement pour steak
+protein powder -> protéines en poudre
+granulated sugar -> sucre cristallisé
+canned albacore tuna -> thon germon en conserve
+base -> base
+turkey breast -> poitrine de dinde
+yogurt -> yaourt
+canned fish -> poisson en conserve
+cabbage -> choux
+feta cheese -> fromage feta
+legumes -> légumineuses
+game meat -> viande de gibier
+cardamom pods -> gousses de cardamome
+sandwich cookies -> biscuits sandwichs
+peanuts -> cacahuètes
+veggie crumbles -> crumble de légumes
+ham hock -> jarret de porc
+cooked pasta -> pâtes cuites
+long pasta -> pâtes longues
+sprouts -> germes
+eggplant -> aubergine
+canned green chiles -> piments verts en conserve
+arugula -> roquette
+fermented vegetable -> légume fermenté
+liver -> foie
+bouillon -> bouillon
+hot sauce -> sauce piquante
+cooked white rice -> riz blanc cuit
+dates -> dates
+nut milk -> lait de noix
+lettuce -> laitue
+veal -> veau
+italian sausage -> saucisse italienne
+boiling potato -> pomme de terre bouillante
+beef broth -> bouillon de bœuf
+root vegetable -> légume-racine
+vegetable juice -> jus de légumes
+vegetable broth -> bouillon de légumes
+breakfast -> petit déjeuner
+green chili pepper -> piment vert
+dark chocolate -> chocolat noir
+chocolate -> chocolat
+waxy potato -> pomme de terre cireuse
+processed turkey -> dinde transformée
+nondairy butter -> beurre non laitier
+baking pieces -> pièces de cuisson
+dry white wine -> vin blanc sec
+fruit spread -> pâte à tartiner
+pie crust -> pâte à tarte
+coriander -> coriandre
+beans -> haricots
+processed chicken -> poulet transformé
+canned tomatoes -> tomates en conserve
+dessert topping -> garniture de dessert
+nondairy creamer -> crème sans produits laitiers
+roasted chicken -> poulet rôti
+chipotle chiles -> piments chipotle
+red sauce -> sauce rouge
+peanut butter -> beurre de cacahuètes
+hard cheese -> fromage à pâte dure
+rolled oats -> flocons d'avoine
+juice -> jus
+crust -> croûte
+cream of chicken soup -> soupe de poulet à la crème
+sesame seeds -> graines de sésame
+bengal gram -> gramme du bengale
+meat substitute -> substitut de viande
+sharp cheddar cheese -> fromage cheddar fort
+filled pasta -> pâtes farcies
+liqueur -> liqueur
+fruit butter -> beurre de fruits
+red wine -> vin rouge
+seasoned salt -> sel assaisonné
+chorizo -> chorizo
+corn -> maïs
+dessert filling -> garniture de dessert
+cherries -> cerises
+onion -> oignon
+cucumber -> concombre
+half and half -> moitié-moitié
+sausage -> saucisse
+enchilada sauce -> sauce enchilada
+mustard -> moutarde
+squash -> courge
+black beans -> haricots noirs
+flour product -> produit à base de farine
+fresh mushrooms -> champignons frais
+sage -> sage
+sweet pepper -> poivre doux
+baguette -> baguette
+grill seasoning -> assaisonnement pour grillades
+dried sweetened cranberries -> canneberges séchées et sucrées
+dried fruit -> fruits secs
+beef ribs -> côtes de bœuf
+tree nuts -> les fruits à coque
+salmon -> saumon
+rice noodles -> nouilles de riz
+tortilla -> tortilla
+water -> l'eau
+great northern beans -> haricots du Grand Nord
+tapenade -> tapenade
+roasted cashews -> noix de cajou grillées
+romaine -> romaine
+fresh herbs -> herbes fraîches
+cereal -> céréales
+halibut -> flétan
+green peas -> pois verts
+raisins -> raisins secs
+sugar -> sucre
+rice wine -> vin de riz
+tuna -> thon
+cauliflower -> chou-fleur
+condiment -> condiment
+shrimp -> crevette
+steak -> steak
+drink mix -> mélange de boissons
+green pesto -> pesto vert
+herbs -> herbes
+pickles -> cornichons
+salad dressing mix -> mélange pour vinaigrette
+butter -> beurre
+oats -> avoine
+beef brisket -> poitrine de bœuf
+vinaigrette -> vinaigrette
+canned beans -> haricots en conserve
+lime -> chaux
+greens -> verts
+beef roast -> rôti de bœuf
+spread -> se propager
+clove -> girofle
+cake mix -> mélange à gâteau
+shellfish -> mollusques et crustacés
+dessert -> dessert
+cooked rice -> riz cuit
+meat -> viande
+gravy -> sauce
+seafood seasoning -> assaisonnement pour fruits de mer
+arbol chile -> arbol chile
+carrot -> carotte

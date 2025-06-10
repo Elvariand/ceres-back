@@ -1,0 +1,23 @@
+{
+    "name": "nut",
+    "warning": [
+        "chocolat",
+        "pâtisserie",
+        "patisserie",
+        "pesto",
+        "muesli",
+        "glace"
+    ],
+    "forbidden": [
+        "amande",
+        "noisette",
+        "cajou",
+        "macadamia",
+        "noix du brésil",
+        "noix du bresil",
+        "pécan",
+        "pecan",
+        "pistache",
+        "noix"
+    ]
+}

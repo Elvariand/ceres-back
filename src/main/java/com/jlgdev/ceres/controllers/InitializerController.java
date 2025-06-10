@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -37,6 +39,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jlgdev.ceres.models.jsonToObject.AlimentJTO;
 import com.jlgdev.ceres.models.dataAccessObject.AlimentDAO;
+import com.jlgdev.ceres.models.dataAccessObject.AllergyDAO;
 import com.jlgdev.ceres.models.dataAccessObject.IngredientDAO;
 import com.jlgdev.ceres.models.dataAccessObject.MissingIngredients;
 import com.jlgdev.ceres.models.dataAccessObject.RecipeDAO;
@@ -46,6 +49,7 @@ import com.jlgdev.ceres.models.mapper.MapperAliment;
 import com.jlgdev.ceres.models.mapper.MapperRecipe;
 import com.jlgdev.ceres.models.translation.TranslationQuery;
 import com.jlgdev.ceres.services.AlimentService;
+import com.jlgdev.ceres.services.AllergyService;
 import com.jlgdev.ceres.services.MissingService;
 import com.jlgdev.ceres.services.RecipeService;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -64,6 +68,9 @@ public class InitializerController {
 
     @Autowired
     private MissingService missingService;
+
+    @Autowired
+    private AllergyService allergyService;
 
     @Autowired
     public MapperRecipe mapperRecipe;
@@ -517,5 +524,122 @@ public class InitializerController {
         return ("done");
     }
 
+    @GetMapping("/recipes/juge")
+    public String determineRestrictions() {
 
+        Iterable<RecipeDAO> allRecipes = recipeService.getAllRecipes();
+        int count = 0;
+
+        for (RecipeDAO recipe : allRecipes) {
+            // for (IngredientDAO ingredient : recipe.getIngredients()) {
+            //     ingredient.setAliment(alimentService.getAlimentById(ingredient.getAliment().getId()).get());
+            // }
+            System.out.println("###########################################");
+            System.out.println("recipe id = " + recipe.getId());
+            evaluateAllergies(recipe);
+            if (++count > 10) {
+                break;
+            }
+        }
+        return "you've been served";
+    }
+
+    private Set<AlimentDAO> getAlimentsFromRecipe(RecipeDAO recipe) {
+        Set<AlimentDAO> recipeAliments = new HashSet<>();
+        List<IngredientDAO> recipeIngredients = recipe.getIngredients();
+
+        for (IngredientDAO ingredient : recipeIngredients) {
+            recipeAliments.add(ingredient.getAliment());
+        }
+
+        return recipeAliments;
+    }
+
+    private RecipeDAO evaluateAllergies(RecipeDAO recipe) {
+
+        Iterable<AllergyDAO> allAllergies = allergyService.getAllAllergies();
+        Set<AlimentDAO> recipeAliments = getAlimentsFromRecipe(recipe);
+
+        for (AllergyDAO allergy : allAllergies) {
+            byte restriction = RecipeDAO.OK;
+            for (AlimentDAO aliment : recipeAliments) {
+                String alimentNameFr = aliment.getNameFr();
+                if (isInIterable(allergy.getForbidden(), alimentNameFr)) {
+                    System.out.println(allergy.getName());
+                    restriction = RecipeDAO.FORBIDDEN;
+                    break;
+                } else if (isInIterable(allergy.getWarnings(), alimentNameFr)) {
+                    System.out.println("warning " + allergy.getName());
+                    restriction = RecipeDAO.WARNING;
+                }
+            }
+            switch (allergy.getName()) {
+                case "arachid":
+                    recipe.setArachidfree(restriction);
+                    break;
+                case "celery":
+                    recipe.setCeleryfree(restriction);
+                    break;
+                case "dairy":
+                    recipe.setDairyfree(restriction);
+                    break;
+                case "egg":
+                    recipe.setEggfree(restriction);
+                    break;
+                case "fish":
+                    recipe.setFishfree(restriction);
+                    break;
+                case "gluten":
+                    recipe.setGlutenfree(restriction);
+                    break;
+                case "lupine":
+                    recipe.setLupinefree(restriction);
+                    break;
+                case "mustard":
+                    recipe.setMustardfree(restriction);
+                    break;
+                case "nut":
+                    recipe.setNutfree(restriction);
+                    break;
+                case "seefood":
+                    recipe.setSeefoodfree(restriction);
+                    break;
+                case "sesame":
+                    recipe.setSesamefree(restriction);
+                    break;
+                case "shellfish":
+                    recipe.setShellfishfree(restriction);
+                    break;
+                case "soy":
+                    recipe.setSoyfree(restriction);
+                    break;
+                case "sulfit":
+                    recipe.setSulfitfree(restriction);
+                    break;
+
+                default:
+                System.err.println("Un erreur a eu lieu ici");
+                    break;
+            }
+        }
+        recipeService.save(recipe);
+
+        return recipe;
+    }
+
+    private boolean isInIterable(Iterable<String> haystack, String needle) {
+        if (haystack == null || needle == null) {
+            return false;
+        }
+        for (String hay : haystack) {
+
+            Pattern pattern = Pattern.compile("(.*\\s)?\\b" + hay + "(s|x)?\\b(\\s.*)?");
+            Matcher matcher = pattern.matcher(needle);
+            if (matcher.matches() ) {
+                System.out.println("needle found : " + needle);
+                return true;
+            }
+        }
+        return false;
+    }
 }

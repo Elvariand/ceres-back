@@ -1,0 +1,14 @@
+{
+    "name": "sesame",
+    "warning": [
+        "houmous"
+    ],
+    "forbidden": [
+        "sésame",
+        "sesame",
+        "tahini",
+        "halva",
+        "gomashio",
+        "gomasio"
+    ]
+}

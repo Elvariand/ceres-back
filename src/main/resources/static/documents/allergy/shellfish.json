@@ -1,0 +1,19 @@
+{
+    "name": "shellfish",
+    "warning": [
+    ],
+    "forbidden": [
+        "moule",
+        "huître",
+        "huitre",
+        "coque",
+        "palourde",
+        "calmar",
+        "calamar",
+        "seiche",
+        "escargot",
+        "pétoncle",
+        "petoncle",
+        "ormeau"
+    ]
+}

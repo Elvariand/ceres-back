@@ -1,0 +1,25 @@
+{
+    "name": "dairy",
+    "warning": [
+        "viennoiserie",
+        "chocolat au lait",
+        "charcuterie",
+        "margarine",
+        "céréale",
+        "cereale",
+        "sans lactose"
+    ],
+    "forbidden": [
+        "lait",
+        "caséine",
+        "caseine",
+        "lactose",
+        "lactosérum",
+        "lactoserum",
+        "beurre",
+        "crème",
+        "creme",
+        "fromage",
+        "yaourt"
+    ]
+}

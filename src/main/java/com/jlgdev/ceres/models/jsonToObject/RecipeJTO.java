@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
+import com.jlgdev.ceres.models.dataAccessObject.RecipeDAO;
 
 public class RecipeJTO {
 
@@ -23,16 +24,20 @@ public class RecipeJTO {
     private List<String> tags;
 
     @JsonProperty("vegetarian")
-    private boolean vegetarian;
+    @JsonSetter(nulls = Nulls.SKIP)
+    private byte vegetarian = RecipeDAO.OK;
 
     @JsonProperty("vegan")
-    private boolean vegan;
+    @JsonSetter(nulls = Nulls.SKIP)
+    private byte vegan = RecipeDAO.OK;
 
     @JsonProperty("glutenFree")
-    private boolean glutenFree;
+    @JsonSetter(nulls = Nulls.SKIP)
+    private byte glutenFree = RecipeDAO.OK;
 
     @JsonProperty("dairyFree")
-    private boolean dairyFree;
+    @JsonSetter(nulls = Nulls.SKIP)
+    private byte dairyFree = RecipeDAO.OK;
 
     @JsonProperty("preparationMinutes")
     @JsonSetter(nulls = Nulls.SKIP)
@@ -91,38 +96,6 @@ public class RecipeJTO {
 
     public void setTags(List<String> tags) {
         this.tags = tags;
-    }
-
-    public boolean isVegetarian() {
-        return vegetarian;
-    }
-
-    public void setVegetarian(boolean vegetarian) {
-        this.vegetarian = vegetarian;
-    }
-
-    public boolean isVegan() {
-        return vegan;
-    }
-
-    public void setVegan(boolean vegan) {
-        this.vegan = vegan;
-    }
-
-    public boolean isGlutenFree() {
-        return glutenFree;
-    }
-
-    public void setGlutenFree(boolean glutenFree) {
-        this.glutenFree = glutenFree;
-    }
-
-    public boolean isDairyFree() {
-        return dairyFree;
-    }
-
-    public void setDairyFree(boolean dairyFree) {
-        this.dairyFree = dairyFree;
     }
 
     public int getPreparationMinutes() {
@@ -206,30 +179,39 @@ public class RecipeJTO {
         this.totalMinutes = totalMinutes;
     }
     
-    public RecipeJTO() {
+    public byte getVegetarian() {
+        return vegetarian;
     }
 
-    public RecipeJTO(String id, String title, NutritionRecipeJTO nutrition, List<String> tags, boolean vegetarian,
-            boolean vegan, boolean glutenFree, boolean dairyFree, int preparationMinutes, int cookingMinutes,
-            int totalMinutes, int likes, int healthScore, String image, String imageType, String sourceURL,
-            String spoonacularURL) {
-        this.id = id;
-        this.title = title;
-        this.nutrition = nutrition;
-        this.tags = tags;
+    public void setVegetarian(byte vegetarian) {
         this.vegetarian = vegetarian;
+    }
+
+    public byte getVegan() {
+        return vegan;
+    }
+
+    public void setVegan(byte vegan) {
         this.vegan = vegan;
+    }
+
+    public byte getGlutenFree() {
+        return glutenFree;
+    }
+
+    public void setGlutenFree(byte glutenFree) {
         this.glutenFree = glutenFree;
+    }
+
+    public byte getDairyFree() {
+        return dairyFree;
+    }
+
+    public void setDairyFree(byte dairyFree) {
         this.dairyFree = dairyFree;
-        this.preparationMinutes = preparationMinutes;
-        this.cookingMinutes = cookingMinutes;
-        this.totalMinutes = totalMinutes;
-        this.likes = likes;
-        this.healthScore = healthScore;
-        this.image = image;
-        this.imageType = imageType;
-        this.sourceURL = sourceURL;
-        this.spoonacularURL = spoonacularURL;
+    }
+
+    public RecipeJTO() {
     }
 
     @Override

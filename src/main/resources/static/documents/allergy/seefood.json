@@ -1,0 +1,16 @@
+{
+    "name": "seefood",
+    "warning": [
+        "bouillon",
+        "surimi"
+    ],
+    "forbidden": [
+        "crevette",
+        "crabe",
+        "langoustine",
+        "langouste",
+        "homard",
+        "écrevisse",
+        "ecrevisse"
+    ]
+}

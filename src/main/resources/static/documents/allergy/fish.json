@@ -1,0 +1,26 @@
+{
+    "name": "fish",
+    "warning": [
+        ""
+    ],
+    "forbidden": [
+        "poisson",
+        "sashimi",
+        "morue",
+        "cabillaud",
+        "saumon",
+        "lieu",
+        "seiche",
+        "raie",
+        "labre",
+        "roussette",
+        "saumonette",
+        "flétan",
+        "fletan",
+        "dorade",
+        "mulet",
+        "loup",
+        "bar",
+        "thon"
+    ]
+}

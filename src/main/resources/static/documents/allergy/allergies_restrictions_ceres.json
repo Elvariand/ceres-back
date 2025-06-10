@@ -1,0 +1,230 @@
+{
+  "allergie_arachide": {
+    "interdits": [
+      "Arachides",
+      "Huile d’arachide",
+      "Beurre de cacahuète",
+      "Farine d’arachide",
+      "Protéines d’arachide",
+      "Nougat/pralines avec cacahuètes",
+      "Arachis hypogaea"
+    ],
+    "surveiller": [
+      "Bonbons (ex : barres chocolatées)",
+      "Plats asiatiques",
+      "Cuisine africaine/indienne",
+      "Mélanges de fruits secs",
+      "Glaces industrielles",
+      "Produits de boulangerie",
+      "Snacks contaminés"
+    ]
+  },
+  "allergie_lait": {
+    "interdits": [
+      "Lait",
+      "Caséine",
+      "Lactose",
+      "Lactosérum",
+      "Beurre",
+      "Crème",
+      "Fromage",
+      "Yaourt",
+      "Protéines de lait",
+      "Petit-lait"
+    ],
+    "surveiller": [
+      "Viennoiseries",
+      "Chocolat au lait",
+      "Charcuterie",
+      "Margarines",
+      "Céréales",
+      "Produits 'sans lactose'"
+    ]
+  },
+  "allergie_oeufs": {
+    "interdits": [
+      "Œufs entiers",
+      "Blancs d’œufs",
+      "Jaunes d’œufs",
+      "Albumine",
+      "Lécithine d’œuf",
+      "Poudre d’œuf",
+      "Ovomucoïde",
+      "Ovomucine",
+      "Ovalbumine",
+      "Ovoglobuline"
+    ],
+    "surveiller": [
+      "Pâtes",
+      "Pâtisseries",
+      "Plats préparés",
+      "Sauces",
+      "Substituts d’œufs",
+      "Viandes panées",
+      "Vaccins"
+    ]
+  },
+  "allergie_fruits_a_coque": {
+    "interdits": [
+      "Amandes",
+      "Noisettes",
+      "Noix de cajou",
+      "Noix de macadamia",
+      "Noix du Brésil",
+      "Noix de pécan",
+      "Pistaches",
+      "Noix",
+      "Beurres de fruits à coque"
+    ],
+    "surveiller": [
+      "Chocolats",
+      "Pâtisseries",
+      "Pesto",
+      "Mueslis",
+      "Glaces",
+      "Produits végétariens"
+    ]
+  },
+  "allergie_mollusques": {
+    "interdits": [
+      "Moules",
+      "Huîtres",
+      "Coques",
+      "Palourdes",
+      "Calmars",
+      "Seiches",
+      "Escargots",
+      "Pétoncles",
+      "Ormeaux"
+    ],
+    "surveiller": [
+      "Bouillabaisses",
+      "Paellas",
+      "Plats asiatiques",
+      "Sauces fruits de mer",
+      "Plats préparés",
+      "Contaminations croisées"
+    ]
+  },
+  "allergie_crustaces": {
+    "interdits": [
+      "Crevettes",
+      "Crabes",
+      "Langoustines",
+      "Langoustes",
+      "Homards",
+      "Écrevisses"
+    ],
+    "surveiller": [
+      "Plats de fruits de mer",
+      "Bouillons",
+      "Surimi",
+      "Plats asiatiques",
+      "Sauces fruits de mer",
+      "Snacks goût fruits de mer"
+    ]
+  },
+  "allergie_moutarde": {
+    "interdits": [
+      "Graines de moutarde",
+      "Moutarde",
+      "Poudre de moutarde",
+      "Huile de moutarde"
+    ],
+    "surveiller": [
+      "Vinaigrettes",
+      "Charcuterie",
+      "Marinades",
+      "Bouillons",
+      "Mélanges d'épices",
+      "Plats préparés"
+    ]
+  },
+  "allergie_poisson": {
+    "interdits": [
+      "Poissons",
+      "Huile de foie de morue",
+      "Arômes naturels de poisson",
+      "Protéines de poisson"
+    ],
+    "surveiller": [
+      "Sauce poisson",
+      "Pâtes à tartiner",
+      "Bouillons de poisson",
+      "Sushi/sashimi",
+      "Compléments alimentaires"
+    ]
+  },
+  "allergie_celeri": {
+    "interdits": [
+      "Céleri rave",
+      "Céleri branche",
+      "Graines de céleri",
+      "Jus de céleri",
+      "Sel de céleri",
+      "Poudre de céleri"
+    ],
+    "surveiller": [
+      "Bouillons",
+      "Charcuterie",
+      "Mélanges d’épices",
+      "Plats préparés",
+      "Soupes industrielles"
+    ]
+  },
+  "allergie_soja": {
+    "interdits": [
+      "Soja",
+      "Fèves de soja",
+      "Protéines de soja",
+      "Sauce soja",
+      "Lait de soja",
+      "Tofu",
+      "Tempeh",
+      "Lécithine de soja",
+      "Farine de soja"
+    ],
+    "surveiller": [
+      "Produits végétariens",
+      "Charcuterie",
+      "Céréales",
+      "Chocolats",
+      "Produits sans lactose"
+    ]
+  },
+  "allergie_sulfites": {
+    "interdits": [
+      "Anhydride sulfureux (E220)",
+      "Sulfites (E221 à E228)",
+      "Dioxide de soufre"
+    ],
+    "surveiller": [
+      "Vins",
+      "Bières",
+      "Cidres",
+      "Fruits secs",
+      "Jus de fruits",
+      "Conserves",
+      "Surgelés traités",
+      "Pâtes de fruits",
+      "Charcuterie"
+    ]
+  },
+  "allergie_sesame": {
+    "interdits": [
+      "Graines de sésame",
+      "Huile de sésame",
+      "Tahini",
+      "Halva",
+      "Gomashio"
+    ],
+    "surveiller": [
+      "Pains à graines",
+      "Houmous",
+      "Plats orientaux",
+      "Plats asiatiques",
+      "Cuisine libanaise/maghrébine",
+      "Barres de céréales"
+    ]
+  }
+}

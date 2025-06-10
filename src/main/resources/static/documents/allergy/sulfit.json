@@ -1,0 +1,31 @@
+{
+    "name": "sulfit",
+    "warning": [
+        "vin",
+        "bière",
+        "biere",
+        "cidre",
+        "fruits sec",
+        "jus de fruit",
+        "conserve",
+        "surgelé",
+        "surgele",
+        "pâtes de fruit",
+        "pates de fruit",
+        "charcuterie"
+    ],
+    "forbidden": [
+        "sulfite",
+        "sulfureux",
+        "soufre",
+        "e220",
+        "e221",
+        "e222",
+        "e223",
+        "e224",
+        "e225",
+        "e226",
+        "e227",
+        "e228"
+    ]
+}

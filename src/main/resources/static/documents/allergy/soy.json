@@ -1,0 +1,13 @@
+{
+    "name": "soy",
+    "warning": [
+        "sans lactose"
+    ],
+    "forbidden": [
+        "soja",
+        "tofu",
+        "tempeh",
+        "lécithine",
+        "lecithine"
+    ]
+}

@@ -1,0 +1,12 @@
+{
+    "name": "mustard",
+    "warning": [
+        "vinaigrette",
+        "charcuterie",
+        "marinade",
+        "bouillon"
+    ],
+    "forbidden": [
+        "moutarde"
+    ]
+}

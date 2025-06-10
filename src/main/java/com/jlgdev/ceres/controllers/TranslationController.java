@@ -1,5 +1,14 @@
 package com.jlgdev.ceres.controllers;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Scanner;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +28,8 @@ import com.jlgdev.ceres.models.mapper.MapperRecipe;
 import com.jlgdev.ceres.models.translation.TranslationQuery;
 import com.jlgdev.ceres.services.AlimentService;
 import com.jlgdev.ceres.services.RecipeService;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/translate")
@@ -39,7 +50,6 @@ public class TranslationController {
 
     Logger log = LoggerFactory.getLogger(this.getClass());
 
-    
     @GetMapping("/aliments/names")
     public String getAlimentsNames() {
 
@@ -52,16 +62,18 @@ public class TranslationController {
             nameEn = aliment.getNameEn();
 
             TranslationQuery query = new TranslationQuery(nameEn);
-            
+
             String response = defaultClient.post()
-            .uri("http://localhost:5000/translate")
-            .contentType(MediaType.APPLICATION_JSON)
-            .body( query )
-            .retrieve()
-            .body(String.class);
-            
+                    .uri("http://localhost:5000/translate")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(query)
+                    .retrieve()
+                    .body(String.class);
+
             if (response != null) {
-                nameFr = response.indexOf("\"alternatives\":[]") != -1 ? response.substring(37, response.indexOf("}")-1) : response.substring(response.indexOf("[")+2, response.indexOf("]")-1);
+                nameFr = response.indexOf("\"alternatives\":[]") != -1
+                        ? response.substring(37, response.indexOf("}") - 1)
+                        : response.substring(response.indexOf("[") + 2, response.indexOf("]") - 1);
                 aliment.setNameFr(nameFr);
                 alimentService.save(aliment);
             }
@@ -85,7 +97,7 @@ public class TranslationController {
             titleEn = recipe.getTitleEn();
 
             TextResult result = deeplClient.translateText(titleEn, "en", "fr");
-            
+
             if (result != null) {
                 titleFr = result.getText();
                 System.out.println(titleFr);
@@ -100,5 +112,68 @@ public class TranslationController {
         }
 
         return allTitlesFr;
+    }
+
+    @GetMapping("/aliments/categories")
+    public String getAlimentsCategories() throws DeepLException, InterruptedException, IOException {
+
+        Iterable<AlimentDAO> allAliments = alimentService.getAllAliments();
+        Set<String> categoriesAliment = new HashSet<>();
+        String authKey = "10107230-e20d-40f8-afd1-fb61efbe1607:fx";
+        deeplClient = new DeepLClient(authKey);
+
+        File myFile = new File(
+                "C:\\Users\\Elvariand\\Coding\\Projets\\Ceres\\Code\\ceres\\src\\main\\java\\com\\jlgdev\\ceres\\models\\translation\\categories.txt");
+        Scanner myReader = new Scanner(myFile);
+        String strFile = "";
+        while (myReader.hasNextLine()) {
+            String data = myReader.nextLine();
+            strFile += data + "\n";
+        }
+        myReader.close();
+        String[] arrayFile = strFile.split("\n");
+        List<String> listAllCategoriesEn = new ArrayList<>();
+        List<String> listAllCategoriesFr = new ArrayList<>();
+
+        for (String string : arrayFile) {
+            String[] cat = string.split(" -> ");
+            listAllCategoriesEn.add(cat[0]);
+            listAllCategoriesFr.add(cat[1]);
+        }
+
+        for (AlimentDAO aliment : allAliments) {
+            categoriesAliment = aliment.getCategoryPath();
+
+            if (categoriesAliment.size() > 0) {
+
+                int index = 0;
+                Set<String> categoriesAlimentFr = new HashSet<>();
+
+                for (String catEn : categoriesAliment) {
+                    index = listAllCategoriesEn.indexOf(catEn);
+                    categoriesAlimentFr.add(listAllCategoriesFr.get(index));
+                }
+
+                aliment.setCategoryPathFr(categoriesAlimentFr);
+                alimentService.save(aliment);
+                System.out.println(categoriesAlimentFr);
+            }
+        }
+
+        return "done";
+    }
+
+    @GetMapping("/correction")
+    public void correction() {
+        Iterable<AlimentDAO> allAliments = alimentService.getAllAliments();
+
+        for (AlimentDAO aliment : allAliments) {
+            Set<String> categories = aliment.getCategoryPathFr();
+            if (categories!=null && categories.contains("boire")) {
+                categories.remove("boire");
+                categories.add("boisson");
+                alimentService.save(aliment);
+            }
+        }
     }
 }

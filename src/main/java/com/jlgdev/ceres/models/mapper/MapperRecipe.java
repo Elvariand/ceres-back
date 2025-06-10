@@ -29,10 +29,10 @@ public class MapperRecipe {
         recipeDAO.setTitleEn(Objects.requireNonNullElse(recipeJTO.getTitle(), ""));
         recipeDAO.setIngredients(mapIngredients(recipeJTO.getNutrition()));
         recipeDAO.setTags(Objects.requireNonNullElse(recipeJTO.getTags(), new ArrayList<>()));
-        recipeDAO.setVegetarian(Objects.requireNonNullElse(recipeJTO.isVegetarian(), false));
-        recipeDAO.setVegan(Objects.requireNonNullElse(recipeJTO.isVegan(), false));
-        recipeDAO.setGlutenFree(Objects.requireNonNullElse(recipeJTO.isGlutenFree(), false));
-        recipeDAO.setDairyFree(Objects.requireNonNullElse(recipeJTO.isDairyFree(), false));
+        recipeDAO.setVegetarian(Objects.requireNonNullElse(recipeJTO.getVegetarian(), RecipeDAO.OK));
+        recipeDAO.setVegan(Objects.requireNonNullElse(recipeJTO.getVegan(), RecipeDAO.OK));
+        recipeDAO.setGlutenfree(Objects.requireNonNullElse(recipeJTO.getGlutenFree(), RecipeDAO.OK));
+        recipeDAO.setDairyfree(Objects.requireNonNullElse(recipeJTO.getDairyFree(), RecipeDAO.OK));
         recipeDAO.setPreparationMinutes(Objects.requireNonNullElse(recipeJTO.getPreparationMinutes(), -1));
         recipeDAO.setCookingMinutes(Objects.requireNonNullElse(recipeJTO.getCookingMinutes(), -1));
         recipeDAO.setTotalMinutes(Objects.requireNonNullElse(recipeJTO.getTotalMinutes(), -1));

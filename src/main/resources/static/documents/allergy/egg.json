@@ -1,0 +1,21 @@
+{
+    "name": "egg",
+    "warning": [
+        "Pâtes",
+        "Pâtisseries",
+        "Pates",
+        "Patisseries"
+    ],
+    "forbidden": [
+        "oeuf",
+        "œuf",
+        "albumine",
+        "lécithine",
+        "lecithine",
+        "ovomucoïde",
+        "ovomucoide",
+        "ovomucine",
+        "ovalbumine",
+        "ovoglobuline"
+    ]
+}

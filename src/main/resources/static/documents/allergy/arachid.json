@@ -1,0 +1,14 @@
+{
+    "name": "arachid",
+    "warning": [
+        "nougat",
+        "praline",
+        "bonbon",
+        "fruits secs"
+    ],
+    "forbidden": [
+        "arachide",
+        "cacahuète",
+        "cacahuete"
+    ]
+}

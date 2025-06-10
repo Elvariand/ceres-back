@@ -26,6 +26,10 @@ public class AlimentDAO {
 
     private Set<String> categoryPath;
 
+    private Set<String> categoryPathEn;
+
+    private Set<String> categoryPathFr;
+
     private Set<String> possibleUnits;
 
     private Double convertionValue;
@@ -82,6 +86,21 @@ public class AlimentDAO {
         return categoryPath;
     }
 
+    public Set<String> getCategoryPathEn() {
+        return categoryPathEn;
+    }
+
+    public void setCategoryPathEn(Set<String> categoryPathEn) {
+        this.categoryPathEn = categoryPathEn;
+    }
+
+    public Set<String> getCategoryPathFr() {
+        return categoryPathFr;
+    }
+
+    public void setCategoryPathFr(Set<String> categoryPathFr) {
+        this.categoryPathFr = categoryPathFr;
+    }
     public void setCategoryPath(Set<String> categoryPath) {
         this.categoryPath = categoryPath;
     }
@@ -112,8 +131,9 @@ public class AlimentDAO {
     @Override
     public String toString() {
         return "AlimentDAO [id=" + id + ", nameEn=" + nameEn + ", nameFr=" + nameFr + ", aisle=" + aisle + ", image="
-                + image + ", nutrition=" + nutrition + ", categoryPath=" + categoryPath + ", possibleUnits="
-                + possibleUnits + ", convertionValue=" + convertionValue + "]";
+                + image + ", nutrition=" + nutrition + ", categoryPath=" + categoryPath + ", categoryPathEn="
+                + categoryPathEn + ", categoryPathFr=" + categoryPathFr + ", possibleUnits=" + possibleUnits
+                + ", convertionValue=" + convertionValue + "]";
     }
 
 }
