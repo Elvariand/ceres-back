@@ -18,6 +18,22 @@ public class AlimentService {
         return alimentRepository.findAll();
     }
 
+    public Iterable<AlimentDAO> getAllVeganAliments() {
+        return alimentRepository.findAllVegan();
+    }
+
+    public Iterable<AlimentDAO> getAllNonVeganAliments() {
+        return alimentRepository.findAllNonVegan();
+    }
+
+    public Iterable<AlimentDAO> getAllVegetarianAliments() {
+        return alimentRepository.findAllVegetarian();
+    }
+
+    public Iterable<AlimentDAO> getAllNonVegetarianAliments() {
+        return alimentRepository.findAllNonVegetarian();
+    }
+
     public Optional<AlimentDAO> getAlimentById(String id) {
         return alimentRepository.findById(id);
     }

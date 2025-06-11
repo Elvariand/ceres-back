@@ -13,7 +13,7 @@ public class AllergyDAO {
 
     private String name;
 
-    private Set<String> warnings;
+    private Set<String> warning;
 
     private Set<String> forbidden;
 
@@ -34,12 +34,12 @@ public class AllergyDAO {
         this.name = name;
     }
 
-    public Set<String> getWarnings() {
-        return warnings;
+    public Set<String> getWarning() {
+        return warning;
     }
 
-    public void setWarnings(Set<String> warnings) {
-        this.warnings = warnings;
+    public void setWarnings(Set<String> warning) {
+        this.warning = warning;
     }
 
     public Set<String> getForbidden() {
@@ -55,7 +55,7 @@ public class AllergyDAO {
 
     @Override
     public String toString() {
-        return "AllergyDAO [id=" + id + ", name=" + name + ", warnings=" + warnings + ", forbidden=" + forbidden + "]";
+        return "AllergyDAO [id=" + id + ", name=" + name + ", warning=" + warning + ", forbidden=" + forbidden + "]";
     }
 
 }
