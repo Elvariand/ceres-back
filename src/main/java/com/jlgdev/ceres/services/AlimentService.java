@@ -62,6 +62,10 @@ public class AlimentService {
         return alimentRepository.findByCategoryPathContaining(categoryPath);
     }
 
+    public Iterable<AlimentDAO> getAlimentMissingPath() {
+        return alimentRepository.findAllMissingPath();
+    }
+
     public AlimentDAO save(AlimentDAO aliment) {
         return alimentRepository.save(aliment);
     }

@@ -11,4 +11,6 @@ public interface AllergyRepository extends MongoRepository<AllergyDAO, String>{
     @SuppressWarnings("null")
     Optional<AllergyDAO> findById(String id);
 
+    Optional<AllergyDAO> findByName(String name);
+
 }

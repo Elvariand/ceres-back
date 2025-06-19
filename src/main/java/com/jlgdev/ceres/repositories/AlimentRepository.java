@@ -8,6 +8,8 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.lang.NonNull;
 
 import com.jlgdev.ceres.models.dataAccessObject.AlimentDAO;
+import java.util.Set;
+
 
 public interface AlimentRepository extends MongoRepository<AlimentDAO, String>{
 
@@ -22,15 +24,19 @@ public interface AlimentRepository extends MongoRepository<AlimentDAO, String>{
     List<AlimentDAO> findByCategoryPath(String categoryPath);
     List<AlimentDAO> findByCategoryPathContaining(String categoryPath);
 
-    @Query("select a from aliment where a.vegan = 1")
+    @Query("{vegan : 1}")
     List<AlimentDAO> findAllVegan();
 
-    @Query("select a from aliment where a.vegan = 0")
+    @Query("{vegan : 0}")
     List<AlimentDAO> findAllNonVegan();
 
-    @Query("select a from aliment where a.vegetarian = 1")
+    @Query("{vegetarian : 1}")
     List<AlimentDAO> findAllVegetarian();
 
-    @Query("select a from aliment where a.vegetarian = 0")
+    @Query("{vegetarian : 0}")
     List<AlimentDAO> findAllNonVegetarian();
+
+    @Query("{categoryPath: {$exists: true, $type: \"array\", $eq: [] } }"
+    + "$and {categoryPathEn: {$exists: true, $type: \"array\", $ne: [] } }")
+    List<AlimentDAO> findAllMissingPath();
 }

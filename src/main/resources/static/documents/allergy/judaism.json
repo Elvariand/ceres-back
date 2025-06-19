@@ -1,0 +1,30 @@
+{
+    "name": "judaism",
+    "warning": [
+        "lait",
+        "beurre",
+        "yaourt",
+        "yoghourt",
+        "fromage",
+        "viande",
+        "poisson"
+    ],
+    "forbidden": [
+        "porc",
+        "lard",
+        "raie",
+        "seiche",
+        "poulpe",
+        "calmar",
+        "calamar",
+        "fruit de mer",
+        "fruits de mer",
+        "coquillage",
+        "crustacé",
+        "insecte",
+        "pigeon",
+        "autruche",
+        "mouette",
+        "cigogne"
+    ]
+}

@@ -30,7 +30,6 @@ import com.jlgdev.ceres.services.AlimentService;
 import com.jlgdev.ceres.services.RecipeService;
 import org.springframework.web.bind.annotation.RequestParam;
 
-
 @RestController
 @RequestMapping("/translate")
 @CrossOrigin(origins = "*")
@@ -169,10 +168,36 @@ public class TranslationController {
 
         for (AlimentDAO aliment : allAliments) {
             Set<String> categories = aliment.getCategoryPathFr();
-            if (categories!=null && categories.contains("boire")) {
+            if (categories != null && categories.contains("boire")) {
                 categories.remove("boire");
                 categories.add("boisson");
                 alimentService.save(aliment);
+            }
+        }
+    }
+
+    @GetMapping("/correctionPath")
+    public void correctionMissingPath() throws DeepLException, InterruptedException {
+        Iterable<AlimentDAO> allAliments = alimentService.getAlimentMissingPath();
+        String authKey = "10107230-e20d-40f8-afd1-fb61efbe1607:fx";
+        deeplClient = new DeepLClient(authKey);
+        int slowdown = 0;
+        for (AlimentDAO aliment : allAliments) {
+            Set<String> pathFr = new HashSet<>();
+            for (String pathEn : aliment.getCategoryPathEn()) {
+                
+
+                TextResult result = deeplClient.translateText(pathEn, "en", "fr");
+
+                if (result != null) {
+                    pathFr.add(result.getText());
+                    aliment.setCategoryPathFr(pathFr);
+                    alimentService.save(aliment);
+                }
+                if (++slowdown == 10) {
+                    Thread.sleep(1000);
+                    slowdown = 0;
+                }
             }
         }
     }

@@ -1,0 +1,16 @@
+{
+    "name": "islam",
+    "warning": [
+        ""
+    ],
+    "forbidden": [
+        "porc",
+        "lard",
+        "alcool",
+        "alcohol",
+        "vin",
+        "bière",
+        "biere",
+        "cidre"
+    ]
+}

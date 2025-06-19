@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -24,7 +23,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,12 +45,10 @@ import com.jlgdev.ceres.models.jsonToObject.RecipeJTO;
 import com.jlgdev.ceres.models.jsonToObject.RecipeTransferJTO;
 import com.jlgdev.ceres.models.mapper.MapperAliment;
 import com.jlgdev.ceres.models.mapper.MapperRecipe;
-import com.jlgdev.ceres.models.translation.TranslationQuery;
 import com.jlgdev.ceres.services.AlimentService;
 import com.jlgdev.ceres.services.AllergyService;
 import com.jlgdev.ceres.services.MissingService;
 import com.jlgdev.ceres.services.RecipeService;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/initialize")
@@ -531,13 +527,8 @@ public class InitializerController {
         int count = 0;
 
         for (RecipeDAO recipe : allRecipes) {
-            // for (IngredientDAO ingredient : recipe.getIngredients()) {
-            // ingredient.setAliment(alimentService.getAlimentById(ingredient.getAliment().getId()).get());
-            // }
-            System.out.println("###########################################");
-            System.out.println("recipe id = " + recipe.getId());
             evaluateAllergies(recipe);
-            if (++count > 10) {
+            if (++count > 1300) {
                 break;
             }
         }
@@ -618,7 +609,7 @@ public class InitializerController {
                     break;
 
                 default:
-                    System.err.println("Un erreur a eu lieu ici");
+                    System.err.println("Une erreur a eu lieu ici");
                     break;
             }
         }
@@ -721,7 +712,7 @@ public class InitializerController {
                     break;
 
                 default:
-                    System.err.println("Un erreur a eu lieu ici");
+                    System.err.println("Une erreur a eu lieu ici");
                     break;
             }
         }
@@ -753,26 +744,52 @@ public class InitializerController {
         byte vegan = AlimentDAO.OK;
         byte vegetarian = AlimentDAO.OK;
         String alimentNameFr = aliment.getNameFr();
-        
+
         if (categoriesPathFr == null) {
             categoriesPathFr = new HashSet<>();
         }
         categoriesPathFr.add(alimentNameFr);
 
-        Set<String> nonVegan = new HashSet();
+        Set<String> nonVegan = new HashSet<>();
         nonVegan.add("oeuf");
         nonVegan.add("œuf");
         nonVegan.add("lait");
         nonVegan.add("fromage");
         nonVegan.add("miel");
         nonVegan.add("beurre");
+        nonVegan.add("crème");
 
-        Set<String> nonVegetarian = new HashSet();
+        Set<String> veganMilk = new HashSet<>();
+        nonVegan.add("amande");
+        nonVegan.add("épeautre");
+        nonVegan.add("epeautre");
+        nonVegan.add("noisette");
+        nonVegan.add("soja");
+        nonVegan.add("riz");
+        nonVegan.add("noix");
+        nonVegan.add("cajou");
+        nonVegan.add("coco");
+        nonVegan.add("végétal");
+        nonVegan.add("vegetal");
+
+        Set<String> warningVegan = new HashSet<>();
+        nonVegan.add("bonbon");
+
+        Set<String> nonVegetarian = new HashSet<>();
         nonVegetarian.add("poisson");
         nonVegetarian.add("crustacé");
         nonVegetarian.add("crustace");
         nonVegetarian.add("coquillage");
         nonVegetarian.add("viande");
+        nonVegetarian.add("porc");
+        nonVegetarian.add("boeuf");
+        nonVegetarian.add("bœuf");
+        nonVegetarian.add("poulet");
+        nonVegetarian.add("dinde");
+        nonVegetarian.add("mouton");
+        nonVegetarian.add("brebis");
+        nonVegetarian.add("cochon");
+        nonVegetarian.add("lard");
         nonVegetarian.add("volaille");
         nonVegetarian.add("charcuterie");
 
@@ -787,6 +804,20 @@ public class InitializerController {
 
             if (isInIterable(nonVegan, cat)) {
                 vegan = AlimentDAO.FORBIDDEN;
+                if (cat.contains("lait")) {
+                    if (isInIterable(veganMilk, cat)) {
+                        vegan = AlimentDAO.OK;
+                    }
+                } else if (cat.contains("beurre") && !cat.contains("noix de beurre")) {
+                    if (cat.contains("végétal")
+                    || cat.contains("vegetal")
+                    || cat.contains("de pomme")
+                    || cat.contains("vegan") ) {
+                        vegan = AlimentDAO.OK;
+                    }
+                }
+            } else if (isInIterable(warningVegan, cat)) {
+                vegan = AlimentDAO.WARNING;
             }
         }
 
@@ -798,18 +829,170 @@ public class InitializerController {
         return aliment;
     }
 
-    // private boolean isInName(String hay, String needle) {
-    //     if (hay == null || needle == null) {
-    //         return false;
-    //     }
+    @GetMapping("/recipes/vegan")
+    public String determineRecipeVeganism() {
 
-    //     Pattern pattern = Pattern.compile("(.*(\\s|\'))?\\b" + hay + "(s|x)?\\b(\\s.*)?");
-    //     Matcher matcher = pattern.matcher(needle);
-    //     if (matcher.matches()) {
-    //         // System.out.println("needle found : " + needle);
-    //         return true;
-    //     }
+        Iterable<RecipeDAO> allRecipes = recipeService.getAllRecipes();
+        int count = 0;
 
-    //     return false;
-    // }
+        for (RecipeDAO recipe : allRecipes) {
+            evaluateRecipeVeganism(recipe);
+            if (++count > 1300) {
+                break;
+            }
+        }
+        return "vegan recipes have been served";
+    }
+
+    private RecipeDAO evaluateRecipeVeganism(RecipeDAO recipe) {
+
+        Set<AlimentDAO> recipeAliments = getAlimentsFromRecipe(recipe);
+        byte isVegan = RecipeDAO.OK;
+        byte isVegetarian = RecipeDAO.OK;
+
+        for (AlimentDAO aliment : recipeAliments) {
+            if (aliment.getVegetarian() == AlimentDAO.FORBIDDEN) {
+                isVegan = RecipeDAO.FORBIDDEN;
+                isVegetarian = RecipeDAO.FORBIDDEN;
+                break;
+            } else if (aliment.getVegan() == AlimentDAO.FORBIDDEN) {
+                isVegan = RecipeDAO.FORBIDDEN;
+            }
+        }
+
+        recipe.setVegan(isVegan);
+        recipe.setVegetarian(isVegetarian);
+        recipeService.save(recipe);
+
+        return recipe;
+    }
+
+    @GetMapping("/aliments/jugeReligion")
+    public String determineAlimentReligion() {
+
+        Iterable<AlimentDAO> allAliments = alimentService.getAllAliments();
+        int count = 0;
+
+        for (AlimentDAO aliment : allAliments) {
+            evaluateReligion(aliment);
+            if (++count > 1300) {
+                break;
+            }
+        }
+        return "justice has been served";
+    }
+
+    private AlimentDAO evaluateReligion(AlimentDAO aliment) {
+
+        if (aliment.getVegan() == 1) {
+            aliment.setJudaism(AlimentDAO.OK);
+            aliment.setIslam(AlimentDAO.OK);
+            alimentService.save(aliment);
+            return aliment;
+        } else {
+            Iterable<AllergyDAO> allReligions = allergyService.getReligions();
+
+            for (AllergyDAO religion : allReligions) {
+                byte restriction = AlimentDAO.OK;
+                String alimentNameFr = aliment.getNameFr();
+
+                if (isInIterable(religion.getForbidden(), alimentNameFr)) {
+                    restriction = AlimentDAO.FORBIDDEN;
+                } else if (isInIterable(religion.getWarning(), alimentNameFr)) {
+                    restriction = AlimentDAO.WARNING;
+                }
+
+                switch (religion.getName()) {
+                    case "judaism":
+                        aliment.setJudaism(restriction);
+                        break;
+                    case "islam":
+                        aliment.setIslam(restriction);
+                        break;
+                    default:
+                        System.err.println("Un erreur a eu lieu ici");
+                        break;
+                }
+            }
+            alimentService.save(aliment);
+
+            return aliment;
+
+        }
+    }
+
+    @GetMapping("/recipes/jugeReligion")
+    public String determineRecipeReligion() {
+
+        Iterable<RecipeDAO> allRecipes = recipeService.getAllRecipes();
+        int count = 0;
+
+        for (RecipeDAO recipe : allRecipes) {
+            evaluateRecipeReligion(recipe);
+            if (++count > 1300) {
+                break;
+            }
+        }
+        return "justice has been served to the recipes";
+    }
+
+    private RecipeDAO evaluateRecipeReligion(RecipeDAO recipe) {
+
+        recipe.setJudaism(RecipeDAO.OK);
+        recipe.setIslam(RecipeDAO.OK);
+        if (recipe.getVegan() == 1) {
+            recipeService.save(recipe);
+        } else {
+            Set<AlimentDAO> recipeAliments = getAlimentsFromRecipe(recipe);
+            Set<AlimentDAO> recipeJudaismWarnings = new HashSet<>();
+
+            for (AlimentDAO aliment : recipeAliments) {
+                if (aliment.getJudaism() == AlimentDAO.FORBIDDEN) {
+                    recipe.setJudaism(RecipeDAO.FORBIDDEN);
+                }
+                if (aliment.getIslam() == AlimentDAO.FORBIDDEN) {
+                    recipe.setIslam(RecipeDAO.FORBIDDEN);
+                }
+                if (recipe.getJudaism() != RecipeDAO.FORBIDDEN
+                        && aliment.getJudaism() == AlimentDAO.WARNING
+                        && aliment.getVegan() != AlimentDAO.OK) {
+                    recipeJudaismWarnings.add(aliment);
+                }
+            }
+            if (recipeJudaismWarnings.size() > 1) {
+                boolean hasMeat = false;
+                boolean hasMilk = false;
+                boolean hasFish = false;
+
+                for (AlimentDAO warning : recipeJudaismWarnings) {
+                    Set<String> paths = warning.getCategoryPathFr();
+                    if (paths == null) {
+                        System.out.println(warning.getId() + " n'a pas de path");
+                        recipe.setJudaism(RecipeDAO.WARNING);
+                    } else {
+
+                        if (paths.contains("viande")) {
+                            hasMeat = true;
+                        } else if (paths.contains("poisson")) {
+                            hasFish = true;
+                        } else if (paths.contains("lait")
+                                || paths.contains("beurre")
+                                || paths.contains("yaourt")
+                                || paths.contains("yoghourt")
+                                || paths.contains("fromage")) {
+                            hasMilk = true;
+                        }
+                    }
+                }
+                if (hasMeat && hasMilk) {
+                    recipe.setJudaism(RecipeDAO.FORBIDDEN);
+                } else if (hasFish && hasMeat) {
+                    recipe.setJudaism(RecipeDAO.WARNING);
+                }
+            }
+            recipeService.save(recipe);
+
+        }
+        return recipe;
+    }
 }
