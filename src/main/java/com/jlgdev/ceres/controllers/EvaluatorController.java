@@ -24,7 +24,6 @@ import com.jlgdev.ceres.services.RecipeService;
 @RestController
 @RequestMapping("/evaluate")
 @CrossOrigin(origins = "*")
-// @Transactional
 public class EvaluatorController {
 
     @Autowired
@@ -41,32 +40,21 @@ public class EvaluatorController {
 
     Logger log = LoggerFactory.getLogger(this.getClass());
 
+/**************************************************
+ *             Recipe evaluation                  *
+ **************************************************/
+
     @GetMapping("/recipes/juge")
-    public String determineRestrictions() {
+    public String determineRecipeRestrictions() {
 
         Iterable<RecipeDAO> allRecipes = recipeService.getAllRecipes();
-        int count = 0;
 
         for (RecipeDAO recipe : allRecipes) {
             evaluateAllergies(recipe);
             evaluateRecipeVeganism(recipe);
             evaluateRecipeReligion(recipe);
-            if (++count > 1300) {
-                break;
-            }
         }
-        return "you've been served";
-    }
-
-    private Set<AlimentDAO> getAlimentsFromRecipe(RecipeDAO recipe) {
-        Set<AlimentDAO> recipeAliments = new HashSet<>();
-        List<IngredientDAO> recipeIngredients = recipe.getIngredients();
-
-        for (IngredientDAO ingredient : recipeIngredients) {
-            recipeAliments.add(ingredient.getAliment());
-        }
-
-        return recipeAliments;
+        return "Recipes have been evaluated";
     }
 
     private RecipeDAO evaluateAllergies(RecipeDAO recipe) {
@@ -79,11 +67,9 @@ public class EvaluatorController {
             for (AlimentDAO aliment : recipeAliments) {
                 String alimentNameFr = aliment.getNameFr();
                 if (isInIterable(allergy.getForbidden(), alimentNameFr)) {
-                    System.out.println(allergy.getName());
                     restriction = RecipeDAO.FORBIDDEN;
                     break;
                 } else if (isInIterable(allergy.getWarning(), alimentNameFr)) {
-                    System.out.println("warning " + allergy.getName());
                     restriction = RecipeDAO.WARNING;
                 }
             }
@@ -132,7 +118,7 @@ public class EvaluatorController {
                     break;
 
                 default:
-                    System.err.println("Une erreur a eu lieu ici");
+                    System.err.println("Une erreur a eu lieu ici (allergie recette) : " + recipe.getId());
                     break;
             }
         }
@@ -140,262 +126,6 @@ public class EvaluatorController {
 
         return recipe;
     }
-
-    private boolean isInIterable(Iterable<String> haystack, String needle) {
-        if (haystack == null || needle == null) {
-            return false;
-        }
-        for (String hay : haystack) {
-
-            Pattern pattern = Pattern.compile("(.*(\\s|\'))?\\b" + hay + "(s|x)?\\b(\\s.*)?");
-            Matcher matcher = pattern.matcher(needle);
-            if (matcher.matches()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @GetMapping("/aliments/juge")
-    public String determineAlimentRestrictions() {
-
-        Iterable<AlimentDAO> allAliments = alimentService.getAllAliments();
-        int count = 0;
-
-        for (AlimentDAO aliment : allAliments) {
-            evaluateAllergies(aliment);
-            evaluateVeganism(aliment);
-            evaluateReligion(aliment);
-            if (++count > 1300) {
-                break;
-            }
-        }
-        return "Aliments all got evaluated";
-    }
-
-    private AlimentDAO evaluateAllergies(AlimentDAO aliment) {
-
-        Iterable<AllergyDAO> allAllergies = allergyService.getAllAllergies();
-
-        for (AllergyDAO allergy : allAllergies) {
-            byte restriction = AlimentDAO.OK;
-            String alimentNameFr = aliment.getNameFr();
-
-            if (isInIterable(allergy.getForbidden(), alimentNameFr)) {
-                restriction = AlimentDAO.FORBIDDEN;
-            } else if (isInIterable(allergy.getWarning(), alimentNameFr)) {
-                System.out.println("warning " + allergy.getName());
-                restriction = AlimentDAO.WARNING;
-            }
-
-            switch (allergy.getName()) {
-                case "arachid":
-                    aliment.setArachidfree(restriction);
-                    break;
-                case "celery":
-                    aliment.setCeleryfree(restriction);
-                    break;
-                case "dairy":
-                    aliment.setDairyfree(restriction);
-                    break;
-                case "egg":
-                    aliment.setEggfree(restriction);
-                    break;
-                case "fish":
-                    aliment.setFishfree(restriction);
-                    break;
-                case "gluten":
-                    aliment.setGlutenfree(restriction);
-                    break;
-                case "lupine":
-                    aliment.setLupinefree(restriction);
-                    break;
-                case "mustard":
-                    aliment.setMustardfree(restriction);
-                    break;
-                case "nut":
-                    aliment.setNutfree(restriction);
-                    break;
-                case "seefood":
-                    aliment.setSeefoodfree(restriction);
-                    break;
-                case "sesame":
-                    aliment.setSesamefree(restriction);
-                    break;
-                case "shellfish":
-                    aliment.setShellfishfree(restriction);
-                    break;
-                case "soy":
-                    aliment.setSoyfree(restriction);
-                    break;
-                case "sulfit":
-                    aliment.setSulfitfree(restriction);
-                    break;
-
-                default:
-                    System.err.println("Une erreur a eu lieu ici");
-                    break;
-            }
-        }
-        alimentService.save(aliment);
-
-        return aliment;
-    }
-
-    private AlimentDAO evaluateVeganism(AlimentDAO aliment) {
-
-        Set<String> categoriesPathFr = aliment.getCategoryPathFr();
-        byte vegan = AlimentDAO.OK;
-        byte vegetarian = AlimentDAO.OK;
-        String alimentNameFr = aliment.getNameFr();
-
-        if (categoriesPathFr == null) {
-            categoriesPathFr = new HashSet<>();
-        }
-        categoriesPathFr.add(alimentNameFr);
-
-        Set<String> nonVegan = new HashSet<>();
-        nonVegan.add("oeuf");
-        nonVegan.add("œuf");
-        nonVegan.add("lait");
-        nonVegan.add("fromage");
-        nonVegan.add("miel");
-        nonVegan.add("beurre");
-        nonVegan.add("crème");
-
-        Set<String> veganMilk = new HashSet<>();
-        nonVegan.add("amande");
-        nonVegan.add("épeautre");
-        nonVegan.add("epeautre");
-        nonVegan.add("noisette");
-        nonVegan.add("soja");
-        nonVegan.add("riz");
-        nonVegan.add("noix");
-        nonVegan.add("cajou");
-        nonVegan.add("coco");
-        nonVegan.add("végétal");
-        nonVegan.add("vegetal");
-
-        Set<String> warningVegan = new HashSet<>();
-        nonVegan.add("bonbon");
-
-        Set<String> nonVegetarian = new HashSet<>();
-        nonVegetarian.add("poisson");
-        nonVegetarian.add("crustacé");
-        nonVegetarian.add("crustace");
-        nonVegetarian.add("coquillage");
-        nonVegetarian.add("viande");
-        nonVegetarian.add("porc");
-        nonVegetarian.add("boeuf");
-        nonVegetarian.add("bœuf");
-        nonVegetarian.add("poulet");
-        nonVegetarian.add("dinde");
-        nonVegetarian.add("mouton");
-        nonVegetarian.add("brebis");
-        nonVegetarian.add("cochon");
-        nonVegetarian.add("lard");
-        nonVegetarian.add("volaille");
-        nonVegetarian.add("charcuterie");
-
-        for (String cat : categoriesPathFr) {
-
-            if (isInIterable(nonVegetarian, cat)) {
-                System.out.println(aliment.getId() + " = " + alimentNameFr);
-                vegan = AlimentDAO.FORBIDDEN;
-                vegetarian = AlimentDAO.FORBIDDEN;
-                break;
-            }
-
-            if (isInIterable(nonVegan, cat)) {
-                vegan = AlimentDAO.FORBIDDEN;
-                if (cat.contains("lait")) {
-                    if (isInIterable(veganMilk, cat)) {
-                        vegan = AlimentDAO.OK;
-                    }
-                } else if (cat.contains("beurre") && !cat.contains("noix de beurre")) {
-                    if (cat.contains("végétal")
-                    || cat.contains("vegetal")
-                    || cat.contains("de pomme")
-                    || cat.contains("vegan") ) {
-                        vegan = AlimentDAO.OK;
-                    }
-                }
-            } else if (isInIterable(warningVegan, cat)) {
-                vegan = AlimentDAO.WARNING;
-            }
-        }
-
-        aliment.setVegan(vegan);
-        aliment.setVegetarian(vegetarian);
-
-        alimentService.save(aliment);
-
-        return aliment;
-    }
-
-
-    private RecipeDAO evaluateRecipeVeganism(RecipeDAO recipe) {
-
-        Set<AlimentDAO> recipeAliments = getAlimentsFromRecipe(recipe);
-        byte isVegan = RecipeDAO.OK;
-        byte isVegetarian = RecipeDAO.OK;
-
-        for (AlimentDAO aliment : recipeAliments) {
-            if (aliment.getVegetarian() == AlimentDAO.FORBIDDEN) {
-                isVegan = RecipeDAO.FORBIDDEN;
-                isVegetarian = RecipeDAO.FORBIDDEN;
-                break;
-            } else if (aliment.getVegan() == AlimentDAO.FORBIDDEN) {
-                isVegan = RecipeDAO.FORBIDDEN;
-            }
-        }
-
-        recipe.setVegan(isVegan);
-        recipe.setVegetarian(isVegetarian);
-        recipeService.save(recipe);
-
-        return recipe;
-    }
-
-    private AlimentDAO evaluateReligion(AlimentDAO aliment) {
-
-        if (aliment.getVegan() == 1) {
-            aliment.setJudaism(AlimentDAO.OK);
-            aliment.setIslam(AlimentDAO.OK);
-            alimentService.save(aliment);
-            return aliment;
-        } else {
-            Iterable<AllergyDAO> allReligions = allergyService.getReligions();
-
-            for (AllergyDAO religion : allReligions) {
-                byte restriction = AlimentDAO.OK;
-                String alimentNameFr = aliment.getNameFr();
-
-                if (isInIterable(religion.getForbidden(), alimentNameFr)) {
-                    restriction = AlimentDAO.FORBIDDEN;
-                } else if (isInIterable(religion.getWarning(), alimentNameFr)) {
-                    restriction = AlimentDAO.WARNING;
-                }
-
-                switch (religion.getName()) {
-                    case "judaism":
-                        aliment.setJudaism(restriction);
-                        break;
-                    case "islam":
-                        aliment.setIslam(restriction);
-                        break;
-                    default:
-                        System.err.println("Un erreur a eu lieu ici");
-                        break;
-                }
-            }
-            alimentService.save(aliment);
-
-            return aliment;
-
-        }
-    }
-
 
     private RecipeDAO evaluateRecipeReligion(RecipeDAO recipe) {
 
@@ -455,5 +185,281 @@ public class EvaluatorController {
 
         }
         return recipe;
+    }
+
+    private RecipeDAO evaluateRecipeVeganism(RecipeDAO recipe) {
+
+        Set<AlimentDAO> recipeAliments = getAlimentsFromRecipe(recipe);
+        byte isVegan = RecipeDAO.OK;
+        byte isVegetarian = RecipeDAO.OK;
+
+        for (AlimentDAO aliment : recipeAliments) {
+            if (aliment.getVegetarian() == AlimentDAO.FORBIDDEN) {
+                isVegan = RecipeDAO.FORBIDDEN;
+                isVegetarian = RecipeDAO.FORBIDDEN;
+                break;
+            } else if (aliment.getVegan() == AlimentDAO.FORBIDDEN) {
+                isVegan = RecipeDAO.FORBIDDEN;
+            }
+        }
+
+        recipe.setVegan(isVegan);
+        recipe.setVegetarian(isVegetarian);
+        recipeService.save(recipe);
+
+        return recipe;
+    }
+
+/**************************************************
+ *             Aliment evaluation                 *
+ **************************************************/
+
+    @GetMapping("/aliments/juge")
+    public String determineRestrictions() {
+
+        Iterable<AlimentDAO> allAliments = alimentService.getAllAliments();
+
+        for (AlimentDAO aliment : allAliments) {
+            evaluateAllergies(aliment);
+            evaluateVeganism(aliment);
+            evaluateReligion(aliment);
+        }
+        return "Aliments have been evaluated";
+    }
+
+    private AlimentDAO evaluateAllergies(AlimentDAO aliment) {
+
+        Iterable<AllergyDAO> allAllergies = allergyService.getAllAllergies();
+
+        for (AllergyDAO allergy : allAllergies) {
+            byte restriction = AlimentDAO.OK;
+            String alimentNameFr = aliment.getNameFr();
+
+            if (isInIterable(allergy.getForbidden(), alimentNameFr)) {
+                restriction = AlimentDAO.FORBIDDEN;
+            } else if (isInIterable(allergy.getWarning(), alimentNameFr)) {
+                restriction = AlimentDAO.WARNING;
+            }
+
+            switch (allergy.getName()) {
+                case "arachid":
+                    aliment.setArachidfree(restriction);
+                    break;
+                case "celery":
+                    aliment.setCeleryfree(restriction);
+                    break;
+                case "dairy":
+                    aliment.setDairyfree(restriction);
+                    break;
+                case "egg":
+                    aliment.setEggfree(restriction);
+                    break;
+                case "fish":
+                    aliment.setFishfree(restriction);
+                    break;
+                case "gluten":
+                    aliment.setGlutenfree(restriction);
+                    break;
+                case "lupine":
+                    aliment.setLupinefree(restriction);
+                    break;
+                case "mustard":
+                    aliment.setMustardfree(restriction);
+                    break;
+                case "nut":
+                    aliment.setNutfree(restriction);
+                    break;
+                case "seefood":
+                    aliment.setSeefoodfree(restriction);
+                    break;
+                case "sesame":
+                    aliment.setSesamefree(restriction);
+                    break;
+                case "shellfish":
+                    aliment.setShellfishfree(restriction);
+                    break;
+                case "soy":
+                    aliment.setSoyfree(restriction);
+                    break;
+                case "sulfit":
+                    aliment.setSulfitfree(restriction);
+                    break;
+
+                default:
+                    System.err.println("Une erreur a eu lieu ici (allergie aliment) : " + aliment.getId());
+                    break;
+            }
+        }
+        alimentService.save(aliment);
+
+        return aliment;
+    }
+
+    private AlimentDAO evaluateVeganism(AlimentDAO aliment) {
+
+        Set<String> categoriesPathFr = aliment.getCategoryPathFr();
+        byte vegan = AlimentDAO.OK;
+        byte vegetarian = AlimentDAO.OK;
+        String alimentNameFr = aliment.getNameFr();
+
+        if (categoriesPathFr == null) {
+            categoriesPathFr = new HashSet<>();
+        }
+        categoriesPathFr.add(alimentNameFr);
+
+        Set<String> nonVegan = new HashSet<>();
+        nonVegan.add("oeuf");
+        nonVegan.add("œuf");
+        nonVegan.add("lait");
+        nonVegan.add("fromage");
+        nonVegan.add("miel");
+        nonVegan.add("beurre");
+        nonVegan.add("crème");
+        nonVegan.add("yaourt");
+        nonVegan.add("yogourt");
+
+        Set<String> veganMilk = new HashSet<>();
+        veganMilk.add("amande");
+        veganMilk.add("épeautre");
+        veganMilk.add("epeautre");
+        veganMilk.add("noisette");
+        veganMilk.add("soja");
+        veganMilk.add("riz");
+        veganMilk.add("noix");
+        veganMilk.add("cajou");
+        veganMilk.add("coco");
+        veganMilk.add("chanvre");
+        veganMilk.add("végétal");
+        veganMilk.add("vegetal");
+        veganMilk.add("substitut de lait");
+
+        Set<String> warningVegan = new HashSet<>();
+        nonVegan.add("bonbon");
+
+        Set<String> nonVegetarian = new HashSet<>();
+        nonVegetarian.add("poisson");
+        nonVegetarian.add("crustacé");
+        nonVegetarian.add("crustace");
+        nonVegetarian.add("coquillage");
+        nonVegetarian.add("viande");
+        nonVegetarian.add("porc");
+        nonVegetarian.add("boeuf");
+        nonVegetarian.add("bœuf");
+        nonVegetarian.add("poulet");
+        nonVegetarian.add("dinde");
+        nonVegetarian.add("mouton");
+        nonVegetarian.add("brebis");
+        nonVegetarian.add("cochon");
+        nonVegetarian.add("lard");
+        nonVegetarian.add("volaille");
+        nonVegetarian.add("charcuterie");
+
+        for (String cat : categoriesPathFr) {
+
+            if (isInIterable(nonVegetarian, cat)) {
+                vegan = AlimentDAO.FORBIDDEN;
+                vegetarian = AlimentDAO.FORBIDDEN;
+                break;
+            }
+
+            if (isInIterable(nonVegan, cat)) {
+                vegan = AlimentDAO.FORBIDDEN;
+                if (cat.contains("lait") || cat.contains("yaourt") || cat.contains("yogourt")) {
+                    if (isInIterable(veganMilk, cat)) {
+                        vegan = AlimentDAO.OK;
+                        break;
+                    }
+                } else if (cat.contains("beurre") && !cat.contains("noix de beurre")) {
+                    if (cat.contains("végétal")
+                            || cat.contains("vegetal")
+                            || cat.contains("de pomme")
+                            || cat.contains("vegan")) {
+                        vegan = AlimentDAO.OK;
+                        break;
+                    }
+                }
+            } else if (isInIterable(warningVegan, cat)) {
+                vegan = AlimentDAO.WARNING;
+            }
+        }
+
+        aliment.setVegan(vegan);
+        aliment.setVegetarian(vegetarian);
+
+        alimentService.save(aliment);
+
+        return aliment;
+    }
+
+    private AlimentDAO evaluateReligion(AlimentDAO aliment) {
+
+        if (aliment.getVegan() == 1) {
+            aliment.setJudaism(AlimentDAO.OK);
+            aliment.setIslam(AlimentDAO.OK);
+            alimentService.save(aliment);
+            return aliment;
+        } else {
+            Iterable<AllergyDAO> allReligions = allergyService.getReligions();
+
+            for (AllergyDAO religion : allReligions) {
+                byte restriction = AlimentDAO.OK;
+                // String alimentNameFr = aliment.getNameFr();
+                Set<String> categories = aliment.getCategoryPathFr();
+
+                for (String cat : categories) {
+                    if (isInIterable(religion.getForbidden(), cat)) {
+                        restriction = AlimentDAO.FORBIDDEN;
+                    } else if (isInIterable(religion.getWarning(), cat)) {
+                        restriction = AlimentDAO.WARNING;
+                    }
+                }
+
+                switch (religion.getName()) {
+                    case "judaism":
+                        aliment.setJudaism(restriction);
+                        break;
+                    case "islam":
+                        aliment.setIslam(restriction);
+                        break;
+                    default:
+                        System.err.println("Une erreur a eu lieu ici (religion aliment) : " + aliment.getId());
+                        break;
+                }
+            }
+            alimentService.save(aliment);
+
+            return aliment;
+
+        }
+    }
+
+/**************************************************
+ *              Common methods                    *
+ **************************************************/
+
+    private Set<AlimentDAO> getAlimentsFromRecipe(RecipeDAO recipe) {
+        Set<AlimentDAO> recipeAliments = new HashSet<>();
+        List<IngredientDAO> recipeIngredients = recipe.getIngredients();
+
+        for (IngredientDAO ingredient : recipeIngredients) {
+            recipeAliments.add(ingredient.getAliment());
+        }
+
+        return recipeAliments;
+    }
+
+    private boolean isInIterable(Iterable<String> haystack, String needle) {
+        if (haystack == null || needle == null) {
+            return false;
+        }
+        for (String hay : haystack) {
+
+            Pattern pattern = Pattern.compile("(.*(\\s|\'))?\\b" + hay + "(s|x)?\\b(\\s.*)?");
+            Matcher matcher = pattern.matcher(needle);
+            if (matcher.matches()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

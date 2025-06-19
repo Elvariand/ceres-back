@@ -1,7 +1,6 @@
 package com.jlgdev.ceres.controllers;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,7 +27,6 @@ import com.jlgdev.ceres.models.mapper.MapperRecipe;
 import com.jlgdev.ceres.models.translation.TranslationQuery;
 import com.jlgdev.ceres.services.AlimentService;
 import com.jlgdev.ceres.services.RecipeService;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/translate")
