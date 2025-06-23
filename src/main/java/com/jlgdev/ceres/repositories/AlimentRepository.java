@@ -8,7 +8,6 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.lang.NonNull;
 
 import com.jlgdev.ceres.models.dataAccessObject.AlimentDAO;
-import java.util.Set;
 
 
 public interface AlimentRepository extends MongoRepository<AlimentDAO, String>{
