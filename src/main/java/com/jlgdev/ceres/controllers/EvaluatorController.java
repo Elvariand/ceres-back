@@ -403,7 +403,6 @@ public class EvaluatorController {
 
             for (AllergyDAO religion : allReligions) {
                 byte restriction = AlimentDAO.OK;
-                // String alimentNameFr = aliment.getNameFr();
                 Set<String> categories = aliment.getCategoryPathFr();
 
                 for (String cat : categories) {
