@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jlgdev.ceres.models.dataAccessObject.RecipeDAO;
+import com.jlgdev.ceres.models.dataTransferObject.RecipeDTO;
 import com.jlgdev.ceres.models.request.SearchForm;
 // import com.jlgdev.ceres.services.AlimentService;
 import com.jlgdev.ceres.services.RecipeService;
@@ -41,12 +41,12 @@ public class RecipeController {
     Logger log = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping("/{number}")
-    public @ResponseBody List<RecipeDAO> getRecipes(@PathVariable int number) {
-        Iterable<RecipeDAO> recipes = recipeService.getAllRecipes();
+    public @ResponseBody List<RecipeDTO> getRecipes(@PathVariable int number) {
+        Iterable<RecipeDTO> recipes = recipeService.getAllRecipes();
         int counter = 0;
-        List<RecipeDAO> recipesToFrontend = new ArrayList<>();
+        List<RecipeDTO> recipesToFrontend = new ArrayList<>();
 
-        for (RecipeDAO recipeDAO : recipes) {
+        for (RecipeDTO recipeDAO : recipes) {
             recipesToFrontend.add(recipeDAO);
             if (++counter >= number) {
                 break;
@@ -57,7 +57,7 @@ public class RecipeController {
     }
 
     @PostMapping("/search")
-    public List<RecipeDAO> getFilteredRecipes(@RequestBody SearchForm searchForm) {
+    public List<RecipeDTO> getFilteredRecipes(@RequestBody SearchForm searchForm) {
 
         String ingredients = searchForm.getFormattedString(searchForm.getIngredients()) ;
         Boolean allIngredient = searchForm.isAllIngredient() ;
@@ -120,7 +120,7 @@ public class RecipeController {
         BasicQuery query = new BasicQuery(queryString);
 
 
-        List<RecipeDAO> filteredRecipes = mongoTemplate.find(query, RecipeDAO.class);
+        List<RecipeDTO> filteredRecipes = mongoTemplate.find(query, RecipeDTO.class);
         
         System.out.println("nombre de recettes trouvees : " + filteredRecipes.size());
         System.out.println(filteredRecipes.size() > 0 ? filteredRecipes.get(0).getTitleEn() : "none");

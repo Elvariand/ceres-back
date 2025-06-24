@@ -4,13 +4,13 @@ import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import com.jlgdev.ceres.models.dataAccessObject.AllergyDAO;
+import com.jlgdev.ceres.models.dataTransferObject.AllergyDTO;
 
-public interface AllergyRepository extends MongoRepository<AllergyDAO, String>{
+public interface AllergyRepository extends MongoRepository<AllergyDTO, String>{
 
     @SuppressWarnings("null")
-    Optional<AllergyDAO> findById(String id);
+    Optional<AllergyDTO> findById(String id);
 
-    Optional<AllergyDAO> findByName(String name);
+    Optional<AllergyDTO> findByName(String name);
 
 }

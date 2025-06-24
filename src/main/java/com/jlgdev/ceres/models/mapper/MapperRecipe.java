@@ -7,9 +7,9 @@ import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.jlgdev.ceres.models.dataAccessObject.AlimentDAO;
-import com.jlgdev.ceres.models.dataAccessObject.IngredientDAO;
-import com.jlgdev.ceres.models.dataAccessObject.RecipeDAO;
+import com.jlgdev.ceres.models.dataTransferObject.AlimentDTO;
+import com.jlgdev.ceres.models.dataTransferObject.IngredientDTO;
+import com.jlgdev.ceres.models.dataTransferObject.RecipeDTO;
 import com.jlgdev.ceres.models.jsonToObject.IngredientJTO;
 import com.jlgdev.ceres.models.jsonToObject.NutritionRecipeJTO;
 import com.jlgdev.ceres.models.jsonToObject.RecipeJTO;
@@ -21,18 +21,18 @@ public class MapperRecipe {
     @Autowired
     public AlimentService alimentService;
 
-    public RecipeDAO mapRecipe(RecipeJTO recipeJTO) {
+    public RecipeDTO mapRecipe(RecipeJTO recipeJTO) {
 
-        RecipeDAO recipeDAO = new RecipeDAO(); 
+        RecipeDTO recipeDAO = new RecipeDTO(); 
 
         recipeDAO.setId(Objects.requireNonNullElse(recipeJTO.getId(), ""));
         recipeDAO.setTitleEn(Objects.requireNonNullElse(recipeJTO.getTitle(), ""));
         recipeDAO.setIngredients(mapIngredients(recipeJTO.getNutrition()));
         recipeDAO.setTags(Objects.requireNonNullElse(recipeJTO.getTags(), new ArrayList<>()));
-        recipeDAO.setVegetarian(Objects.requireNonNullElse(recipeJTO.getVegetarian(), RecipeDAO.OK));
-        recipeDAO.setVegan(Objects.requireNonNullElse(recipeJTO.getVegan(), RecipeDAO.OK));
-        recipeDAO.setGlutenfree(Objects.requireNonNullElse(recipeJTO.getGlutenFree(), RecipeDAO.OK));
-        recipeDAO.setDairyfree(Objects.requireNonNullElse(recipeJTO.getDairyFree(), RecipeDAO.OK));
+        recipeDAO.setVegetarian(Objects.requireNonNullElse(recipeJTO.getVegetarian(), RecipeDTO.OK));
+        recipeDAO.setVegan(Objects.requireNonNullElse(recipeJTO.getVegan(), RecipeDTO.OK));
+        recipeDAO.setGlutenfree(Objects.requireNonNullElse(recipeJTO.getGlutenFree(), RecipeDTO.OK));
+        recipeDAO.setDairyfree(Objects.requireNonNullElse(recipeJTO.getDairyFree(), RecipeDTO.OK));
         recipeDAO.setPreparationMinutes(Objects.requireNonNullElse(recipeJTO.getPreparationMinutes(), -1));
         recipeDAO.setCookingMinutes(Objects.requireNonNullElse(recipeJTO.getCookingMinutes(), -1));
         recipeDAO.setTotalMinutes(Objects.requireNonNullElse(recipeJTO.getTotalMinutes(), -1));
@@ -46,12 +46,12 @@ public class MapperRecipe {
         return recipeDAO;
     }
 
-    public List<IngredientDAO> mapIngredients(NutritionRecipeJTO nutrition) {
-        List<IngredientDAO> ingredients = new ArrayList<>();
+    public List<IngredientDTO> mapIngredients(NutritionRecipeJTO nutrition) {
+        List<IngredientDTO> ingredients = new ArrayList<>();
 
         for (IngredientJTO ingredientJTO : nutrition.getIngredients()) {
-            IngredientDAO ingredientDAO = new IngredientDAO();
-            AlimentDAO linkedAliment = alimentService.getAlimentById(ingredientJTO.getIdAliment()).orElse(new AlimentDAO(ingredientJTO.getIdAliment()));
+            IngredientDTO ingredientDAO = new IngredientDTO();
+            AlimentDTO linkedAliment = alimentService.getAlimentById(ingredientJTO.getIdAliment()).orElse(new AlimentDTO(ingredientJTO.getIdAliment()));
 
             ingredientDAO.setQuantity(Objects.requireNonNullElse(ingredientJTO.getQuantity(), -1.0));
             ingredientDAO.setUnit(Objects.requireNonNullElse(ingredientJTO.getUnit(), ""));

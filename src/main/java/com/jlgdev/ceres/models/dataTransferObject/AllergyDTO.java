@@ -1,4 +1,4 @@
-package com.jlgdev.ceres.models.dataAccessObject;
+package com.jlgdev.ceres.models.dataTransferObject;
 
 import java.util.Set;
 
@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document("allergy")
-public class AllergyDAO {
+public class AllergyDTO {
 
     @Id
     private String id;
@@ -50,7 +50,7 @@ public class AllergyDAO {
         this.forbidden = forbidden;
     }
 
-    public AllergyDAO() {
+    public AllergyDTO() {
     }
 
     @Override

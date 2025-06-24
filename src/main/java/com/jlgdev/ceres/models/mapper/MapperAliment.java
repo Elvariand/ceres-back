@@ -6,12 +6,12 @@ import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
-import com.jlgdev.ceres.models.dataAccessObject.AlimentDAO;
-import com.jlgdev.ceres.models.dataAccessObject.AlimentPropertiesDAO;
-import com.jlgdev.ceres.models.dataAccessObject.FlavonoidDAO;
-import com.jlgdev.ceres.models.dataAccessObject.NutrientDAO;
-import com.jlgdev.ceres.models.dataAccessObject.NutritionDAO;
-import com.jlgdev.ceres.models.dataAccessObject.WeightPerServingDAO;
+import com.jlgdev.ceres.models.dataTransferObject.AlimentDTO;
+import com.jlgdev.ceres.models.dataTransferObject.AlimentPropertiesDTO;
+import com.jlgdev.ceres.models.dataTransferObject.FlavonoidDTO;
+import com.jlgdev.ceres.models.dataTransferObject.NutrientDTO;
+import com.jlgdev.ceres.models.dataTransferObject.NutritionDTO;
+import com.jlgdev.ceres.models.dataTransferObject.WeightPerServingDTO;
 import com.jlgdev.ceres.models.jsonToObject.AlimentJTO;
 import com.jlgdev.ceres.models.jsonToObject.AlimentPropertiesJTO;
 import com.jlgdev.ceres.models.jsonToObject.FlavonoidJTO;
@@ -22,9 +22,9 @@ import com.jlgdev.ceres.models.jsonToObject.WeightPerServingJTO;
 @Component
 public abstract class MapperAliment {
 
-    public static AlimentDAO mapAliment(AlimentJTO alimentJTO) {
+    public static AlimentDTO mapAliment(AlimentJTO alimentJTO) {
 
-        AlimentDAO alimentDAO = new AlimentDAO(); 
+        AlimentDTO alimentDAO = new AlimentDTO(); 
 
         alimentDAO.setId(Objects.requireNonNullElse(alimentJTO.getId(),""));
         alimentDAO.setNameEn(Objects.requireNonNullElse(alimentJTO.getName(),""));
@@ -37,9 +37,9 @@ public abstract class MapperAliment {
         return alimentDAO;
     }
 
-    public static NutritionDAO mapNutritionAliment(NutritionJTO nutritionJTO) {
+    public static NutritionDTO mapNutritionAliment(NutritionJTO nutritionJTO) {
     
-        NutritionDAO nutritionDAO = new NutritionDAO();
+        NutritionDTO nutritionDAO = new NutritionDTO();
 
         nutritionDAO.setNutrients(mapNutrients(nutritionJTO.getNutrients()));
         nutritionDAO.setProperties(mapProperties(nutritionJTO.getProperties()));
@@ -50,12 +50,12 @@ public abstract class MapperAliment {
         return nutritionDAO;
     }
 
-    public static Set<NutrientDAO> mapNutrients(Set<NutrientJTO> nutrientsJTO) {
+    public static Set<NutrientDTO> mapNutrients(Set<NutrientJTO> nutrientsJTO) {
 
-        Set<NutrientDAO> nutrients = new HashSet<>();
+        Set<NutrientDTO> nutrients = new HashSet<>();
 
         for (NutrientJTO nutrientJTO : nutrientsJTO) {
-            NutrientDAO nutrientDAO = new NutrientDAO();
+            NutrientDTO nutrientDAO = new NutrientDTO();
             
             nutrientDAO.setNameEn(Objects.requireNonNullElse(nutrientJTO.getName(), ""));
             nutrientDAO.setAmount(Objects.requireNonNullElse(nutrientJTO.getAmount(), -1.0));
@@ -68,12 +68,12 @@ public abstract class MapperAliment {
         return nutrients;
     }
     
-    public static Set<AlimentPropertiesDAO> mapProperties(Set<AlimentPropertiesJTO> propertiesJTO) {
+    public static Set<AlimentPropertiesDTO> mapProperties(Set<AlimentPropertiesJTO> propertiesJTO) {
         
-        Set<AlimentPropertiesDAO> properties = new HashSet<>();
+        Set<AlimentPropertiesDTO> properties = new HashSet<>();
 
         for (AlimentPropertiesJTO propertyJTO : propertiesJTO) {
-            AlimentPropertiesDAO propertyDAO = new AlimentPropertiesDAO();
+            AlimentPropertiesDTO propertyDAO = new AlimentPropertiesDTO();
             
             propertyDAO.setNameEn(Objects.requireNonNullElse(propertyJTO.getName(), ""));
             propertyDAO.setAmount(Objects.requireNonNullElse(propertyJTO.getAmount(), -1.0));
@@ -85,12 +85,12 @@ public abstract class MapperAliment {
         return properties;
     }
     
-    public static Set<FlavonoidDAO> mapFlavonoids(Set<FlavonoidJTO> flavonoidsJTO) {
+    public static Set<FlavonoidDTO> mapFlavonoids(Set<FlavonoidJTO> flavonoidsJTO) {
         
-        Set<FlavonoidDAO> flavonoids = new HashSet<>();
+        Set<FlavonoidDTO> flavonoids = new HashSet<>();
         
         for (FlavonoidJTO flavonoidJTO : flavonoidsJTO) {
-            FlavonoidDAO flavonoidDAO = new FlavonoidDAO();
+            FlavonoidDTO flavonoidDAO = new FlavonoidDTO();
             
             flavonoidDAO.setNameEn(Objects.requireNonNullElse(flavonoidJTO.getName(), ""));
             flavonoidDAO.setAmount(Objects.requireNonNullElse(flavonoidJTO.getAmount(), -1.0));
@@ -102,9 +102,9 @@ public abstract class MapperAliment {
         return flavonoids;
     }
 
-    public static WeightPerServingDAO mapWeightPerServing(WeightPerServingJTO weightPerServingJTO) {
+    public static WeightPerServingDTO mapWeightPerServing(WeightPerServingJTO weightPerServingJTO) {
 
-        WeightPerServingDAO weightPerServingDAO = new WeightPerServingDAO(Objects.requireNonNullElse(weightPerServingJTO.getAmount(),-1.0), Objects.requireNonNullElse(weightPerServingJTO.getUnit(), ""));
+        WeightPerServingDTO weightPerServingDAO = new WeightPerServingDTO(Objects.requireNonNullElse(weightPerServingJTO.getAmount(),-1.0), Objects.requireNonNullElse(weightPerServingJTO.getUnit(), ""));
 
         return weightPerServingDAO;
     }

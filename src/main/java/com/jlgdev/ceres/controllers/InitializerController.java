@@ -33,11 +33,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jlgdev.ceres.models.dataTransferObject.AlimentDTO;
+import com.jlgdev.ceres.models.dataTransferObject.IngredientDTO;
+import com.jlgdev.ceres.models.dataTransferObject.MissingIngredientsDTO;
+import com.jlgdev.ceres.models.dataTransferObject.RecipeDTO;
 import com.jlgdev.ceres.models.jsonToObject.AlimentJTO;
-import com.jlgdev.ceres.models.dataAccessObject.AlimentDAO;
-import com.jlgdev.ceres.models.dataAccessObject.IngredientDAO;
-import com.jlgdev.ceres.models.dataAccessObject.MissingIngredients;
-import com.jlgdev.ceres.models.dataAccessObject.RecipeDAO;
 import com.jlgdev.ceres.models.jsonToObject.RecipeJTO;
 import com.jlgdev.ceres.models.jsonToObject.RecipeTransferJTO;
 import com.jlgdev.ceres.models.mapper.MapperAliment;
@@ -67,13 +67,13 @@ public class InitializerController {
     Logger log = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping("/list")
-    public @ResponseBody Iterable<AlimentDAO> getAllAliments() {
+    public @ResponseBody Iterable<AlimentDTO> getAllAliments() {
         log.info("\n---------------------------- Appel à getAllAliments()\n");
         return alimentService.getAllAliments();
     }
 
     @GetMapping("aliment/add/{id}")
-    public ResponseEntity<AlimentDAO> addAliment(@PathVariable String id) {
+    public ResponseEntity<AlimentDTO> addAliment(@PathVariable String id) {
         try {
             RestClient defaultClient = RestClient.create();
 
@@ -85,7 +85,7 @@ public class InitializerController {
 
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            AlimentDAO alimentDAO = new AlimentDAO();
+            AlimentDTO alimentDAO = new AlimentDTO();
             AlimentJTO alimentJTO = new AlimentJTO();
             try {
                 alimentJTO = mapper.readValue(response, AlimentJTO.class);
@@ -95,8 +95,8 @@ public class InitializerController {
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
-            if (!alimentDAO.equals(new AlimentDAO())) {
-                return new ResponseEntity<AlimentDAO>(alimentDAO, HttpStatus.OK);
+            if (!alimentDAO.equals(new AlimentDTO())) {
+                return new ResponseEntity<AlimentDTO>(alimentDAO, HttpStatus.OK);
             } else {
                 return null;
             }
@@ -107,7 +107,7 @@ public class InitializerController {
     }
 
     @GetMapping("aliment/addBulkFrom/{index}")
-    public ResponseEntity<AlimentDAO> addMultipleAliments(@PathVariable int index) throws InterruptedException {
+    public ResponseEntity<AlimentDTO> addMultipleAliments(@PathVariable int index) throws InterruptedException {
         boolean canContinue = true;
         int[] idsFromCsv = { 1002002, 11482, 6979, 19912, 15117, 93606, 1002050, 93740, 93607, 12061, 10014534,
                 10211962, 15001, 7064, 18087, 10020420, 93653, 9003, 19294, 1009016, 9016, 1042035, 19719, 9021,
@@ -205,7 +205,7 @@ public class InitializerController {
 
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            AlimentDAO alimentDAO = new AlimentDAO();
+            AlimentDTO alimentDAO = new AlimentDTO();
             AlimentJTO alimentJTO = new AlimentJTO();
             try {
                 alimentJTO = mapper.readValue(response, AlimentJTO.class);
@@ -215,11 +215,11 @@ public class InitializerController {
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
-            if (!alimentDAO.equals(new AlimentDAO())) {
+            if (!alimentDAO.equals(new AlimentDTO())) {
                 alimentService.save(alimentDAO);
             } else {
                 canContinue = false;
-                return new ResponseEntity<AlimentDAO>(alimentService.save(alimentDAO), HttpStatus.CONFLICT);
+                return new ResponseEntity<AlimentDTO>(alimentService.save(alimentDAO), HttpStatus.CONFLICT);
             }
         }
         return null;
@@ -237,7 +237,7 @@ public class InitializerController {
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        RecipeDAO recipeDAO = new RecipeDAO();
+        RecipeDTO recipeDAO = new RecipeDTO();
         RecipeTransferJTO recipeTransfer = new RecipeTransferJTO();
 
         // test
@@ -249,7 +249,7 @@ public class InitializerController {
 
                 recipeDAO = mapperRecipe.mapRecipe(result);
 
-                if (!recipeDAO.equals(new RecipeDAO())) {
+                if (!recipeDAO.equals(new RecipeDTO())) {
                     recipeService.save(recipeDAO);
                 }
 
@@ -283,13 +283,13 @@ public class InitializerController {
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        RecipeDAO recipeDAO = new RecipeDAO();
+        RecipeDTO recipeDAO = new RecipeDTO();
 
         try {
             RecipeJTO recipeJTO = mapper.readValue(response, RecipeJTO.class);
             recipeDAO = mapperRecipe.mapRecipe(recipeJTO);
 
-            if (!recipeDAO.equals(new RecipeDAO())) {
+            if (!recipeDAO.equals(new RecipeDTO())) {
                 recipeService.save(recipeDAO);
             }
 
@@ -302,17 +302,17 @@ public class InitializerController {
     }
 
     @GetMapping("/missingIngredients/calculate")
-    public MissingIngredients calculateMissingIngredients() {
+    public MissingIngredientsDTO calculateMissingIngredients() {
 
-        Iterable<RecipeDAO> allRecipes = recipeService.getAllRecipes();
+        Iterable<RecipeDTO> allRecipes = recipeService.getAllRecipes();
         Set<String> missingSet = new HashSet<>();
 
-        for (RecipeDAO recipe : allRecipes) {
-            List<IngredientDAO> ingredients = recipe.getIngredients();
+        for (RecipeDTO recipe : allRecipes) {
+            List<IngredientDTO> ingredients = recipe.getIngredients();
 
-            for (IngredientDAO ingredient : ingredients) {
+            for (IngredientDTO ingredient : ingredients) {
                 String idIngredient = ingredient.getAliment().getId();
-                Optional<AlimentDAO> aliment = alimentService.getAlimentById(idIngredient);
+                Optional<AlimentDTO> aliment = alimentService.getAlimentById(idIngredient);
 
                 if (!aliment.isPresent()) {
                     missingSet.add(idIngredient);
@@ -320,24 +320,24 @@ public class InitializerController {
             }
         }
 
-        MissingIngredients missingIngredients = new MissingIngredients(1, missingSet, missingSet.size());
+        MissingIngredientsDTO missingIngredients = new MissingIngredientsDTO(1, missingSet, missingSet.size());
         missingService.save(missingIngredients);
 
         return missingIngredients;
     }
 
     @GetMapping("/missingIngredients/ponderate")
-    public MissingIngredients ponderateMissingIngredients() {
+    public MissingIngredientsDTO ponderateMissingIngredients() {
 
-        Iterable<RecipeDAO> allRecipes = recipeService.getAllRecipes();
+        Iterable<RecipeDTO> allRecipes = recipeService.getAllRecipes();
         Map<String, Integer> missingMap = new HashMap<>();
 
-        for (RecipeDAO recipe : allRecipes) {
-            List<IngredientDAO> ingredients = recipe.getIngredients();
+        for (RecipeDTO recipe : allRecipes) {
+            List<IngredientDTO> ingredients = recipe.getIngredients();
 
-            for (IngredientDAO ingredient : ingredients) {
+            for (IngredientDTO ingredient : ingredients) {
                 String idIngredient = ingredient.getAliment().getId();
-                Optional<AlimentDAO> aliment = alimentService.getAlimentById(idIngredient);
+                Optional<AlimentDTO> aliment = alimentService.getAlimentById(idIngredient);
 
                 if (!aliment.isPresent()) {
                     Integer value = missingMap.get(idIngredient);
@@ -352,7 +352,7 @@ public class InitializerController {
         LinkedHashMap<String, Integer> sortedMissingMap = sorted
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x, y) -> y, LinkedHashMap::new));
 
-        MissingIngredients missingIngredients = missingService.getMissingById(1).get();
+        MissingIngredientsDTO missingIngredients = missingService.getMissingById(1).get();
         missingIngredients.setMissingMap(sortedMissingMap);
         missingService.save(missingIngredients);
 
@@ -360,7 +360,7 @@ public class InitializerController {
     }
 
     @GetMapping("/missingIngredients/cure/{number}")
-    public MissingIngredients cureMissingIngredients(@PathVariable int number) throws InterruptedException {
+    public MissingIngredientsDTO cureMissingIngredients(@PathVariable int number) throws InterruptedException {
         int counter = 0;
         Map<String, Integer> missingMap = missingService.getMissingById(1).get().getMissingMap();
 
@@ -381,14 +381,14 @@ public class InitializerController {
     @GetMapping("/missingIngredients/patch")
     public String patchMissingIngredients() {
 
-        Iterable<RecipeDAO> allRecipes = recipeService.getAllRecipes();
+        Iterable<RecipeDTO> allRecipes = recipeService.getAllRecipes();
 
-        for (RecipeDAO recipe : allRecipes) {
-            List<IngredientDAO> ingredients = recipe.getIngredients();
+        for (RecipeDTO recipe : allRecipes) {
+            List<IngredientDTO> ingredients = recipe.getIngredients();
 
-            for (IngredientDAO ingredient : ingredients) {
+            for (IngredientDTO ingredient : ingredients) {
                 String idIngredient = ingredient.getAliment().getId();
-                Optional<AlimentDAO> aliment = alimentService.getAlimentById(idIngredient);
+                Optional<AlimentDTO> aliment = alimentService.getAlimentById(idIngredient);
 
                 if (aliment.isPresent()) {
                     ingredient.setAliment(aliment.get());
@@ -403,10 +403,10 @@ public class InitializerController {
     @GetMapping("/aliment/all")
     public Set<String> getAllAlliment() {
 
-        Iterable<AlimentDAO> allAliments = alimentService.getAllAliments();
+        Iterable<AlimentDTO> allAliments = alimentService.getAllAliments();
         Set<String> foodSet = new HashSet<>();
 
-        for (AlimentDAO aliment : allAliments) {
+        for (AlimentDTO aliment : allAliments) {
             String alimentName = aliment.getNameEn();
             foodSet.add(alimentName);
         }
@@ -417,14 +417,14 @@ public class InitializerController {
     @GetMapping("/aliment/getConverter")
     public String getAllConvertionValue() throws IOException, URISyntaxException {
 
-        Iterable<RecipeDAO> allRecipes = recipeService.getAllRecipes();
+        Iterable<RecipeDTO> allRecipes = recipeService.getAllRecipes();
         // Optional<RecipeDAO> recipe = recipeService.getRecipeById("640941");
 
         Document document = null;
         String uri = null;
 
-        for (RecipeDAO recipe : allRecipes) {
-            List<IngredientDAO> ingredientsRecipe = recipe.getIngredients();
+        for (RecipeDTO recipe : allRecipes) {
+            List<IngredientDTO> ingredientsRecipe = recipe.getIngredients();
             uri = recipe.getSpoonacularURL();
             try {
                 document = Jsoup.connect(uri).get();
@@ -452,9 +452,9 @@ public class InitializerController {
                     Double convertionValue = amountFr / amountUs;
 
                     if (unitUs.toLowerCase().contains("cup") || unitUs.trim().toLowerCase().equals("c")) {
-                        for (IngredientDAO ingredientDAO : ingredientsRecipe) {
+                        for (IngredientDTO ingredientDAO : ingredientsRecipe) {
 
-                            AlimentDAO currentAliment = ingredientDAO.getAliment();
+                            AlimentDTO currentAliment = ingredientDAO.getAliment();
                             String nameDAO = ingredientDAO.getNameFromApi();
                             String altNameDAO = currentAliment.getNameEn();
 
@@ -495,7 +495,7 @@ public class InitializerController {
             } catch (IndexOutOfBoundsException oob) {
                 System.err.println("###############################");
                 System.err.println(" ça n'a pas marché avec \n recette : " + recipe.getId());
-                for (IngredientDAO ingredientDAO : ingredientsRecipe) {
+                for (IngredientDTO ingredientDAO : ingredientsRecipe) {
                     System.err.println(ingredientDAO.getNameFromApi());
                 }
                 System.err.println("###############################");

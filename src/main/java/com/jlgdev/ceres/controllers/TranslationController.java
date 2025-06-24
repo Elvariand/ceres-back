@@ -21,8 +21,8 @@ import org.springframework.web.client.RestClient;
 import com.deepl.api.DeepLClient;
 import com.deepl.api.DeepLException;
 import com.deepl.api.TextResult;
-import com.jlgdev.ceres.models.dataAccessObject.AlimentDAO;
-import com.jlgdev.ceres.models.dataAccessObject.RecipeDAO;
+import com.jlgdev.ceres.models.dataTransferObject.AlimentDTO;
+import com.jlgdev.ceres.models.dataTransferObject.RecipeDTO;
 import com.jlgdev.ceres.models.mapper.MapperRecipe;
 import com.jlgdev.ceres.models.translation.TranslationQuery;
 import com.jlgdev.ceres.services.AlimentService;
@@ -50,12 +50,12 @@ public class TranslationController {
     @GetMapping("/aliments/names")
     public String getAlimentsNames() {
 
-        Iterable<AlimentDAO> allAliments = alimentService.getAllAliments();
+        Iterable<AlimentDTO> allAliments = alimentService.getAllAliments();
         RestClient defaultClient = RestClient.create();
         String nameEn = "";
         String nameFr = "";
 
-        for (AlimentDAO aliment : allAliments) {
+        for (AlimentDTO aliment : allAliments) {
             nameEn = aliment.getNameEn();
 
             TranslationQuery query = new TranslationQuery(nameEn);
@@ -82,7 +82,7 @@ public class TranslationController {
     @GetMapping("/recipes/titles")
     public String getRecipesTitles() throws DeepLException, InterruptedException {
 
-        Iterable<RecipeDAO> allRecipes = recipeService.getAllRecipes();
+        Iterable<RecipeDTO> allRecipes = recipeService.getAllRecipes();
         String titleEn = "";
         String titleFr = "";
         String allTitlesFr = "";
@@ -90,7 +90,7 @@ public class TranslationController {
         deeplClient = new DeepLClient(authKey);
         int slowdown = 0;
 
-        for (RecipeDAO recipe : allRecipes) {
+        for (RecipeDTO recipe : allRecipes) {
             titleEn = recipe.getTitleEn();
 
             TextResult result = deeplClient.translateText(titleEn, "en", "fr");
@@ -114,7 +114,7 @@ public class TranslationController {
     @GetMapping("/aliments/categories")
     public String getAlimentsCategories() throws DeepLException, InterruptedException, IOException {
 
-        Iterable<AlimentDAO> allAliments = alimentService.getAllAliments();
+        Iterable<AlimentDTO> allAliments = alimentService.getAllAliments();
         Set<String> categoriesAliment = new HashSet<>();
         String authKey = "10107230-e20d-40f8-afd1-fb61efbe1607:fx";
         deeplClient = new DeepLClient(authKey);
@@ -138,7 +138,7 @@ public class TranslationController {
             listAllCategoriesFr.add(cat[1]);
         }
 
-        for (AlimentDAO aliment : allAliments) {
+        for (AlimentDTO aliment : allAliments) {
             categoriesAliment = aliment.getCategoryPath();
 
             if (categoriesAliment.size() > 0) {
@@ -162,9 +162,9 @@ public class TranslationController {
 
     @GetMapping("/correction")
     public void correction() {
-        Iterable<AlimentDAO> allAliments = alimentService.getAllAliments();
+        Iterable<AlimentDTO> allAliments = alimentService.getAllAliments();
 
-        for (AlimentDAO aliment : allAliments) {
+        for (AlimentDTO aliment : allAliments) {
             Set<String> categories = aliment.getCategoryPathFr();
             if (categories != null && categories.contains("boire")) {
                 categories.remove("boire");
@@ -176,11 +176,11 @@ public class TranslationController {
 
     @GetMapping("/correctionPath")
     public void correctionMissingPath() throws DeepLException, InterruptedException {
-        Iterable<AlimentDAO> allAliments = alimentService.getAlimentMissingPath();
+        Iterable<AlimentDTO> allAliments = alimentService.getAlimentMissingPath();
         String authKey = "10107230-e20d-40f8-afd1-fb61efbe1607:fx";
         deeplClient = new DeepLClient(authKey);
         int slowdown = 0;
-        for (AlimentDAO aliment : allAliments) {
+        for (AlimentDTO aliment : allAliments) {
             Set<String> pathFr = new HashSet<>();
             for (String pathEn : aliment.getCategoryPathEn()) {
                 

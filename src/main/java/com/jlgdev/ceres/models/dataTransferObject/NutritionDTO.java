@@ -1,4 +1,4 @@
-package com.jlgdev.ceres.models.dataAccessObject;
+package com.jlgdev.ceres.models.dataTransferObject;
 
 import java.util.Map;
 import java.util.Set;
@@ -7,49 +7,49 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 
 @Document(collection = "nutrition")
-public class NutritionDAO {
+public class NutritionDTO {
 
-    private Set<NutrientDAO> nutrients;
+    private Set<NutrientDTO> nutrients;
 
-    private Set<AlimentPropertiesDAO> properties;
+    private Set<AlimentPropertiesDTO> properties;
 
-    private Set<FlavonoidDAO> flavonoids;
+    private Set<FlavonoidDTO> flavonoids;
 
     private Map<String, Double> caloricBreakdown;
 
-    private WeightPerServingDAO weightPerServing;
+    private WeightPerServingDTO weightPerServing;
 
 
 
-    public Set<NutrientDAO> getNutrients() {
+    public Set<NutrientDTO> getNutrients() {
         return nutrients;
     }
 
-    public void setNutrients(Set<NutrientDAO> nutrients) {
+    public void setNutrients(Set<NutrientDTO> nutrients) {
         this.nutrients = nutrients;
     }
 
-    public void addNutrients(NutrientDAO nutrientToAdd) {
+    public void addNutrients(NutrientDTO nutrientToAdd) {
         this.nutrients.add(nutrientToAdd);
     }
 
-    public Set<AlimentPropertiesDAO> getProperties() {
+    public Set<AlimentPropertiesDTO> getProperties() {
         return properties;
     }
 
-    public void setProperties(Set<AlimentPropertiesDAO> properties) {
+    public void setProperties(Set<AlimentPropertiesDTO> properties) {
         this.properties = properties;
     }
 
-    public void addProperties(AlimentPropertiesDAO propertyToAdd) {
+    public void addProperties(AlimentPropertiesDTO propertyToAdd) {
         this.properties.add(propertyToAdd);
     }
 
-    public Set<FlavonoidDAO> getFlavonoids() {
+    public Set<FlavonoidDTO> getFlavonoids() {
         return flavonoids;
     }
 
-    public void setFlavonoids(Set<FlavonoidDAO> flavonoids) {
+    public void setFlavonoids(Set<FlavonoidDTO> flavonoids) {
         this.flavonoids = flavonoids;
     }
 
@@ -65,19 +65,19 @@ public class NutritionDAO {
         this.caloricBreakdown.put(name, quantity);
     }
     
-    public WeightPerServingDAO getWeightPerServing() {
+    public WeightPerServingDTO getWeightPerServing() {
         return weightPerServing;
     }
 
-    public void setWeightPerServing(WeightPerServingDAO weightPerServing) {
+    public void setWeightPerServing(WeightPerServingDTO weightPerServing) {
         this.weightPerServing = weightPerServing;
     }
 
-    public NutritionDAO() {
+    public NutritionDTO() {
     }
 
-    public NutritionDAO(Set<NutrientDAO> nutrients, Set<AlimentPropertiesDAO> properties, Set<FlavonoidDAO> flavonoids,
-            Map<String, Double> caloricBreakdown, WeightPerServingDAO weightPerServing) {
+    public NutritionDTO(Set<NutrientDTO> nutrients, Set<AlimentPropertiesDTO> properties, Set<FlavonoidDTO> flavonoids,
+            Map<String, Double> caloricBreakdown, WeightPerServingDTO weightPerServing) {
         this.nutrients = nutrients;
         this.properties = properties;
         this.flavonoids = flavonoids;
@@ -105,7 +105,7 @@ public class NutritionDAO {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        NutritionDAO other = (NutritionDAO) obj;
+        NutritionDTO other = (NutritionDTO) obj;
         if (nutrients == null) {
             if (other.nutrients != null)
                 return false;

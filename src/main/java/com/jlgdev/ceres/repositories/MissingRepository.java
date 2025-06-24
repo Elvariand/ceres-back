@@ -4,10 +4,10 @@ import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import com.jlgdev.ceres.models.dataAccessObject.MissingIngredients;
+import com.jlgdev.ceres.models.dataTransferObject.MissingIngredientsDTO;
 
-public interface MissingRepository extends MongoRepository<MissingIngredients, Integer>{
+public interface MissingRepository extends MongoRepository<MissingIngredientsDTO, Integer>{
 
-    Optional<MissingIngredients> findById(int id);
+    Optional<MissingIngredientsDTO> findById(int id);
 
 }

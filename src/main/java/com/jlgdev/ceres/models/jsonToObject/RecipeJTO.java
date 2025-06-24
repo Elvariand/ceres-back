@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
-import com.jlgdev.ceres.models.dataAccessObject.RecipeDAO;
+import com.jlgdev.ceres.models.dataTransferObject.RecipeDTO;
 
 public class RecipeJTO {
 
@@ -25,19 +25,19 @@ public class RecipeJTO {
 
     @JsonProperty("vegetarian")
     @JsonSetter(nulls = Nulls.SKIP)
-    private byte vegetarian = RecipeDAO.OK;
+    private byte vegetarian = RecipeDTO.OK;
 
     @JsonProperty("vegan")
     @JsonSetter(nulls = Nulls.SKIP)
-    private byte vegan = RecipeDAO.OK;
+    private byte vegan = RecipeDTO.OK;
 
     @JsonProperty("glutenFree")
     @JsonSetter(nulls = Nulls.SKIP)
-    private byte glutenFree = RecipeDAO.OK;
+    private byte glutenFree = RecipeDTO.OK;
 
     @JsonProperty("dairyFree")
     @JsonSetter(nulls = Nulls.SKIP)
-    private byte dairyFree = RecipeDAO.OK;
+    private byte dairyFree = RecipeDTO.OK;
 
     @JsonProperty("preparationMinutes")
     @JsonSetter(nulls = Nulls.SKIP)

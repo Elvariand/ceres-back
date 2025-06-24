@@ -1,4 +1,4 @@
-package com.jlgdev.ceres.models.dataAccessObject;
+package com.jlgdev.ceres.models.dataTransferObject;
 
 import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 
 @Document(collection = "nutrient")
-public class NutrientDAO{
+public class NutrientDTO{
 
     @Indexed(direction = IndexDirection.ASCENDING)
     private String nameEn;
@@ -64,10 +64,10 @@ public class NutrientDAO{
         this.percentOfDailyNeed = percentOfDailyNeed;
     }
 
-    public NutrientDAO() {
+    public NutrientDTO() {
     }
 
-    public NutrientDAO(String nameEn, String nameFr, Double amount, String unit, Double percentOfDailyNeed) {
+    public NutrientDTO(String nameEn, String nameFr, Double amount, String unit, Double percentOfDailyNeed) {
         this.nameEn = nameEn;
         this.nameFr = nameFr;
         this.amount = amount;
@@ -95,7 +95,7 @@ public class NutrientDAO{
             return false;
         if (getClass() != obj.getClass())
             return false;
-        NutrientDAO other = (NutrientDAO) obj;
+        NutrientDTO other = (NutrientDTO) obj;
         if (nameEn == null) {
             if (other.nameEn != null)
                 return false;

@@ -1,4 +1,4 @@
-package com.jlgdev.ceres.models.dataAccessObject;
+package com.jlgdev.ceres.models.dataTransferObject;
 
 import java.util.Map;
 import java.util.Set;
@@ -6,7 +6,7 @@ import java.util.Set;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document("MissingIngredient")
-public class MissingIngredients {
+public class MissingIngredientsDTO {
 
     private int id;
     
@@ -51,16 +51,16 @@ public class MissingIngredients {
         this.missingMap = missingMap;
     }
 
-    public MissingIngredients(int id, Set<String> missingSet, int total) {
+    public MissingIngredientsDTO(int id, Set<String> missingSet, int total) {
         this.id = 1;
         this.missingSet = missingSet;
         this.total = total;
     }
 
-    public MissingIngredients() {
+    public MissingIngredientsDTO() {
     }
 
-    public MissingIngredients(int id, Set<String> missingSet, Map<String, Integer> missingMap, int total) {
+    public MissingIngredientsDTO(int id, Set<String> missingSet, Map<String, Integer> missingMap, int total) {
         this.id = id;
         this.missingSet = missingSet;
         this.missingMap = missingMap;

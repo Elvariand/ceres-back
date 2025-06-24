@@ -1,11 +1,11 @@
-package com.jlgdev.ceres.models.dataAccessObject;
+package com.jlgdev.ceres.models.dataTransferObject;
 
 import java.util.List;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document("recipes")
-public class RecipeDAO {
+public class RecipeDTO {
     public static final byte OK = 1;
     public static final byte WARNING = 2;
     public static final byte FORBIDDEN = 0;
@@ -18,7 +18,7 @@ public class RecipeDAO {
 
     private String titleFr;
 
-    private List<IngredientDAO> ingredients;
+    private List<IngredientDTO> ingredients;
 
     private List<String> tags;
 
@@ -112,11 +112,11 @@ public class RecipeDAO {
         this.titleFr = titleFr;
     }
     
-    public List<IngredientDAO> getIngredients() {
+    public List<IngredientDTO> getIngredients() {
         return ingredients;
     }
     
-    public void setIngredients(List<IngredientDAO> ingredients) {
+    public void setIngredients(List<IngredientDTO> ingredients) {
         this.ingredients = ingredients;
     }
     
@@ -355,7 +355,7 @@ public class RecipeDAO {
         this.dairyfree = dairyfree;
     }
 
-    public RecipeDAO() {
+    public RecipeDTO() {
     }
 
     @Override

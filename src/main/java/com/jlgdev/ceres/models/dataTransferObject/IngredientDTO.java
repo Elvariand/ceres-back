@@ -1,15 +1,15 @@
-package com.jlgdev.ceres.models.dataAccessObject;
+package com.jlgdev.ceres.models.dataTransferObject;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document("ingredient")
-public class IngredientDAO {
+public class IngredientDTO {
 
     private Double quantity;
 
     private String nameFromApi;
 
-    private AlimentDAO aliment;
+    private AlimentDTO aliment;
 
     private String unit;
 
@@ -21,11 +21,11 @@ public class IngredientDAO {
         this.quantity = quantity;
     }
 
-    public AlimentDAO getAliment() {
+    public AlimentDTO getAliment() {
         return aliment;
     }
 
-    public void setAliment(AlimentDAO aliment) {
+    public void setAliment(AlimentDTO aliment) {
         this.aliment = aliment;
     }
 
@@ -45,10 +45,10 @@ public class IngredientDAO {
         this.nameFromApi = nameFromApi;
     }
 
-    public IngredientDAO() {
+    public IngredientDTO() {
     }
 
-    public IngredientDAO(Double quantity, String nameFromApi, AlimentDAO aliment, String unit) {
+    public IngredientDTO(Double quantity, String nameFromApi, AlimentDTO aliment, String unit) {
         this.quantity = quantity;
         this.nameFromApi = nameFromApi;
         this.aliment = aliment;

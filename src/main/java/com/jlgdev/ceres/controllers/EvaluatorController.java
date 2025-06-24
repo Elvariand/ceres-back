@@ -12,10 +12,11 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.jlgdev.ceres.models.dataAccessObject.AlimentDAO;
-import com.jlgdev.ceres.models.dataAccessObject.AllergyDAO;
-import com.jlgdev.ceres.models.dataAccessObject.IngredientDAO;
-import com.jlgdev.ceres.models.dataAccessObject.RecipeDAO;
+
+import com.jlgdev.ceres.models.dataTransferObject.AlimentDTO;
+import com.jlgdev.ceres.models.dataTransferObject.AllergyDTO;
+import com.jlgdev.ceres.models.dataTransferObject.IngredientDTO;
+import com.jlgdev.ceres.models.dataTransferObject.RecipeDTO;
 import com.jlgdev.ceres.models.mapper.MapperRecipe;
 import com.jlgdev.ceres.services.AlimentService;
 import com.jlgdev.ceres.services.AllergyService;
@@ -47,9 +48,9 @@ public class EvaluatorController {
     @GetMapping("/recipes/juge")
     public String determineRecipeRestrictions() {
 
-        Iterable<RecipeDAO> allRecipes = recipeService.getAllRecipes();
+        Iterable<RecipeDTO> allRecipes = recipeService.getAllRecipes();
 
-        for (RecipeDAO recipe : allRecipes) {
+        for (RecipeDTO recipe : allRecipes) {
             evaluateAllergies(recipe);
             evaluateRecipeVeganism(recipe);
             evaluateRecipeReligion(recipe);
@@ -57,20 +58,20 @@ public class EvaluatorController {
         return "Recipes have been evaluated";
     }
 
-    private RecipeDAO evaluateAllergies(RecipeDAO recipe) {
+    private RecipeDTO evaluateAllergies(RecipeDTO recipe) {
 
-        Iterable<AllergyDAO> allAllergies = allergyService.getAllAllergies();
-        Set<AlimentDAO> recipeAliments = getAlimentsFromRecipe(recipe);
+        Iterable<AllergyDTO> allAllergies = allergyService.getAllAllergies();
+        Set<AlimentDTO> recipeAliments = getAlimentsFromRecipe(recipe);
 
-        for (AllergyDAO allergy : allAllergies) {
-            byte restriction = RecipeDAO.OK;
-            for (AlimentDAO aliment : recipeAliments) {
+        for (AllergyDTO allergy : allAllergies) {
+            byte restriction = RecipeDTO.OK;
+            for (AlimentDTO aliment : recipeAliments) {
                 String alimentNameFr = aliment.getNameFr();
                 if (isInIterable(allergy.getForbidden(), alimentNameFr)) {
-                    restriction = RecipeDAO.FORBIDDEN;
+                    restriction = RecipeDTO.FORBIDDEN;
                     break;
                 } else if (isInIterable(allergy.getWarning(), alimentNameFr)) {
-                    restriction = RecipeDAO.WARNING;
+                    restriction = RecipeDTO.WARNING;
                 }
             }
             switch (allergy.getName()) {
@@ -127,26 +128,26 @@ public class EvaluatorController {
         return recipe;
     }
 
-    private RecipeDAO evaluateRecipeReligion(RecipeDAO recipe) {
+    private RecipeDTO evaluateRecipeReligion(RecipeDTO recipe) {
 
-        recipe.setJudaism(RecipeDAO.OK);
-        recipe.setIslam(RecipeDAO.OK);
+        recipe.setJudaism(RecipeDTO.OK);
+        recipe.setIslam(RecipeDTO.OK);
         if (recipe.getVegan() == 1) {
             recipeService.save(recipe);
         } else {
-            Set<AlimentDAO> recipeAliments = getAlimentsFromRecipe(recipe);
-            Set<AlimentDAO> recipeJudaismWarnings = new HashSet<>();
+            Set<AlimentDTO> recipeAliments = getAlimentsFromRecipe(recipe);
+            Set<AlimentDTO> recipeJudaismWarnings = new HashSet<>();
 
-            for (AlimentDAO aliment : recipeAliments) {
-                if (aliment.getJudaism() == AlimentDAO.FORBIDDEN) {
-                    recipe.setJudaism(RecipeDAO.FORBIDDEN);
+            for (AlimentDTO aliment : recipeAliments) {
+                if (aliment.getJudaism() == AlimentDTO.FORBIDDEN) {
+                    recipe.setJudaism(RecipeDTO.FORBIDDEN);
                 }
-                if (aliment.getIslam() == AlimentDAO.FORBIDDEN) {
-                    recipe.setIslam(RecipeDAO.FORBIDDEN);
+                if (aliment.getIslam() == AlimentDTO.FORBIDDEN) {
+                    recipe.setIslam(RecipeDTO.FORBIDDEN);
                 }
-                if (recipe.getJudaism() != RecipeDAO.FORBIDDEN
-                        && aliment.getJudaism() == AlimentDAO.WARNING
-                        && aliment.getVegan() != AlimentDAO.OK) {
+                if (recipe.getJudaism() != RecipeDTO.FORBIDDEN
+                        && aliment.getJudaism() == AlimentDTO.WARNING
+                        && aliment.getVegan() != AlimentDTO.OK) {
                     recipeJudaismWarnings.add(aliment);
                 }
             }
@@ -155,11 +156,11 @@ public class EvaluatorController {
                 boolean hasMilk = false;
                 boolean hasFish = false;
 
-                for (AlimentDAO warning : recipeJudaismWarnings) {
+                for (AlimentDTO warning : recipeJudaismWarnings) {
                     Set<String> paths = warning.getCategoryPathFr();
                     if (paths == null) {
                         System.out.println(warning.getId() + " n'a pas de path");
-                        recipe.setJudaism(RecipeDAO.WARNING);
+                        recipe.setJudaism(RecipeDTO.WARNING);
                     } else {
 
                         if (paths.contains("viande")) {
@@ -176,9 +177,9 @@ public class EvaluatorController {
                     }
                 }
                 if (hasMeat && hasMilk) {
-                    recipe.setJudaism(RecipeDAO.FORBIDDEN);
+                    recipe.setJudaism(RecipeDTO.FORBIDDEN);
                 } else if (hasFish && hasMeat) {
-                    recipe.setJudaism(RecipeDAO.WARNING);
+                    recipe.setJudaism(RecipeDTO.WARNING);
                 }
             }
             recipeService.save(recipe);
@@ -187,19 +188,19 @@ public class EvaluatorController {
         return recipe;
     }
 
-    private RecipeDAO evaluateRecipeVeganism(RecipeDAO recipe) {
+    private RecipeDTO evaluateRecipeVeganism(RecipeDTO recipe) {
 
-        Set<AlimentDAO> recipeAliments = getAlimentsFromRecipe(recipe);
-        byte isVegan = RecipeDAO.OK;
-        byte isVegetarian = RecipeDAO.OK;
+        Set<AlimentDTO> recipeAliments = getAlimentsFromRecipe(recipe);
+        byte isVegan = RecipeDTO.OK;
+        byte isVegetarian = RecipeDTO.OK;
 
-        for (AlimentDAO aliment : recipeAliments) {
-            if (aliment.getVegetarian() == AlimentDAO.FORBIDDEN) {
-                isVegan = RecipeDAO.FORBIDDEN;
-                isVegetarian = RecipeDAO.FORBIDDEN;
+        for (AlimentDTO aliment : recipeAliments) {
+            if (aliment.getVegetarian() == AlimentDTO.FORBIDDEN) {
+                isVegan = RecipeDTO.FORBIDDEN;
+                isVegetarian = RecipeDTO.FORBIDDEN;
                 break;
-            } else if (aliment.getVegan() == AlimentDAO.FORBIDDEN) {
-                isVegan = RecipeDAO.FORBIDDEN;
+            } else if (aliment.getVegan() == AlimentDTO.FORBIDDEN) {
+                isVegan = RecipeDTO.FORBIDDEN;
             }
         }
 
@@ -217,9 +218,9 @@ public class EvaluatorController {
     @GetMapping("/aliments/juge")
     public String determineRestrictions() {
 
-        Iterable<AlimentDAO> allAliments = alimentService.getAllAliments();
+        Iterable<AlimentDTO> allAliments = alimentService.getAllAliments();
 
-        for (AlimentDAO aliment : allAliments) {
+        for (AlimentDTO aliment : allAliments) {
             evaluateAllergies(aliment);
             evaluateVeganism(aliment);
             evaluateReligion(aliment);
@@ -227,18 +228,18 @@ public class EvaluatorController {
         return "Aliments have been evaluated";
     }
 
-    private AlimentDAO evaluateAllergies(AlimentDAO aliment) {
+    private AlimentDTO evaluateAllergies(AlimentDTO aliment) {
 
-        Iterable<AllergyDAO> allAllergies = allergyService.getAllAllergies();
+        Iterable<AllergyDTO> allAllergies = allergyService.getAllAllergies();
 
-        for (AllergyDAO allergy : allAllergies) {
-            byte restriction = AlimentDAO.OK;
+        for (AllergyDTO allergy : allAllergies) {
+            byte restriction = AlimentDTO.OK;
             String alimentNameFr = aliment.getNameFr();
 
             if (isInIterable(allergy.getForbidden(), alimentNameFr)) {
-                restriction = AlimentDAO.FORBIDDEN;
+                restriction = AlimentDTO.FORBIDDEN;
             } else if (isInIterable(allergy.getWarning(), alimentNameFr)) {
-                restriction = AlimentDAO.WARNING;
+                restriction = AlimentDTO.WARNING;
             }
 
             switch (allergy.getName()) {
@@ -295,11 +296,11 @@ public class EvaluatorController {
         return aliment;
     }
 
-    private AlimentDAO evaluateVeganism(AlimentDAO aliment) {
+    private AlimentDTO evaluateVeganism(AlimentDTO aliment) {
 
         Set<String> categoriesPathFr = aliment.getCategoryPathFr();
-        byte vegan = AlimentDAO.OK;
-        byte vegetarian = AlimentDAO.OK;
+        byte vegan = AlimentDTO.OK;
+        byte vegetarian = AlimentDTO.OK;
         String alimentNameFr = aliment.getNameFr();
 
         if (categoriesPathFr == null) {
@@ -357,16 +358,16 @@ public class EvaluatorController {
         for (String cat : categoriesPathFr) {
 
             if (isInIterable(nonVegetarian, cat)) {
-                vegan = AlimentDAO.FORBIDDEN;
-                vegetarian = AlimentDAO.FORBIDDEN;
+                vegan = AlimentDTO.FORBIDDEN;
+                vegetarian = AlimentDTO.FORBIDDEN;
                 break;
             }
 
             if (isInIterable(nonVegan, cat)) {
-                vegan = AlimentDAO.FORBIDDEN;
+                vegan = AlimentDTO.FORBIDDEN;
                 if (cat.contains("lait") || cat.contains("yaourt") || cat.contains("yogourt")) {
                     if (isInIterable(veganMilk, cat)) {
-                        vegan = AlimentDAO.OK;
+                        vegan = AlimentDTO.OK;
                         break;
                     }
                 } else if (cat.contains("beurre") && !cat.contains("noix de beurre")) {
@@ -374,12 +375,12 @@ public class EvaluatorController {
                             || cat.contains("vegetal")
                             || cat.contains("de pomme")
                             || cat.contains("vegan")) {
-                        vegan = AlimentDAO.OK;
+                        vegan = AlimentDTO.OK;
                         break;
                     }
                 }
             } else if (isInIterable(warningVegan, cat)) {
-                vegan = AlimentDAO.WARNING;
+                vegan = AlimentDTO.WARNING;
             }
         }
 
@@ -391,25 +392,25 @@ public class EvaluatorController {
         return aliment;
     }
 
-    private AlimentDAO evaluateReligion(AlimentDAO aliment) {
+    private AlimentDTO evaluateReligion(AlimentDTO aliment) {
 
         if (aliment.getVegan() == 1) {
-            aliment.setJudaism(AlimentDAO.OK);
-            aliment.setIslam(AlimentDAO.OK);
+            aliment.setJudaism(AlimentDTO.OK);
+            aliment.setIslam(AlimentDTO.OK);
             alimentService.save(aliment);
             return aliment;
         } else {
-            Iterable<AllergyDAO> allReligions = allergyService.getReligions();
+            Iterable<AllergyDTO> allReligions = allergyService.getReligions();
 
-            for (AllergyDAO religion : allReligions) {
-                byte restriction = AlimentDAO.OK;
+            for (AllergyDTO religion : allReligions) {
+                byte restriction = AlimentDTO.OK;
                 Set<String> categories = aliment.getCategoryPathFr();
 
                 for (String cat : categories) {
                     if (isInIterable(religion.getForbidden(), cat)) {
-                        restriction = AlimentDAO.FORBIDDEN;
+                        restriction = AlimentDTO.FORBIDDEN;
                     } else if (isInIterable(religion.getWarning(), cat)) {
-                        restriction = AlimentDAO.WARNING;
+                        restriction = AlimentDTO.WARNING;
                     }
                 }
 
@@ -436,11 +437,11 @@ public class EvaluatorController {
  *              Common methods                    *
  **************************************************/
 
-    private Set<AlimentDAO> getAlimentsFromRecipe(RecipeDAO recipe) {
-        Set<AlimentDAO> recipeAliments = new HashSet<>();
-        List<IngredientDAO> recipeIngredients = recipe.getIngredients();
+    private Set<AlimentDTO> getAlimentsFromRecipe(RecipeDTO recipe) {
+        Set<AlimentDTO> recipeAliments = new HashSet<>();
+        List<IngredientDTO> recipeIngredients = recipe.getIngredients();
 
-        for (IngredientDAO ingredient : recipeIngredients) {
+        for (IngredientDTO ingredient : recipeIngredients) {
             recipeAliments.add(ingredient.getAliment());
         }
 

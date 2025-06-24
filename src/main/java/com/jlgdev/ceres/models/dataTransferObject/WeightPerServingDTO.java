@@ -1,34 +1,15 @@
-package com.jlgdev.ceres.models.dataAccessObject;
+package com.jlgdev.ceres.models.dataTransferObject;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document("flavonoids")
-public class FlavonoidDAO {
-
-    private String nameEn;
-
-    private String nameFr;
+@Document(collection = "weightPerServing")
+public class WeightPerServingDTO {
 
     private Double amount;
 
     private String unit;
 
 
-    public String getNameEn() {
-        return nameEn;
-    }
-
-    public void setNameEn(String nameEn) {
-        this.nameEn = nameEn;
-    }
-
-    public String getNameFr() {
-        return nameFr;
-    }
-
-    public void setNameFr(String nameFr) {
-        this.nameFr = nameFr;
-    }
 
     public Double getAmount() {
         return amount;
@@ -43,15 +24,16 @@ public class FlavonoidDAO {
     }
 
     public void setUnit(String unit) {
+        if (unit.charAt(0) == 'Â') {
+            unit.replace("Â", "");
+        }
         this.unit = unit;
     }
 
-    public FlavonoidDAO() {
+    public WeightPerServingDTO() {
     }
 
-    public FlavonoidDAO(String nameEn, String nameFr, Double amount, String unit) {
-        this.nameEn = nameEn;
-        this.nameFr = nameFr;
+    public WeightPerServingDTO(Double amount, String unit) {
         this.amount = amount;
         this.unit = unit;
     }
@@ -60,8 +42,6 @@ public class FlavonoidDAO {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((nameEn == null) ? 0 : nameEn.hashCode());
-        result = prime * result + ((nameFr == null) ? 0 : nameFr.hashCode());
         result = prime * result + ((amount == null) ? 0 : amount.hashCode());
         result = prime * result + ((unit == null) ? 0 : unit.hashCode());
         return result;
@@ -75,17 +55,7 @@ public class FlavonoidDAO {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        FlavonoidDAO other = (FlavonoidDAO) obj;
-        if (nameEn == null) {
-            if (other.nameEn != null)
-                return false;
-        } else if (!nameEn.equals(other.nameEn))
-            return false;
-        if (nameFr == null) {
-            if (other.nameFr != null)
-                return false;
-        } else if (!nameFr.equals(other.nameFr))
-            return false;
+        WeightPerServingDTO other = (WeightPerServingDTO) obj;
         if (amount == null) {
             if (other.amount != null)
                 return false;
@@ -101,9 +71,8 @@ public class FlavonoidDAO {
 
     @Override
     public String toString() {
-        return "FlavonoidDAO [nameEn=" + nameEn + ", nameFr=" + nameFr + ", amount=" + amount + ", unit=" + unit + "]";
+        return "WeightPerServing [amount=" + amount + ", unit=" + unit + "]";
     }
 
     
-
 }

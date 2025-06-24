@@ -1,4 +1,4 @@
-package com.jlgdev.ceres.models.dataAccessObject;
+package com.jlgdev.ceres.models.dataTransferObject;
 
 import java.util.Set;
 
@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "aliment")
-public class AlimentDAO {
+public class AlimentDTO {
     public static final byte OK = 1;
     public static final byte WARNING = 2;
     public static final byte FORBIDDEN = 0;
@@ -25,7 +25,7 @@ public class AlimentDAO {
 
     private String image;
 
-    private NutritionDAO nutrition;
+    private NutritionDTO nutrition;
 
     private Set<String> categoryPath;
 
@@ -117,11 +117,11 @@ public class AlimentDAO {
         this.image = image;
     }
 
-    public NutritionDAO getNutrition() {
+    public NutritionDTO getNutrition() {
         return nutrition;
     }
 
-    public void setNutrition(NutritionDAO nutrition) {
+    public void setNutrition(NutritionDTO nutrition) {
         this.nutrition = nutrition;
     }
 
@@ -316,10 +316,10 @@ public class AlimentDAO {
         this.dairyfree = dairyfree;
     }
 
-    public AlimentDAO() {
+    public AlimentDTO() {
     }
 
-    public AlimentDAO(String id) {
+    public AlimentDTO(String id) {
         this.id = id;
     }
 

@@ -1,9 +1,9 @@
-package com.jlgdev.ceres.models.dataAccessObject;
+package com.jlgdev.ceres.models.dataTransferObject;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "alimentProperties")
-public class AlimentPropertiesDAO {
+public class AlimentPropertiesDTO {
 
 
     private String nameEn;
@@ -46,10 +46,10 @@ public class AlimentPropertiesDAO {
         this.unit = unit;
     }
 
-    public AlimentPropertiesDAO() {
+    public AlimentPropertiesDTO() {
     }
 
-    public AlimentPropertiesDAO(String nameEn, String nameFr, Double amount, String unit) {
+    public AlimentPropertiesDTO(String nameEn, String nameFr, Double amount, String unit) {
         this.nameEn = nameEn;
         this.nameFr = nameFr;
         this.amount = amount;
@@ -75,7 +75,7 @@ public class AlimentPropertiesDAO {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        AlimentPropertiesDAO other = (AlimentPropertiesDAO) obj;
+        AlimentPropertiesDTO other = (AlimentPropertiesDTO) obj;
         if (nameEn == null) {
             if (other.nameEn != null)
                 return false;
