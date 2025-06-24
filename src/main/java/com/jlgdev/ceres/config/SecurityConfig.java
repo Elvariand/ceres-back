@@ -32,7 +32,7 @@ public class SecurityConfig {
                                           // internet
                 .authorizeHttpRequests(
                         authz -> authz
-                                // .requestMatchers(HttpMethod.GET, "/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/**").permitAll()
                                 // .requestMatchers(HttpMethod.POST, "/profile/auth/**").permitAll()
                                 // .requestMatchers(HttpMethod.GET, "/profile/user/**").hasAnyAuthority("USER","ADMIN")
                                 // .requestMatchers(HttpMethod.GET, "/khaos/**").hasAuthority("ADMIN")
