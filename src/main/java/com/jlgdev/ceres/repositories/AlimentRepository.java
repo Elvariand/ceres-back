@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.lang.NonNull;
 
-import com.jlgdev.ceres.models.dataTransferObject.AlimentDTO;
+import com.jlgdev.ceres.models.dataTransferObject.NoSQL.AlimentDTO;
 
 
 public interface AlimentRepository extends MongoRepository<AlimentDTO, String>{

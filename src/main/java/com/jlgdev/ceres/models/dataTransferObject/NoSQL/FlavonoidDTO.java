@@ -1,10 +1,9 @@
-package com.jlgdev.ceres.models.dataTransferObject;
+package com.jlgdev.ceres.models.dataTransferObject.NoSQL;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "alimentProperties")
-public class AlimentPropertiesDTO {
-
+@Document("flavonoids")
+public class FlavonoidDTO {
 
     private String nameEn;
 
@@ -13,6 +12,7 @@ public class AlimentPropertiesDTO {
     private Double amount;
 
     private String unit;
+
 
     public String getNameEn() {
         return nameEn;
@@ -46,10 +46,10 @@ public class AlimentPropertiesDTO {
         this.unit = unit;
     }
 
-    public AlimentPropertiesDTO() {
+    public FlavonoidDTO() {
     }
 
-    public AlimentPropertiesDTO(String nameEn, String nameFr, Double amount, String unit) {
+    public FlavonoidDTO(String nameEn, String nameFr, Double amount, String unit) {
         this.nameEn = nameEn;
         this.nameFr = nameFr;
         this.amount = amount;
@@ -75,7 +75,7 @@ public class AlimentPropertiesDTO {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        AlimentPropertiesDTO other = (AlimentPropertiesDTO) obj;
+        FlavonoidDTO other = (FlavonoidDTO) obj;
         if (nameEn == null) {
             if (other.nameEn != null)
                 return false;
@@ -101,8 +101,9 @@ public class AlimentPropertiesDTO {
 
     @Override
     public String toString() {
-        return "AlimentPropertiesDAO [nameEn=" + nameEn + ", nameFr=" + nameFr + ", amount=" + amount + ", unit=" + unit
-                + "]";
+        return "FlavonoidDTO [nameEn=" + nameEn + ", nameFr=" + nameFr + ", amount=" + amount + ", unit=" + unit + "]";
     }
+
+    
 
 }

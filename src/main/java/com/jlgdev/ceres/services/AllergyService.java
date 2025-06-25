@@ -8,7 +8,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jlgdev.ceres.models.dataTransferObject.AllergyDTO;
+import com.jlgdev.ceres.models.dataTransferObject.NoSQL.AllergyDTO;
 import com.jlgdev.ceres.repositories.AllergyRepository;
 
 @Service

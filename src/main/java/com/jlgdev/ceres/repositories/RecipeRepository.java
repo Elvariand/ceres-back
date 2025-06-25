@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.lang.NonNull;
 
-import com.jlgdev.ceres.models.dataTransferObject.RecipeDTO;
+import com.jlgdev.ceres.models.dataTransferObject.NoSQL.RecipeDTO;
 
 public interface RecipeRepository extends MongoRepository<RecipeDTO, String>{
 

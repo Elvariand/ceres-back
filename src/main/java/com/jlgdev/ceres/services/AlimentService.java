@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jlgdev.ceres.models.dataTransferObject.AlimentDTO;
+import com.jlgdev.ceres.models.dataTransferObject.NoSQL.AlimentDTO;
 import com.jlgdev.ceres.repositories.AlimentRepository;
 
 @Service

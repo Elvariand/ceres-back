@@ -1,8 +1,10 @@
-package com.jlgdev.ceres.models;
+package com.jlgdev.ceres.models.entities;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -20,7 +23,7 @@ public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long  id;
 
     private String email;
 
@@ -32,11 +35,20 @@ public class UserEntity {
     inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles = new HashSet<>();
 
-    public Integer getId() {
+    private String[] history = new String[30];
+
+    private Set<String> favorite = new HashSet<>();
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "preferences_id")
+    @Nullable
+    private UserPreference preferences;
+
+    public Long  getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long  id) {
         this.id = id;
     }
 
@@ -64,22 +76,49 @@ public class UserEntity {
         this.roles = roles;
     }
 
+    public String[] getHistory() {
+        return history;
+    }
+
+    public void setHistory(String[] history) {
+        this.history = history;
+    }
+
+    public Set<String> getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(Set<String> favorite) {
+        this.favorite = favorite;
+    }
+
     public UserEntity() {
     }
 
-    public UserEntity(String email, String password) {
-        this.email = email;
-        this.password = password;
+    public UserPreference getPreferences() {
+        return preferences;
+    }
+
+    public void setPreferences(UserPreference preferences) {
+        this.preferences = preferences;
+    }
+
+    @Override
+    public String toString() {
+        return "UserEntity [id=" + id + ", email=" + email + ", password=" + password + ", roles=" + roles
+                + ", history=" + Arrays.toString(history) + ", favorite=" + favorite + ", preferences=" + preferences
+                + "]";
     }
 
     @Override
     public int hashCode() {
-        final int prime = 37;
+        final int prime = 31;
         int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
         result = prime * result + ((email == null) ? 0 : email.hashCode());
-        result = prime * result + ((password == null) ? 0 : password.hashCode());
         result = prime * result + ((roles == null) ? 0 : roles.hashCode());
+        result = prime * result + Arrays.hashCode(history);
+        result = prime * result + ((favorite == null) ? 0 : favorite.hashCode());
+        result = prime * result + ((preferences == null) ? 0 : preferences.hashCode());
         return result;
     }
 
@@ -92,33 +131,31 @@ public class UserEntity {
         if (getClass() != obj.getClass())
             return false;
         UserEntity other = (UserEntity) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
         if (email == null) {
             if (other.email != null)
                 return false;
         } else if (!email.equals(other.email))
-            return false;
-        if (password == null) {
-            if (other.password != null)
-                return false;
-        } else if (!password.equals(other.password))
             return false;
         if (roles == null) {
             if (other.roles != null)
                 return false;
         } else if (!roles.equals(other.roles))
             return false;
+        if (!Arrays.equals(history, other.history))
+            return false;
+        if (favorite == null) {
+            if (other.favorite != null)
+                return false;
+        } else if (!favorite.equals(other.favorite))
+            return false;
+        if (preferences == null) {
+            if (other.preferences != null)
+                return false;
+        } else if (!preferences.equals(other.preferences))
+            return false;
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "UserEntity [id=" + id + ", email=" + email + ", password=" + password + ", roles=" + roles + "]";
-    }
-
     
+
 }

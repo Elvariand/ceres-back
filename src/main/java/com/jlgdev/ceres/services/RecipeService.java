@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jlgdev.ceres.models.dataTransferObject.RecipeDTO;
+import com.jlgdev.ceres.models.dataTransferObject.NoSQL.RecipeDTO;
 import com.jlgdev.ceres.repositories.RecipeRepository;
 
 @Service

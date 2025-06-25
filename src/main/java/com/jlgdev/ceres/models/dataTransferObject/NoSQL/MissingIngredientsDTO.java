@@ -1,4 +1,4 @@
-package com.jlgdev.ceres.models.dataTransferObject;
+package com.jlgdev.ceres.models.dataTransferObject.NoSQL;
 
 import java.util.Map;
 import java.util.Set;

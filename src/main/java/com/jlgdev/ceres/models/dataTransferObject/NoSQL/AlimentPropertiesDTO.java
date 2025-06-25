@@ -1,25 +1,18 @@
-package com.jlgdev.ceres.models.dataTransferObject;
+package com.jlgdev.ceres.models.dataTransferObject.NoSQL;
 
-import org.springframework.data.mongodb.core.index.IndexDirection;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "alimentProperties")
+public class AlimentPropertiesDTO {
 
-@Document(collection = "nutrient")
-public class NutrientDTO{
 
-    @Indexed(direction = IndexDirection.ASCENDING)
     private String nameEn;
-    
+
     private String nameFr;
 
     private Double amount;
 
     private String unit;
-
-    private Double percentOfDailyNeed;
-
-
 
     public String getNameEn() {
         return nameEn;
@@ -50,29 +43,17 @@ public class NutrientDTO{
     }
 
     public void setUnit(String unit) {
-        if (unit.charAt(0) == 'Â') {
-            unit.replace("Â", "");
-        }
         this.unit = unit;
     }
 
-    public Double getPercentOfDailyNeed() {
-        return percentOfDailyNeed;
+    public AlimentPropertiesDTO() {
     }
 
-    public void setPercentOfDailyNeed(Double percentOfDailyNeed) {
-        this.percentOfDailyNeed = percentOfDailyNeed;
-    }
-
-    public NutrientDTO() {
-    }
-
-    public NutrientDTO(String nameEn, String nameFr, Double amount, String unit, Double percentOfDailyNeed) {
+    public AlimentPropertiesDTO(String nameEn, String nameFr, Double amount, String unit) {
         this.nameEn = nameEn;
         this.nameFr = nameFr;
         this.amount = amount;
         this.unit = unit;
-        this.percentOfDailyNeed = percentOfDailyNeed;
     }
 
     @Override
@@ -83,7 +64,6 @@ public class NutrientDTO{
         result = prime * result + ((nameFr == null) ? 0 : nameFr.hashCode());
         result = prime * result + ((amount == null) ? 0 : amount.hashCode());
         result = prime * result + ((unit == null) ? 0 : unit.hashCode());
-        result = prime * result + ((percentOfDailyNeed == null) ? 0 : percentOfDailyNeed.hashCode());
         return result;
     }
 
@@ -95,7 +75,7 @@ public class NutrientDTO{
             return false;
         if (getClass() != obj.getClass())
             return false;
-        NutrientDTO other = (NutrientDTO) obj;
+        AlimentPropertiesDTO other = (AlimentPropertiesDTO) obj;
         if (nameEn == null) {
             if (other.nameEn != null)
                 return false;
@@ -116,17 +96,13 @@ public class NutrientDTO{
                 return false;
         } else if (!unit.equals(other.unit))
             return false;
-        if (percentOfDailyNeed == null) {
-            if (other.percentOfDailyNeed != null)
-                return false;
-        } else if (!percentOfDailyNeed.equals(other.percentOfDailyNeed))
-            return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "NutrientDAO [nameEn=" + nameEn + ", nameFr=" + nameFr + ", amount=" + amount + ", unit=" + unit
-                + ", percentOfDailyNeed=" + percentOfDailyNeed + "]";
+        return "AlimentPropertiesDTO [nameEn=" + nameEn + ", nameFr=" + nameFr + ", amount=" + amount + ", unit=" + unit
+                + "]";
     }
+
 }

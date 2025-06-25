@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
-import com.jlgdev.ceres.models.dataTransferObject.RecipeDTO;
+import com.jlgdev.ceres.models.dataTransferObject.NoSQL.RecipeDTO;
 
 public class RecipeJTO {
 

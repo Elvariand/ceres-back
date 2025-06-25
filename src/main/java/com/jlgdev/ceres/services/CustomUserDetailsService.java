@@ -12,8 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.jlgdev.ceres.models.Role;
-import com.jlgdev.ceres.models.UserEntity;
+import com.jlgdev.ceres.models.entities.Role;
+import com.jlgdev.ceres.models.entities.UserEntity;
 import com.jlgdev.ceres.repositories.UserRepository;
 
 @Service

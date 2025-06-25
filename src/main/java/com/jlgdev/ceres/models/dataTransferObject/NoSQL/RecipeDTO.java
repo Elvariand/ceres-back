@@ -1,42 +1,27 @@
-package com.jlgdev.ceres.models.dataTransferObject;
+package com.jlgdev.ceres.models.dataTransferObject.NoSQL;
 
-import java.util.Set;
+import java.util.List;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.IndexDirection;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "aliment")
-public class AlimentDTO {
+@Document("recipes")
+public class RecipeDTO {
     public static final byte OK = 1;
     public static final byte WARNING = 2;
     public static final byte FORBIDDEN = 0;
 
-    @Id
     private String id;
 
-    @Indexed(unique = true, direction = IndexDirection.ASCENDING)
-    private String nameEn;
+    private String title;
 
-    private String nameFr;
+    private String titleEn;
 
-    private String aisle;
+    private String titleFr;
 
-    private String image;
+    private List<IngredientDTO> ingredients;
 
-    private NutritionDTO nutrition;
+    private List<String> tags;
 
-    private Set<String> categoryPath;
-
-    private Set<String> categoryPathEn;
-
-    private Set<String> categoryPathFr;
-
-    private Set<String> possibleUnits;
-
-    private Double convertionValue;
-    
     private byte vegetarian;
 
     private byte vegan;
@@ -75,38 +60,112 @@ public class AlimentDTO {
     
     private byte dairyfree;
 
+    private int preparationMinutes;
 
+    private int cookingMinutes;
 
+    private int totalMinutes;
+    
+    private int likes;
+    
+    private int healthScore;
+    
+    private String image;
+    
+    private String imageType;
+    
+    private String sourceURL;
+    
+    private String spoonacularURL;
+    
+    
+    
     public String getId() {
         return id;
     }
-
+    
     public void setId(String id) {
         this.id = id;
     }
-
-    public String getNameEn() {
-        return nameEn;
+    
+    public String getTitle() {
+        return title;
     }
 
-    public void setNameEn(String nameEn) {
-        this.nameEn = nameEn;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getNameFr() {
-        return nameFr;
+    public String getTitleEn() {
+        return titleEn;
+    }
+    
+    public void setTitleEn(String titleEn) {
+        this.titleEn = titleEn;
+    }
+    
+    public String getTitleFr() {
+        return titleFr;
+    }
+    
+    public void setTitleFr(String titleFr) {
+        this.titleFr = titleFr;
+    }
+    
+    public List<IngredientDTO> getIngredients() {
+        return ingredients;
+    }
+    
+    public void setIngredients(List<IngredientDTO> ingredients) {
+        this.ingredients = ingredients;
+    }
+    
+    public List<String> getTags() {
+        return tags;
+    }
+    
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
+    
+    public int getPreparationMinutes() {
+        return preparationMinutes;
+    }
+    
+    public void setPreparationMinutes(int preparationMinutes) {
+        this.preparationMinutes = preparationMinutes;
+    }
+    
+    public int getCookingMinutes() {
+        return cookingMinutes;
+    }
+    
+    public void setCookingMinutes(int cookingMinutes) {
+        this.cookingMinutes = cookingMinutes;
     }
 
-    public void setNameFr(String nameFr) {
-        this.nameFr = nameFr;
+    public int getTotalMinutes() {
+        return totalMinutes;
     }
 
-    public String getAisle() {
-        return aisle;
+    public void setTotalMinutes(int totalMinutes) {
+        this.totalMinutes = totalMinutes;
+    }
+    
+    public int getLikes() {
+        return likes;
     }
 
-    public void setAisle(String aisle) {
-        this.aisle = aisle;
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+
+    public int getHealthScore() {
+        return healthScore;
+    }
+
+    public void setHealthScore(int healthScore) {
+        this.healthScore = healthScore;
     }
 
     public String getImage() {
@@ -117,52 +176,32 @@ public class AlimentDTO {
         this.image = image;
     }
 
-    public NutritionDTO getNutrition() {
-        return nutrition;
+    public String getImageType() {
+        return imageType;
     }
 
-    public void setNutrition(NutritionDTO nutrition) {
-        this.nutrition = nutrition;
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
     }
 
-    public Set<String> getCategoryPath() {
-        return categoryPath;
+    public String getSourceURL() {
+        return sourceURL;
     }
 
-    public Set<String> getCategoryPathEn() {
-        return categoryPathEn;
+    public void setSourceURL(String sourceURL) {
+        this.sourceURL = sourceURL;
     }
 
-    public void setCategoryPathEn(Set<String> categoryPathEn) {
-        this.categoryPathEn = categoryPathEn;
+    public String getSpoonacularURL() {
+        return spoonacularURL;
     }
 
-    public Set<String> getCategoryPathFr() {
-        return categoryPathFr;
+    public void setSpoonacularURL(String spoonacularURL) {
+        this.spoonacularURL = spoonacularURL;
     }
 
-    public void setCategoryPathFr(Set<String> categoryPathFr) {
-        this.categoryPathFr = categoryPathFr;
-    }
-    public void setCategoryPath(Set<String> categoryPath) {
-        this.categoryPath = categoryPath;
-    }
+
     
-    public Set<String> getPossibleUnits() {
-        return possibleUnits;
-    }
-    
-    public void setPossibleUnits(Set<String> possibleUnits) {
-        this.possibleUnits = possibleUnits;
-    }
-
-    public Double getConvertionValue() {
-        return convertionValue;
-    }
-
-    public void setConvertionValue(Double convertionValue) {
-        this.convertionValue = convertionValue;
-    }
 
     public byte getVegetarian() {
         return vegetarian;
@@ -316,25 +355,24 @@ public class AlimentDTO {
         this.dairyfree = dairyfree;
     }
 
-    public AlimentDTO() {
-    }
-
-    public AlimentDTO(String id) {
-        this.id = id;
+    public RecipeDTO() {
     }
 
     @Override
     public String toString() {
-        return "AlimentDAO [id=" + id + ", nameEn=" + nameEn + ", nameFr=" + nameFr + ", aisle=" + aisle + ", image="
-                + image + ", nutrition=" + nutrition + ", categoryPath=" + categoryPath + ", categoryPathEn="
-                + categoryPathEn + ", categoryPathFr=" + categoryPathFr + ", possibleUnits=" + possibleUnits
-                + ", convertionValue=" + convertionValue + ", vegetarian=" + vegetarian + ", vegan=" + vegan
+        return "RecipeDTO [id=" + id + ", title=" + title + ", titleEn=" + titleEn + ", titlefr=" + titleFr
+                + ", ingredients=" + ingredients + ", tags=" + tags + ", vegetarian=" + vegetarian + ", vegan=" + vegan
                 + ", arachidfree=" + arachidfree + ", glutenfree=" + glutenfree + ", eggfree=" + eggfree + ", nutfree="
                 + nutfree + ", shellfishfree=" + shellfishfree + ", seefoodfree=" + seefoodfree + ", mustardfree="
                 + mustardfree + ", fishfree=" + fishfree + ", celeryfree=" + celeryfree + ", soyfree=" + soyfree
-                + ", sulfitfree=" + sulfitfree + ", sesamefree=" + sesamefree + ", lupinefree=" + lupinefree
+                + ", sulfiltfree=" + sulfitfree + ", sesamefree=" + sesamefree + ", lupinefree=" + lupinefree
                 + ", judaism=" + judaism + ", islam=" + islam + ", seasonal=" + seasonal + ", dairyfree=" + dairyfree
+                + ", preparationMinutes=" + preparationMinutes + ", cookingMinutes=" + cookingMinutes
+                + ", totalMinutes=" + totalMinutes + ", likes=" + likes + ", healthScore=" + healthScore + ", image="
+                + image + ", imageType=" + imageType + ", sourceURL=" + sourceURL + ", spoonacularURL=" + spoonacularURL
                 + "]";
     }
+
+
 
 }

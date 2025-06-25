@@ -1,4 +1,4 @@
-package com.jlgdev.ceres.models;
+package com.jlgdev.ceres.models.dataTransferObject.NoSQL;
 
 public class AuthResponseDTO {
 
@@ -20,5 +20,4 @@ public class AuthResponseDTO {
         this.accessToken = accessToken;
     }
 
-    
 }

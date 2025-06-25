@@ -1,4 +1,4 @@
-package com.jlgdev.ceres.models.dataTransferObject;
+package com.jlgdev.ceres.models.dataTransferObject.NoSQL;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -57,7 +57,7 @@ public class IngredientDTO {
 
     @Override
     public String toString() {
-        return "IngredientDAO [quantity=" + quantity + ", nameFromApi=" + nameFromApi + ", aliment=" + aliment
+        return "IngredientDTO [quantity=" + quantity + ", nameFromApi=" + nameFromApi + ", aliment=" + aliment
                 + ", unit=" + unit + "]";
     }
 

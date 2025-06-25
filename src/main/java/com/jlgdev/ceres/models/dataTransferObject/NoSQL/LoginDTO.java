@@ -1,6 +1,7 @@
-package com.jlgdev.ceres.models;
+package com.jlgdev.ceres.models.dataTransferObject.NoSQL;
 
-public class RegisterDTO {
+// Ici on ne met que ce qui est nécessaire au login, dans cet exemple c'est comme le RegisterDTO mais en vrai il est plus succint
+public class LoginDTO {
 
     private String email;
 
@@ -22,10 +23,10 @@ public class RegisterDTO {
         this.password = password;
     }
 
-    public RegisterDTO() {
+    public LoginDTO() {
     }
 
-    public RegisterDTO(String email, String password) {
+    public LoginDTO(String email, String password) {
         this.email = email;
         this.password = password;
     }

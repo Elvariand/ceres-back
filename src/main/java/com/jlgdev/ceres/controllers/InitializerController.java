@@ -33,15 +33,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jlgdev.ceres.models.dataTransferObject.AlimentDTO;
-import com.jlgdev.ceres.models.dataTransferObject.IngredientDTO;
-import com.jlgdev.ceres.models.dataTransferObject.MissingIngredientsDTO;
-import com.jlgdev.ceres.models.dataTransferObject.RecipeDTO;
+import com.jlgdev.ceres.models.dataTransferObject.NoSQL.AlimentDTO;
+import com.jlgdev.ceres.models.dataTransferObject.NoSQL.IngredientDTO;
+import com.jlgdev.ceres.models.dataTransferObject.NoSQL.MissingIngredientsDTO;
+import com.jlgdev.ceres.models.dataTransferObject.NoSQL.RecipeDTO;
 import com.jlgdev.ceres.models.jsonToObject.AlimentJTO;
 import com.jlgdev.ceres.models.jsonToObject.RecipeJTO;
 import com.jlgdev.ceres.models.jsonToObject.RecipeTransferJTO;
-import com.jlgdev.ceres.models.mapper.MapperAliment;
-import com.jlgdev.ceres.models.mapper.MapperRecipe;
+import com.jlgdev.ceres.models.mapper.AlimentMapper;
+import com.jlgdev.ceres.models.mapper.RecipeMapper;
 import com.jlgdev.ceres.services.AlimentService;
 import com.jlgdev.ceres.services.MissingService;
 import com.jlgdev.ceres.services.RecipeService;
@@ -62,7 +62,7 @@ public class InitializerController {
     private MissingService missingService;
 
     @Autowired
-    public MapperRecipe mapperRecipe;
+    public RecipeMapper mapperRecipe;
 
     Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -85,18 +85,18 @@ public class InitializerController {
 
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            AlimentDTO alimentDAO = new AlimentDTO();
+            AlimentDTO alimentDTO = new AlimentDTO();
             AlimentJTO alimentJTO = new AlimentJTO();
             try {
                 alimentJTO = mapper.readValue(response, AlimentJTO.class);
-                alimentDAO = alimentService.save(MapperAliment.mapAliment(alimentJTO));
+                alimentDTO = alimentService.save(AlimentMapper.mapAliment(alimentJTO));
             } catch (JsonMappingException e) {
                 e.printStackTrace();
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
-            if (!alimentDAO.equals(new AlimentDTO())) {
-                return new ResponseEntity<AlimentDTO>(alimentDAO, HttpStatus.OK);
+            if (!alimentDTO.equals(new AlimentDTO())) {
+                return new ResponseEntity<AlimentDTO>(alimentDTO, HttpStatus.OK);
             } else {
                 return null;
             }
@@ -205,21 +205,21 @@ public class InitializerController {
 
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            AlimentDTO alimentDAO = new AlimentDTO();
+            AlimentDTO alimentDTO = new AlimentDTO();
             AlimentJTO alimentJTO = new AlimentJTO();
             try {
                 alimentJTO = mapper.readValue(response, AlimentJTO.class);
-                alimentDAO = alimentService.save(MapperAliment.mapAliment(alimentJTO));
+                alimentDTO = alimentService.save(AlimentMapper.mapAliment(alimentJTO));
             } catch (JsonMappingException e) {
                 e.printStackTrace();
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
-            if (!alimentDAO.equals(new AlimentDTO())) {
-                alimentService.save(alimentDAO);
+            if (!alimentDTO.equals(new AlimentDTO())) {
+                alimentService.save(alimentDTO);
             } else {
                 canContinue = false;
-                return new ResponseEntity<AlimentDTO>(alimentService.save(alimentDAO), HttpStatus.CONFLICT);
+                return new ResponseEntity<AlimentDTO>(alimentService.save(alimentDTO), HttpStatus.CONFLICT);
             }
         }
         return null;
@@ -237,7 +237,7 @@ public class InitializerController {
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        RecipeDTO recipeDAO = new RecipeDTO();
+        RecipeDTO recipeDTO = new RecipeDTO();
         RecipeTransferJTO recipeTransfer = new RecipeTransferJTO();
 
         // test
@@ -247,10 +247,10 @@ public class InitializerController {
 
             for (RecipeJTO result : recipeTransfer.getResults()) {
 
-                recipeDAO = mapperRecipe.mapRecipe(result);
+                recipeDTO = mapperRecipe.mapRecipe(result);
 
-                if (!recipeDAO.equals(new RecipeDTO())) {
-                    recipeService.save(recipeDAO);
+                if (!recipeDTO.equals(new RecipeDTO())) {
+                    recipeService.save(recipeDTO);
                 }
 
             }
@@ -283,14 +283,14 @@ public class InitializerController {
 
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        RecipeDTO recipeDAO = new RecipeDTO();
+        RecipeDTO recipeDTO = new RecipeDTO();
 
         try {
             RecipeJTO recipeJTO = mapper.readValue(response, RecipeJTO.class);
-            recipeDAO = mapperRecipe.mapRecipe(recipeJTO);
+            recipeDTO = mapperRecipe.mapRecipe(recipeJTO);
 
-            if (!recipeDAO.equals(new RecipeDTO())) {
-                recipeService.save(recipeDAO);
+            if (!recipeDTO.equals(new RecipeDTO())) {
+                recipeService.save(recipeDTO);
             }
 
         } catch (JsonMappingException e) {
@@ -418,7 +418,7 @@ public class InitializerController {
     public String getAllConvertionValue() throws IOException, URISyntaxException {
 
         Iterable<RecipeDTO> allRecipes = recipeService.getAllRecipes();
-        // Optional<RecipeDAO> recipe = recipeService.getRecipeById("640941");
+        // Optional<RecipeDTO> recipe = recipeService.getRecipeById("640941");
 
         Document document = null;
         String uri = null;
@@ -452,19 +452,19 @@ public class InitializerController {
                     Double convertionValue = amountFr / amountUs;
 
                     if (unitUs.toLowerCase().contains("cup") || unitUs.trim().toLowerCase().equals("c")) {
-                        for (IngredientDTO ingredientDAO : ingredientsRecipe) {
+                        for (IngredientDTO ingredientDTO : ingredientsRecipe) {
 
-                            AlimentDTO currentAliment = ingredientDAO.getAliment();
-                            String nameDAO = ingredientDAO.getNameFromApi();
-                            String altNameDAO = currentAliment.getNameEn();
+                            AlimentDTO currentAliment = ingredientDTO.getAliment();
+                            String nameDTO = ingredientDTO.getNameFromApi();
+                            String altNameDTO = currentAliment.getNameEn();
 
-                            if ((nameDAO == null || nameDAO.equals(""))
-                                    && (altNameDAO == null || altNameDAO.equals(""))) {
+                            if ((nameDTO == null || nameDTO.equals(""))
+                                    && (altNameDTO == null || altNameDTO.equals(""))) {
                                 break;
-                            } else if (nameDAO == null) {
-                                nameDAO = "fail231345";
-                            } else if (altNameDAO == null) {
-                                altNameDAO = "fail1565478";
+                            } else if (nameDTO == null) {
+                                nameDTO = "fail231345";
+                            } else if (altNameDTO == null) {
+                                altNameDTO = "fail1565478";
                             }
                             if ((nameDOM == null || nameDOM.equals(""))) {
                                 nameDOM = "fail also 1456";
@@ -472,10 +472,10 @@ public class InitializerController {
                                 break;
                             }
 
-                            if (nameDAO.contains(nameDOM)
-                                    || altNameDAO.contains(nameDOM)
-                                    || nameDOM.contains(nameDAO)
-                                    || nameDOM.contains(altNameDAO)) {
+                            if (nameDTO.contains(nameDOM)
+                                    || altNameDTO.contains(nameDOM)
+                                    || nameDOM.contains(nameDTO)
+                                    || nameDOM.contains(altNameDTO)) {
                                 if (currentAliment.getConvertionValue() == null
                                         || currentAliment.getConvertionValue() == 0) {
                                     if (unitFr.toLowerCase().contains("g")) {
@@ -495,8 +495,8 @@ public class InitializerController {
             } catch (IndexOutOfBoundsException oob) {
                 System.err.println("###############################");
                 System.err.println(" ça n'a pas marché avec \n recette : " + recipe.getId());
-                for (IngredientDTO ingredientDAO : ingredientsRecipe) {
-                    System.err.println(ingredientDAO.getNameFromApi());
+                for (IngredientDTO ingredientDTO : ingredientsRecipe) {
+                    System.err.println(ingredientDTO.getNameFromApi());
                 }
                 System.err.println("###############################");
             } catch (Exception e) {

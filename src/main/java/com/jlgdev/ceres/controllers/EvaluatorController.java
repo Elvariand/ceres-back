@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jlgdev.ceres.models.dataTransferObject.AlimentDTO;
-import com.jlgdev.ceres.models.dataTransferObject.AllergyDTO;
-import com.jlgdev.ceres.models.dataTransferObject.IngredientDTO;
-import com.jlgdev.ceres.models.dataTransferObject.RecipeDTO;
-import com.jlgdev.ceres.models.mapper.MapperRecipe;
+import com.jlgdev.ceres.models.dataTransferObject.NoSQL.AlimentDTO;
+import com.jlgdev.ceres.models.dataTransferObject.NoSQL.AllergyDTO;
+import com.jlgdev.ceres.models.dataTransferObject.NoSQL.IngredientDTO;
+import com.jlgdev.ceres.models.dataTransferObject.NoSQL.RecipeDTO;
+import com.jlgdev.ceres.models.mapper.RecipeMapper;
 import com.jlgdev.ceres.services.AlimentService;
 import com.jlgdev.ceres.services.AllergyService;
 import com.jlgdev.ceres.services.RecipeService;
@@ -37,7 +37,7 @@ public class EvaluatorController {
     private AllergyService allergyService;
 
     @Autowired
-    public MapperRecipe mapperRecipe;
+    public RecipeMapper mapperRecipe;
 
     Logger log = LoggerFactory.getLogger(this.getClass());
 

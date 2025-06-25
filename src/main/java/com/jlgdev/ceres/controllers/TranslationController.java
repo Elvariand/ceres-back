@@ -21,9 +21,9 @@ import org.springframework.web.client.RestClient;
 import com.deepl.api.DeepLClient;
 import com.deepl.api.DeepLException;
 import com.deepl.api.TextResult;
-import com.jlgdev.ceres.models.dataTransferObject.AlimentDTO;
-import com.jlgdev.ceres.models.dataTransferObject.RecipeDTO;
-import com.jlgdev.ceres.models.mapper.MapperRecipe;
+import com.jlgdev.ceres.models.dataTransferObject.NoSQL.AlimentDTO;
+import com.jlgdev.ceres.models.dataTransferObject.NoSQL.RecipeDTO;
+import com.jlgdev.ceres.models.mapper.RecipeMapper;
 import com.jlgdev.ceres.models.translation.TranslationQuery;
 import com.jlgdev.ceres.services.AlimentService;
 import com.jlgdev.ceres.services.RecipeService;
@@ -41,7 +41,7 @@ public class TranslationController {
     private RecipeService recipeService;
 
     @Autowired
-    public MapperRecipe mapperRecipe;
+    public RecipeMapper mapperRecipe;
 
     DeepLClient deeplClient;
 

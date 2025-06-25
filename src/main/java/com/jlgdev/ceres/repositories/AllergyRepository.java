@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import com.jlgdev.ceres.models.dataTransferObject.AllergyDTO;
+import com.jlgdev.ceres.models.dataTransferObject.NoSQL.AllergyDTO;
 
 public interface AllergyRepository extends MongoRepository<AllergyDTO, String>{
 

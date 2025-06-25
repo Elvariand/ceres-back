@@ -1,4 +1,4 @@
-package com.jlgdev.ceres.models.dataTransferObject;
+package com.jlgdev.ceres.models.dataTransferObject.NoSQL;
 
 import java.util.Set;
 
@@ -55,7 +55,7 @@ public class AllergyDTO {
 
     @Override
     public String toString() {
-        return "AllergyDAO [id=" + id + ", name=" + name + ", warning=" + warning + ", forbidden=" + forbidden + "]";
+        return "AllergyDTO [id=" + id + ", name=" + name + ", warning=" + warning + ", forbidden=" + forbidden + "]";
     }
 
 }

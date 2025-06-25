@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jlgdev.ceres.jwt.JWTGenerator;
-import com.jlgdev.ceres.models.AuthResponseDTO;
-import com.jlgdev.ceres.models.LoginDTO;
-import com.jlgdev.ceres.models.RegisterDTO;
-import com.jlgdev.ceres.models.Role;
-import com.jlgdev.ceres.models.UserEntity;
+import com.jlgdev.ceres.models.dataTransferObject.NoSQL.AuthResponseDTO;
+import com.jlgdev.ceres.models.dataTransferObject.NoSQL.LoginDTO;
+import com.jlgdev.ceres.models.dataTransferObject.SQL.RegisterDTO;
+import com.jlgdev.ceres.models.entities.Role;
+import com.jlgdev.ceres.models.entities.UserEntity;
 import com.jlgdev.ceres.repositories.RoleRepository;
 import com.jlgdev.ceres.repositories.UserRepository;
 

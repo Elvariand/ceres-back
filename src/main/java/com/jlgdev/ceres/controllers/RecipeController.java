@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jlgdev.ceres.models.dataTransferObject.RecipeDTO;
+import com.jlgdev.ceres.models.dataTransferObject.NoSQL.RecipeDTO;
 import com.jlgdev.ceres.models.request.SearchForm;
 // import com.jlgdev.ceres.services.AlimentService;
 import com.jlgdev.ceres.services.RecipeService;
@@ -46,8 +46,8 @@ public class RecipeController {
         int counter = 0;
         List<RecipeDTO> recipesToFrontend = new ArrayList<>();
 
-        for (RecipeDTO recipeDAO : recipes) {
-            recipesToFrontend.add(recipeDAO);
+        for (RecipeDTO recipeDTO : recipes) {
+            recipesToFrontend.add(recipeDTO);
             if (++counter >= number) {
                 break;
             }
