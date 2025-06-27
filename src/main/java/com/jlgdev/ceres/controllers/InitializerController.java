@@ -1,7 +1,12 @@
 package com.jlgdev.ceres.controllers;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -45,6 +50,7 @@ import com.jlgdev.ceres.models.mapper.RecipeMapper;
 import com.jlgdev.ceres.services.AlimentService;
 import com.jlgdev.ceres.services.MissingService;
 import com.jlgdev.ceres.services.RecipeService;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/initialize")
@@ -401,7 +407,7 @@ public class InitializerController {
     }
 
     @GetMapping("/aliment/all")
-    public Set<String> getAllAlliment() {
+    public Set<String> getAllAliment() {
 
         Iterable<AlimentDTO> allAliments = alimentService.getAllAliments();
         Set<String> foodSet = new HashSet<>();
@@ -505,4 +511,111 @@ public class InitializerController {
         }
         return ("done");
     }
+
+    public Set<String> getAllAlimentsImage() {
+        Iterable<AlimentDTO> allAliments = alimentService.getAllAliments();
+        Set<String> imageSet = new HashSet<>();
+
+        for (AlimentDTO aliment : allAliments) {
+            String alimentImage = aliment.getImage();
+            imageSet.add(alimentImage);
+        }
+
+        return imageSet;
+    }
+
+    @GetMapping("/aliments/downloadImage")
+    public void downloadAlimentsImage() throws IOException {
+        String baseUrl = "https://spoonacular.com/cdn/ingredients_100x100/";
+
+        String outputDir = "src/main/resources/static/img/ingredients";
+        Files.createDirectories(Paths.get(outputDir));
+
+        for (String imageName : this.getAllAlimentsImage()) {
+            String fullUrl = baseUrl + imageName;
+
+            try (InputStream in = URI.create(fullUrl).toURL().openStream()) {
+                Files.copy(in, Paths.get(outputDir, imageName));
+            } catch (IOException e) {
+                System.err.println("Echec pour " + imageName + " : " + e.getMessage());
+            }
+        }
+    }
+
+    public Set<String> getAllRecipesId() {
+        Iterable<RecipeDTO> allRecipes = recipeService.getAllRecipes();
+        Set<String> idSet = new HashSet<>();
+
+        for (RecipeDTO recipe : allRecipes) {
+            String recipeImage = recipe.getId();
+            idSet.add(recipeImage);
+        }
+
+        return idSet;
+    }
+
+    @GetMapping("/recipes/downloadImage")
+    public void downloadRecipesImage() throws IOException, InterruptedException {
+        String baseUrl = "https://img.spoonacular.com/recipes/";
+
+        // Dossier de destination local
+        String outputDir = "src/main/resources/static/img/recipes";
+        Files.createDirectories(Paths.get(outputDir));
+
+        Set<String> idSet =  this.getAllRecipesId();
+
+        int counter = 0;
+        int counter2 = 0;
+        for (String idString : idSet) {
+            String fullUrl = baseUrl + idString + "-312x231.jpg";
+
+            if (++counter > 20) {
+                System.out.println("number done: " + ++counter2);
+                Thread.sleep(6000);
+                counter=0;
+            }
+            try (InputStream in = URI.create(fullUrl).toURL().openStream()) {
+                Files.copy(in, Paths.get(outputDir, idString + ".jpg"));
+            } catch (IOException e) {
+                try (InputStream in = URI.create(baseUrl + idString + "-312x231.png").toURL().openStream()) {
+                    System.err.println("Retry pour " + idString + " : " + e.getMessage());
+                    Files.copy(in, Paths.get(outputDir, idString + ".png"));
+                } catch (Exception error) {
+                    System.err.println("Echec pour " + idString + " : " + error.getMessage());
+                }
+            }
+        }
+    }
+
+    @GetMapping("/recipes/patchTime")
+    public void patchTime() throws IOException, InterruptedException {
+        Iterable<RecipeDTO> allRecipes = recipeService.getAllRecipes();
+
+        for (RecipeDTO recipe : allRecipes) {
+
+            int prep = recipe.getPreparationMinutes();
+            int cook = recipe.getCookingMinutes();
+            int total = recipe.getTotalMinutes();
+            boolean hasChanged = false;
+
+            if (prep + cook == 0) {
+                hasChanged = true;
+                prep = -1;
+                cook = -1;
+                if (total == 0) {
+                    total = -1;
+                }
+            } else if (prep + cook > total) {
+                hasChanged = true;
+                total = prep + cook;
+            }
+            if (hasChanged) {
+                recipe.setPreparationMinutes(prep);
+                recipe.setCookingMinutes(cook);
+                recipe.setTotalMinutes(total);
+                recipeService.save(recipe);
+            }
+        }
+    }
+
 }

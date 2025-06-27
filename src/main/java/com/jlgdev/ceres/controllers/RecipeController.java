@@ -1,7 +1,10 @@
 package com.jlgdev.ceres.controllers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +46,8 @@ public class RecipeController {
 
     @GetMapping("/{number}")
     public @ResponseBody List<RecipeDTO> getRecipes(@PathVariable int number) {
-        Iterable<RecipeDTO> recipes = recipeService.getAllRecipes();
+        List<RecipeDTO> recipes = StreamSupport.stream(recipeService.getAllRecipes().spliterator(), false).collect(Collectors.toList());
+        Collections.shuffle(recipes);
         int counter = 0;
         List<RecipeDTO> recipesToFrontend = new ArrayList<>();
 
