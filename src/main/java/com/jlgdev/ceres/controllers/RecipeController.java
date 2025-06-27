@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,7 +58,7 @@ public class RecipeController {
     }
 
     @PostMapping("/search")
-    public List<RecipeDTO> getFilteredRecipes(@RequestBody SearchForm searchForm) {
+    public ResponseEntity<List<RecipeDTO>> getFilteredRecipes(@RequestBody SearchForm searchForm) {
 
         String ingredients = searchForm.getFormattedString(searchForm.getIngredients()) ;
         Boolean allIngredient = searchForm.isAllIngredient() ;
@@ -123,9 +124,9 @@ public class RecipeController {
         List<RecipeDTO> filteredRecipes = mongoTemplate.find(query, RecipeDTO.class);
         
         System.out.println("nombre de recettes trouvees : " + filteredRecipes.size());
-        System.out.println(filteredRecipes.size() > 0 ? filteredRecipes.get(0).getTitleEn() : "none");
-        return filteredRecipes;
-        // return ResponseEntity.ok(filteredRecipes);
+        System.out.println(filteredRecipes.size() > 0 ? filteredRecipes.get(0).getTitleFr() : "none");
+        // return filteredRecipes;
+        return ResponseEntity.ok(filteredRecipes);
     }
     
 }

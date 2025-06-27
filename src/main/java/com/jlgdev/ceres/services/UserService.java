@@ -9,6 +9,7 @@ import com.jlgdev.ceres.models.dataTransferObject.SQL.UserEntityCreateDTO;
 import com.jlgdev.ceres.models.dataTransferObject.SQL.UserEntityReadDTO;
 import com.jlgdev.ceres.models.dataTransferObject.SQL.UserEntityUpdateDTO;
 import com.jlgdev.ceres.models.entities.UserEntity;
+import com.jlgdev.ceres.models.entities.UserPreference;
 import com.jlgdev.ceres.models.mapper.UserEntityMapper;
 import com.jlgdev.ceres.repositories.UserRepository;
 
@@ -23,6 +24,7 @@ public class UserService {
 
     public UserEntityReadDTO createUser(UserEntityCreateDTO userCreateDTO) {
         UserEntity user = userMapper.toCreateEntity(userCreateDTO);
+        user.setPreferences(new UserPreference());
         return userMapper.toReadDTO(userRepository.save(user));
     }
 
