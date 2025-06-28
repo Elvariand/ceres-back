@@ -9,6 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,8 @@ import com.jlgdev.ceres.repositories.RoleRepository;
 import com.jlgdev.ceres.repositories.UserRepository;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/pantheon")
+@CrossOrigin(origins = "http://localhost:4200/")
 public class AuthController {
 
     // On peut annoter les attributs avec @Autowired et ne pas mettre final mais ce
@@ -50,7 +52,6 @@ public class AuthController {
         if (userRepository.existsByEmail(registerDTO.getEmail())) {
             return new ResponseEntity<>("Un compte avec cet email existe déjà!", HttpStatus.BAD_REQUEST);
         }
-
         UserEntity user = new UserEntity();
         user.setEmail(registerDTO.getEmail());
         user.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
@@ -64,9 +65,12 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDTO> login(@RequestBody LoginDTO loginDTO) {
+        System.out.println("Je suis ici");
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword()));
+
+        System.out.println(authentication.toString());
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtGenerator.generateToken(authentication);

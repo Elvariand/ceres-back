@@ -64,6 +64,12 @@ public class UserController {
         return dto.getFavorite().contains(recipeId) ? ResponseEntity.ok(true) : ResponseEntity.ok(false);
     }
     
+    @GetMapping("/{userId}/removeFavorite")
+    public ResponseEntity<Boolean> removeFavorite(@PathVariable Long userId, @RequestParam String recipeId) {
+        UserEntityReadDTO dto = userService.removeFavorite(userId, recipeId);
+        return dto.getFavorite().contains(recipeId) ? ResponseEntity.ok(true) : ResponseEntity.ok(false);
+    }
+    
     @GetMapping("/{userId}/addHistory")
     public ResponseEntity<Boolean> addHistory(@PathVariable Long userId, @RequestParam String recipeId) {
         UserEntityReadDTO dto = userService.addHistory(userId, recipeId);

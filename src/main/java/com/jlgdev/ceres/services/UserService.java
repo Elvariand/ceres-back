@@ -61,6 +61,19 @@ public class UserService {
         return userMapper.toReadDTO(userRepository.save(user));
     }
 
+    public UserEntityReadDTO removeFavorite(Long id, String recipeId) {
+        try {
+            Long.parseLong(recipeId);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+        UserEntity user = userRepository.findById(id).orElseThrow();
+        Set<String> favorite = user.getFavorite();
+        favorite.remove(recipeId);
+        user.setFavorite(favorite);
+        return userMapper.toReadDTO(userRepository.save(user));
+    }
+
     public UserEntityReadDTO addHistory(Long id, String recipeId) {
         try {
             Long.parseLong(recipeId);
