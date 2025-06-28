@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jlgdev.ceres.models.dataAccessObject.AlimentDAO;
+import com.jlgdev.ceres.models.dataTransferObject.NoSQL.AlimentDTO;
 import com.jlgdev.ceres.repositories.AlimentRepository;
 
 @Service
@@ -14,59 +14,59 @@ public class AlimentService {
     @Autowired
     private AlimentRepository alimentRepository;
 
-    public Iterable<AlimentDAO> getAllAliments() {
+    public Iterable<AlimentDTO> getAllAliments() {
         return alimentRepository.findAll();
     }
 
-    public Iterable<AlimentDAO> getAllVeganAliments() {
+    public Iterable<AlimentDTO> getAllVeganAliments() {
         return alimentRepository.findAllVegan();
     }
 
-    public Iterable<AlimentDAO> getAllNonVeganAliments() {
+    public Iterable<AlimentDTO> getAllNonVeganAliments() {
         return alimentRepository.findAllNonVegan();
     }
 
-    public Iterable<AlimentDAO> getAllVegetarianAliments() {
+    public Iterable<AlimentDTO> getAllVegetarianAliments() {
         return alimentRepository.findAllVegetarian();
     }
 
-    public Iterable<AlimentDAO> getAllNonVegetarianAliments() {
+    public Iterable<AlimentDTO> getAllNonVegetarianAliments() {
         return alimentRepository.findAllNonVegetarian();
     }
 
-    public Optional<AlimentDAO> getAlimentById(String id) {
+    public Optional<AlimentDTO> getAlimentById(String id) {
         return alimentRepository.findById(id);
     }
 
-    public Iterable<AlimentDAO> getAlimentByNameEn(String nameEn) {
+    public Iterable<AlimentDTO> getAlimentByNameEn(String nameEn) {
         return alimentRepository.findByNameEn(nameEn);
     }
 
-    public Iterable<AlimentDAO> getAlimentByNameEnContaining(String nameEn) {
+    public Iterable<AlimentDTO> getAlimentByNameEnContaining(String nameEn) {
         return alimentRepository.findByNameEnContaining(nameEn);
     }
 
-    public Iterable<AlimentDAO> getAlimentByAisle(String aisle) {
+    public Iterable<AlimentDTO> getAlimentByAisle(String aisle) {
         return alimentRepository.findByAisle(aisle);
     }
 
-    public Iterable<AlimentDAO> getAlimentByAisleContaining(String aisle) {
+    public Iterable<AlimentDTO> getAlimentByAisleContaining(String aisle) {
         return alimentRepository.findByAisleContaining(aisle);
     }
 
-    public Iterable<AlimentDAO> getAlimentByCategoryPath(String categoryPath) {
+    public Iterable<AlimentDTO> getAlimentByCategoryPath(String categoryPath) {
         return alimentRepository.findByCategoryPath(categoryPath);
     }
 
-    public Iterable<AlimentDAO> getAlimentByCategoryPathContaining(String categoryPath) {
+    public Iterable<AlimentDTO> getAlimentByCategoryPathContaining(String categoryPath) {
         return alimentRepository.findByCategoryPathContaining(categoryPath);
     }
 
-    public Iterable<AlimentDAO> getAlimentMissingPath() {
+    public Iterable<AlimentDTO> getAlimentMissingPath() {
         return alimentRepository.findAllMissingPath();
     }
 
-    public AlimentDAO save(AlimentDAO aliment) {
+    public AlimentDTO save(AlimentDTO aliment) {
         return alimentRepository.save(aliment);
     }
 }

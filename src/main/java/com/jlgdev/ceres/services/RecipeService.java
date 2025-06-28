@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jlgdev.ceres.models.dataAccessObject.RecipeDAO;
+import com.jlgdev.ceres.models.dataTransferObject.NoSQL.RecipeDTO;
 import com.jlgdev.ceres.repositories.RecipeRepository;
 
 @Service
@@ -14,23 +14,23 @@ public class RecipeService {
     @Autowired
     private RecipeRepository recipeRepository;
 
-    public Iterable<RecipeDAO> getAllRecipes() {
+    public Iterable<RecipeDTO> getAllRecipes() {
         return recipeRepository.findAll();
     }
 
-    public Optional<RecipeDAO> getRecipeById(String id) {
+    public Optional<RecipeDTO> getRecipeById(String id) {
         return recipeRepository.findById(id);
     }
 
-    public Iterable<RecipeDAO> getRecipeByTitle(String title) {
+    public Iterable<RecipeDTO> getRecipeByTitle(String title) {
         return recipeRepository.findByTitleEn(title);
     }
 
-    public Iterable<RecipeDAO> getRecipeByTitleContaining(String title) {
+    public Iterable<RecipeDTO> getRecipeByTitleContaining(String title) {
         return recipeRepository.findByTitleEnContaining(title);
     }
 
-    public RecipeDAO save(RecipeDAO Recipe) {
+    public RecipeDTO save(RecipeDTO Recipe) {
         return recipeRepository.save(Recipe);
     }
 }

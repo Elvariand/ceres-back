@@ -1,13 +1,17 @@
 package com.jlgdev.ceres.controllers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jlgdev.ceres.models.dataAccessObject.RecipeDAO;
+import com.jlgdev.ceres.models.dataTransferObject.NoSQL.RecipeDTO;
 import com.jlgdev.ceres.models.request.SearchForm;
 // import com.jlgdev.ceres.services.AlimentService;
 import com.jlgdev.ceres.services.RecipeService;
@@ -41,13 +45,14 @@ public class RecipeController {
     Logger log = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping("/{number}")
-    public @ResponseBody List<RecipeDAO> getRecipes(@PathVariable int number) {
-        Iterable<RecipeDAO> recipes = recipeService.getAllRecipes();
+    public @ResponseBody List<RecipeDTO> getRecipes(@PathVariable int number) {
+        List<RecipeDTO> recipes = StreamSupport.stream(recipeService.getAllRecipes().spliterator(), false).collect(Collectors.toList());
+        Collections.shuffle(recipes);
         int counter = 0;
-        List<RecipeDAO> recipesToFrontend = new ArrayList<>();
+        List<RecipeDTO> recipesToFrontend = new ArrayList<>();
 
-        for (RecipeDAO recipeDAO : recipes) {
-            recipesToFrontend.add(recipeDAO);
+        for (RecipeDTO recipeDTO : recipes) {
+            recipesToFrontend.add(recipeDTO);
             if (++counter >= number) {
                 break;
             }
@@ -57,7 +62,7 @@ public class RecipeController {
     }
 
     @PostMapping("/search")
-    public List<RecipeDAO> getFilteredRecipes(@RequestBody SearchForm searchForm) {
+    public ResponseEntity<List<RecipeDTO>> getFilteredRecipes(@RequestBody SearchForm searchForm) {
 
         String ingredients = searchForm.getFormattedString(searchForm.getIngredients()) ;
         Boolean allIngredient = searchForm.isAllIngredient() ;
@@ -120,12 +125,12 @@ public class RecipeController {
         BasicQuery query = new BasicQuery(queryString);
 
 
-        List<RecipeDAO> filteredRecipes = mongoTemplate.find(query, RecipeDAO.class);
+        List<RecipeDTO> filteredRecipes = mongoTemplate.find(query, RecipeDTO.class);
         
         System.out.println("nombre de recettes trouvees : " + filteredRecipes.size());
-        System.out.println(filteredRecipes.size() > 0 ? filteredRecipes.get(0).getTitleEn() : "none");
-        return filteredRecipes;
-        // return ResponseEntity.ok(filteredRecipes);
+        System.out.println(filteredRecipes.size() > 0 ? filteredRecipes.get(0).getTitleFr() : "none");
+        // return filteredRecipes;
+        return ResponseEntity.ok(filteredRecipes);
     }
     
 }
