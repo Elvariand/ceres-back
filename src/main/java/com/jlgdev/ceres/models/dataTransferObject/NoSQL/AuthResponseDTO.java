@@ -3,7 +3,7 @@ package com.jlgdev.ceres.models.dataTransferObject.NoSQL;
 public class AuthResponseDTO {
 
     private String accessToken;
-    private String tokenType ="Bearer ";
+    // private String tokenType ="Bearer ";
 
     public AuthResponseDTO() {
     }
