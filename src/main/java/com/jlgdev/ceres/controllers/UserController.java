@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 
@@ -56,5 +58,16 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
     
+    @GetMapping("/{userId}/addFavorite")
+    public ResponseEntity<Boolean> addFavorite(@PathVariable Long userId, @RequestParam String recipeId) {
+        UserEntityReadDTO dto = userService.addFavorite(userId, recipeId);
+        return dto.getFavorite().contains(recipeId) ? ResponseEntity.ok(true) : ResponseEntity.ok(false);
+    }
+    
+    @GetMapping("/{userId}/addHistory")
+    public ResponseEntity<Boolean> addHistory(@PathVariable Long userId, @RequestParam String recipeId) {
+        UserEntityReadDTO dto = userService.addHistory(userId, recipeId);
+        return dto.getHistory().contains(recipeId) ? ResponseEntity.ok(true) : ResponseEntity.ok(false);
+    }
     
 }

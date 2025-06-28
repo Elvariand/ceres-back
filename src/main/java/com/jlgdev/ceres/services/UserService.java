@@ -1,6 +1,8 @@
 package com.jlgdev.ceres.services;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,7 +38,7 @@ public class UserService {
         return userRepository.findByEmail(email).map(userMapper::toReadDTO);
     }
 
-    public UserEntityReadDTO updateUser(Long  id, UserEntityUpdateDTO userUpdateDTO) {
+    public UserEntityReadDTO updateUser(Long id, UserEntityUpdateDTO userUpdateDTO) {
         UserEntity user = userRepository.findById(id).orElseThrow();
         userMapper.updateEntityFromDTO(userUpdateDTO, user);
         return userMapper.toReadDTO(userRepository.save(user));
@@ -44,5 +46,34 @@ public class UserService {
 
     public void deleteUser(Long  id) {
         userRepository.deleteById(id);
+    }
+
+    public UserEntityReadDTO addFavorite(Long id, String recipeId) {
+        try {
+            Long.parseLong(recipeId);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+        UserEntity user = userRepository.findById(id).orElseThrow();
+        Set<String> favorite = user.getFavorite();
+        favorite.add(recipeId);
+        user.setFavorite(favorite);
+        return userMapper.toReadDTO(userRepository.save(user));
+    }
+
+    public UserEntityReadDTO addHistory(Long id, String recipeId) {
+        try {
+            Long.parseLong(recipeId);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+        UserEntity user = userRepository.findById(id).orElseThrow();
+        List<String> history = user.getHistory();
+        if (history.size() > 29) {
+            history.removeFirst();
+        }
+        history.addLast(recipeId);
+        user.setHistory(history);
+        return userMapper.toReadDTO(userRepository.save(user));
     }
 }

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collections;
@@ -50,7 +49,6 @@ import com.jlgdev.ceres.models.mapper.RecipeMapper;
 import com.jlgdev.ceres.services.AlimentService;
 import com.jlgdev.ceres.services.MissingService;
 import com.jlgdev.ceres.services.RecipeService;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/initialize")
@@ -207,7 +205,7 @@ public class InitializerController {
                 } catch (Exception e) {
                     System.err.println("error");
                 }
-            } while ((response.contains("does not exist") || response.length() < 15) && counter < 152);
+            } while (response!=null && (response.contains("does not exist") || response.length() < 15) && counter < 152);
 
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

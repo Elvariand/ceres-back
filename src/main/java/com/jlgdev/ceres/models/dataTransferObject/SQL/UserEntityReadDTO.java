@@ -1,6 +1,6 @@
 package com.jlgdev.ceres.models.dataTransferObject.SQL;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import com.jlgdev.ceres.models.entities.Role;
@@ -19,7 +19,7 @@ public class UserEntityReadDTO {
 
     private Set<Role> roles;
 
-    private String[] history;
+    private List<String> history;
 
     private Set<String> favorite;
 
@@ -49,11 +49,11 @@ public class UserEntityReadDTO {
         this.roles = roles;
     }
 
-    public String[] getHistory() {
+    public List<String> getHistory() {
         return history;
     }
 
-    public void setHistory(String[] history) {
+    public void setHistory(List<String> history) {
         this.history = history;
     }
 
@@ -79,7 +79,7 @@ public class UserEntityReadDTO {
     @Override
     public String toString() {
         return "UserEntity [id=" + id + ", email=" + email + ", roles=" + roles
-                + ", history=" + Arrays.toString(history) + ", favorite=" + favorite + "]";
+                + ", history=" + history + ", favorite=" + favorite + "]";
     }
 
 }
