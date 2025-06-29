@@ -15,7 +15,7 @@ public class UserEntityCreateDTO implements IWithConfirmPassword {
     private String email;
     
     @NotBlank(message = "Veuillez renseigner un mot de passe")
-    @Size(min = 14, message = "Le mot de passe doit contenir au moins 14 caractères")
+    @Size(min = 1, message = "Le mot de passe doit contenir au moins 14 caractères")
     private String password;
 
     @NotBlank(message = "Veuillez confirmer votre mot de passe")

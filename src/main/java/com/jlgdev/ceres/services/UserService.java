@@ -30,7 +30,7 @@ public class UserService {
         return userMapper.toReadDTO(userRepository.save(user));
     }
 
-    public Optional<UserEntityReadDTO> readUser(Long  id) {
+    public Optional<UserEntityReadDTO> readUser(Long id) {
         return userRepository.findById(id).map(userMapper::toReadDTO);
     }
 
@@ -44,49 +44,46 @@ public class UserService {
         return userMapper.toReadDTO(userRepository.save(user));
     }
 
-    public void deleteUser(Long  id) {
+    public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }
 
-    public UserEntityReadDTO addFavorite(Long id, String recipeId) {
-        try {
-            Long.parseLong(recipeId);
-        } catch (NumberFormatException e) {
-            return null;
+    public UserEntityReadDTO addFavorite(String email, String recipeId) {
+        Optional<UserEntity> optionalUser = userRepository.findByEmail(email);
+        if (optionalUser.isPresent()) {
+            UserEntity user = optionalUser.get();
+            Set<String> favorite = user.getFavorite();
+            favorite.add(recipeId);
+            user.setFavorite(favorite);
+            return userMapper.toReadDTO(userRepository.save(user));
         }
-        UserEntity user = userRepository.findById(id).orElseThrow();
-        Set<String> favorite = user.getFavorite();
-        favorite.add(recipeId);
-        user.setFavorite(favorite);
-        return userMapper.toReadDTO(userRepository.save(user));
+        return null;
     }
 
-    public UserEntityReadDTO removeFavorite(Long id, String recipeId) {
-        try {
-            Long.parseLong(recipeId);
-        } catch (NumberFormatException e) {
-            return null;
+    public UserEntityReadDTO removeFavorite(String email, String recipeId) {
+        Optional<UserEntity> optionalUser = userRepository.findByEmail(email);
+        if (optionalUser.isPresent()) {
+            UserEntity user = optionalUser.get();
+            Set<String> favorite = user.getFavorite();
+            favorite.remove(recipeId);
+            user.setFavorite(favorite);
+            return userMapper.toReadDTO(userRepository.save(user));
         }
-        UserEntity user = userRepository.findById(id).orElseThrow();
-        Set<String> favorite = user.getFavorite();
-        favorite.remove(recipeId);
-        user.setFavorite(favorite);
-        return userMapper.toReadDTO(userRepository.save(user));
+        return null;
     }
 
-    public UserEntityReadDTO addHistory(Long id, String recipeId) {
-        try {
-            Long.parseLong(recipeId);
-        } catch (NumberFormatException e) {
-            return null;
+    public UserEntityReadDTO addHistory(String email, String recipeId) {
+        Optional<UserEntity> optionalUser = userRepository.findByEmail(email);
+        if (optionalUser.isPresent()) {
+            UserEntity user = optionalUser.get();
+            List<String> history = user.getHistory();
+            if (history.size() > 29) {
+                history.removeFirst();
+            }
+            history.addLast(recipeId);
+            user.setHistory(history);
+            return userMapper.toReadDTO(userRepository.save(user));
         }
-        UserEntity user = userRepository.findById(id).orElseThrow();
-        List<String> history = user.getHistory();
-        if (history.size() > 29) {
-            history.removeFirst();
-        }
-        history.addLast(recipeId);
-        user.setHistory(history);
-        return userMapper.toReadDTO(userRepository.save(user));
+        return null;
     }
 }

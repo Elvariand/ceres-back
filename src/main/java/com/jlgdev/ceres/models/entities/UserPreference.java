@@ -132,5 +132,18 @@ public class UserPreference {
                 + sortBy + ", serving=" + serving + "]";
     }
 
+    public UserPreference() {
+        this.foodIn = null;
+        this.allIngredients = null;
+        this.foodOut = null;
+        this.preparationTime = 0;
+        this.cookingTime = 0;
+        this.totalTime = 0;
+        this.restriction = null;
+        this.filter = null;
+        this.sortBy = null;
+        this.serving = 4;
+    }
+
     
 }

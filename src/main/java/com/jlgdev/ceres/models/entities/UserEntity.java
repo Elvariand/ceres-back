@@ -20,7 +20,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
 
 @Entity
@@ -42,20 +41,19 @@ public class UserEntity {
     private Set<Role> roles = new HashSet<>();
 
     @ElementCollection
-    @OrderColumn(name = "order")
-    @CollectionTable(name = "history", joinColumns = @JoinColumn(name = "id"))
+    @CollectionTable(name = "history", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "id_history")
     private List<String> history = new ArrayList<>();
 
     @ElementCollection
-    @CollectionTable(name = "favoris", joinColumns = @JoinColumn(name = "id"))
+    @CollectionTable(name = "favoris", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "id_favoris")
     private Set<String> favorite = new HashSet<>();
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "id", referencedColumnName = "preference_id")
     @Nullable
-    private UserPreference preferences = null;
+    private UserPreference preferences = new UserPreference();
 
     public Long  getId() {
         return id;
@@ -106,6 +104,8 @@ public class UserEntity {
     }
 
     public UserEntity() {
+    history = new ArrayList<>();
+    favorite = new HashSet<>();
     }
 
     public UserPreference getPreferences() {
