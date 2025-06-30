@@ -59,6 +59,8 @@ public class RecipeDTO {
     private byte seasonal;
     
     private byte dairyfree;
+    
+    private boolean flagged;
 
     private int preparationMinutes;
 
@@ -354,25 +356,31 @@ public class RecipeDTO {
     public void setDairyfree(byte dairyfree) {
         this.dairyfree = dairyfree;
     }
+    
+    public boolean isFlagged() {
+        return flagged;
+    }
+
+    public void setFlagged(boolean flagged) {
+        this.flagged = flagged;
+    }
 
     public RecipeDTO() {
     }
 
     @Override
     public String toString() {
-        return "RecipeDTO [id=" + id + ", title=" + title + ", titleEn=" + titleEn + ", titlefr=" + titleFr
+        return "RecipeDTO [id=" + id + ", title=" + title + ", titleEn=" + titleEn + ", titleFr=" + titleFr
                 + ", ingredients=" + ingredients + ", tags=" + tags + ", vegetarian=" + vegetarian + ", vegan=" + vegan
                 + ", arachidfree=" + arachidfree + ", glutenfree=" + glutenfree + ", eggfree=" + eggfree + ", nutfree="
                 + nutfree + ", shellfishfree=" + shellfishfree + ", seefoodfree=" + seefoodfree + ", mustardfree="
                 + mustardfree + ", fishfree=" + fishfree + ", celeryfree=" + celeryfree + ", soyfree=" + soyfree
-                + ", sulfiltfree=" + sulfitfree + ", sesamefree=" + sesamefree + ", lupinefree=" + lupinefree
+                + ", sulfitfree=" + sulfitfree + ", sesamefree=" + sesamefree + ", lupinefree=" + lupinefree
                 + ", judaism=" + judaism + ", islam=" + islam + ", seasonal=" + seasonal + ", dairyfree=" + dairyfree
-                + ", preparationMinutes=" + preparationMinutes + ", cookingMinutes=" + cookingMinutes
-                + ", totalMinutes=" + totalMinutes + ", likes=" + likes + ", healthScore=" + healthScore + ", image="
-                + image + ", imageType=" + imageType + ", sourceURL=" + sourceURL + ", spoonacularURL=" + spoonacularURL
-                + "]";
+                + ", flagged=" + flagged + ", preparationMinutes=" + preparationMinutes + ", cookingMinutes="
+                + cookingMinutes + ", totalMinutes=" + totalMinutes + ", likes=" + likes + ", healthScore="
+                + healthScore + ", image=" + image + ", imageType=" + imageType + ", sourceURL=" + sourceURL
+                + ", spoonacularURL=" + spoonacularURL + "]";
     }
-
-
 
 }

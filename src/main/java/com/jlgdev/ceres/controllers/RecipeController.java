@@ -64,8 +64,9 @@ public class RecipeController {
     @PostMapping("/search")
     public ResponseEntity<List<RecipeDTO>> getFilteredRecipes(@RequestBody SearchForm searchForm) {
 
+        String title = searchForm.getTitle() ;
         String ingredients = searchForm.getFormattedString(searchForm.getIngredients()) ;
-        Boolean allIngredient = searchForm.isAllIngredient() ;
+        String allIngredient = searchForm.getAllIngredient() ;
         String withoutIngredient = searchForm.getFormattedString(searchForm.getWithoutIngredient()) ;
         int preparationTime = searchForm.getPreparationTime() ;
         int cookingTime = searchForm.getCookingTime() ;
@@ -89,12 +90,16 @@ public class RecipeController {
         String queryString = "{ \"$and\": [\n";
         // String queryString = "{ \"ingredients.aliment.nameEn\": { \"$in\" : [/chicken/, /beef/] } }";
 
+        if (title != null) {
+            queryString += "\t{\"titleFr\" : /" + title + "/i },\n";
+        }
+
         if (ingredients != null) {
-            queryString += "\t{ \"$or\": [\n\t\t{ \"ingredients.aliment.nameEn\" : { " + (allIngredient ? "\"$all\"" : "\"$in\"") + ": [ " + ingredients + " ] } },\n\t\t{ \"ingredients.nameFromApi\" : { " + (allIngredient ? "\"$all\"" : "\"$in\"") + ": [ " + ingredients + " ] } }\n\t\t] },\n";
+            queryString += "\t{\"ingredients.aliment.nameFr\" : { " + (allIngredient.toLowerCase().equals("tous") ? "\"$all\"" : "\"$in\"") + ": [ " + ingredients + " ] } },\n";
         }
 
         if (withoutIngredient != null) {
-            queryString += "\t{ \"$and\": [\n\t\t{ \"ingredients.aliment.nameEn\" : { \"$nin\": [ " + withoutIngredient + " ] } },\n\t\t{ \"ingredients.nameFromApi\" : { \"$nin\": [ " + withoutIngredient + " ] } }\n\t\t] },\n";
+            queryString += "\t{\"ingredients.aliment.nameFr\" : { \"$nin\": [ " + withoutIngredient + " ] } },\n";
         }
 
         if (preparationTime > -1) {
