@@ -59,7 +59,7 @@ deploy_local:
     - docker info
     - docker compose -f docker-compose.yaml --env-file .env up -d --build
   only:
-    - main
+    - master
   tags:
     - runner-local
   dependencies:
@@ -79,7 +79,7 @@ test_backend:
     paths:
       - backend/target/surefire-reports/
   only:
-    - main
+    - master
 
 
 

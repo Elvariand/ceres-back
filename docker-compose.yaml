@@ -24,6 +24,6 @@ clean:
     - docker compose -f docker-compose.yaml down -v
   when: manual
   only:
-    - main
+    - master
   tags:
     - runner-local
