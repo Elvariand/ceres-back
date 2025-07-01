@@ -26,7 +26,7 @@ import com.jlgdev.ceres.repositories.UserRepository;
 
 @RestController
 @RequestMapping("/pantheon")
-@CrossOrigin(origins = "http://localhost:4200/")
+@CrossOrigin(origins = "*")
 public class AuthController {
 
     // On peut annoter les attributs avec @Autowired et ne pas mettre final mais ce

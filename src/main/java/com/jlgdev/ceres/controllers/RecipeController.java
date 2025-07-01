@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,8 +38,6 @@ public class RecipeController {
     @Autowired
     private RecipeService recipeService;
 
-    @Autowired
-    private MongoOperations mongoTemplate;
 
     Logger log = LoggerFactory.getLogger(this.getClass());
 
