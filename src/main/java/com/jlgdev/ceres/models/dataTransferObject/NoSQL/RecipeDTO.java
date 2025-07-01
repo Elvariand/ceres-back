@@ -1,6 +1,11 @@
 package com.jlgdev.ceres.models.dataTransferObject.NoSQL;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -57,39 +62,37 @@ public class RecipeDTO {
     private byte islam;
 
     private byte seasonal;
-    
+
     private byte dairyfree;
-    
-    private boolean flagged;
+
+    private byte consumable=1;
 
     private int preparationMinutes;
 
     private int cookingMinutes;
 
     private int totalMinutes;
-    
+
     private int likes;
-    
+
     private int healthScore;
-    
+
     private String image;
-    
+
     private String imageType;
-    
+
     private String sourceURL;
-    
+
     private String spoonacularURL;
-    
-    
-    
+
     public String getId() {
         return id;
     }
-    
+
     public void setId(String id) {
         this.id = id;
     }
-    
+
     public String getTitle() {
         return title;
     }
@@ -101,47 +104,47 @@ public class RecipeDTO {
     public String getTitleEn() {
         return titleEn;
     }
-    
+
     public void setTitleEn(String titleEn) {
         this.titleEn = titleEn;
     }
-    
+
     public String getTitleFr() {
         return titleFr;
     }
-    
+
     public void setTitleFr(String titleFr) {
         this.titleFr = titleFr;
     }
-    
+
     public List<IngredientDTO> getIngredients() {
         return ingredients;
     }
-    
+
     public void setIngredients(List<IngredientDTO> ingredients) {
         this.ingredients = ingredients;
     }
-    
+
     public List<String> getTags() {
         return tags;
     }
-    
+
     public void setTags(List<String> tags) {
         this.tags = tags;
     }
-    
+
     public int getPreparationMinutes() {
         return preparationMinutes;
     }
-    
+
     public void setPreparationMinutes(int preparationMinutes) {
         this.preparationMinutes = preparationMinutes;
     }
-    
+
     public int getCookingMinutes() {
         return cookingMinutes;
     }
-    
+
     public void setCookingMinutes(int cookingMinutes) {
         this.cookingMinutes = cookingMinutes;
     }
@@ -153,7 +156,7 @@ public class RecipeDTO {
     public void setTotalMinutes(int totalMinutes) {
         this.totalMinutes = totalMinutes;
     }
-    
+
     public int getLikes() {
         return likes;
     }
@@ -201,9 +204,6 @@ public class RecipeDTO {
     public void setSpoonacularURL(String spoonacularURL) {
         this.spoonacularURL = spoonacularURL;
     }
-
-
-    
 
     public byte getVegetarian() {
         return vegetarian;
@@ -356,13 +356,13 @@ public class RecipeDTO {
     public void setDairyfree(byte dairyfree) {
         this.dairyfree = dairyfree;
     }
-    
-    public boolean isFlagged() {
-        return flagged;
+
+    public byte getConsumable() {
+        return consumable;
     }
 
-    public void setFlagged(boolean flagged) {
-        this.flagged = flagged;
+    public void setConsumable(byte consumable) {
+        this.consumable = consumable;
     }
 
     public RecipeDTO() {
@@ -377,10 +377,58 @@ public class RecipeDTO {
                 + mustardfree + ", fishfree=" + fishfree + ", celeryfree=" + celeryfree + ", soyfree=" + soyfree
                 + ", sulfitfree=" + sulfitfree + ", sesamefree=" + sesamefree + ", lupinefree=" + lupinefree
                 + ", judaism=" + judaism + ", islam=" + islam + ", seasonal=" + seasonal + ", dairyfree=" + dairyfree
-                + ", flagged=" + flagged + ", preparationMinutes=" + preparationMinutes + ", cookingMinutes="
+                + ", consumable=" + consumable + ", preparationMinutes=" + preparationMinutes + ", cookingMinutes="
                 + cookingMinutes + ", totalMinutes=" + totalMinutes + ", likes=" + likes + ", healthScore="
                 + healthScore + ", image=" + image + ", imageType=" + imageType + ", sourceURL=" + sourceURL
                 + ", spoonacularURL=" + spoonacularURL + "]";
+    }
+
+    public Map<String, Byte> getRestrictionsMap() {
+        Map<String, Byte> map = Map.ofEntries(
+                Map.entry("vegetarian", vegetarian),
+                Map.entry("vegan", vegan),
+                Map.entry("arachidfree", arachidfree),
+                Map.entry("glutenfree", glutenfree),
+                Map.entry("eggfree", eggfree),
+                Map.entry("nutfree", nutfree),
+                Map.entry("shellfishfree", shellfishfree),
+                Map.entry("seefoodfree", seefoodfree),
+                Map.entry("mustardfree", mustardfree),
+                Map.entry("fishfree", fishfree),
+                Map.entry("celeryfree", celeryfree),
+                Map.entry("soyfree", soyfree),
+                Map.entry("sulfitfree", sulfitfree),
+                Map.entry("sesamefree", sesamefree),
+                Map.entry("lupinefree", lupinefree),
+                Map.entry("judaism", judaism),
+                Map.entry("islam", islam),
+                Map.entry("dairyfree", dairyfree));
+        return map;
+    }
+
+    public Map<String, Byte> getReducedRestrictionsMap() {
+        Map<String, Byte> map = getRestrictionsMap();
+        return map.entrySet().stream()
+            .filter(entry -> entry.getValue() != 1)
+            .collect(Collectors.toMap(
+                Map.Entry::getKey,
+                Map.Entry::getValue) );
+    }
+
+    public Set<String> getRecipeAlimentsNames() {
+        Set<String> alimentsNameInRecipe = new HashSet<>();
+        for (IngredientDTO ingredient : this.getIngredients()) {
+            alimentsNameInRecipe.add(ingredient.getAliment().getNameFr());
+        }
+        return alimentsNameInRecipe;
+    }
+
+    public Set<AlimentDTO> getRecipeAliments() {
+        Set<AlimentDTO> alimentsInRecipe = new HashSet<>();
+        for (IngredientDTO ingredient : this.getIngredients()) {
+            alimentsInRecipe.add(ingredient.getAliment());
+        }
+        return alimentsInRecipe;
     }
 
 }

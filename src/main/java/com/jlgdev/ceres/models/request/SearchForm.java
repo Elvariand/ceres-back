@@ -1,7 +1,6 @@
 package com.jlgdev.ceres.models.request;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -112,6 +111,14 @@ public class SearchForm {
         this.restriction = restriction;
     }
 
+    public String getRestrictionRadio() {
+        return restrictionRadio;
+    }
+
+    public void setRestrictionRadio(String restrictionRadio) {
+        this.restrictionRadio = restrictionRadio;
+    }
+
     public String getSortBy() {
         return sortBy;
     }
@@ -147,7 +154,7 @@ public class SearchForm {
     public Set<String> translateRestrictions() {
         String rawRestrictions = this.getRestriction();
         if (rawRestrictions == null || rawRestrictions.trim().equals("")) {
-            return null;
+            return new HashSet<>();
         }
         String[] arrayRestrictions = rawRestrictions.split(",");
         Set<String> formattedRestrictions = new HashSet<>();
@@ -165,7 +172,7 @@ public class SearchForm {
                 case "vegans":
                 case "veganism":
                 case "veganisme":
-                    formattedRestrictions.add("vagan");
+                    formattedRestrictions.add("vegan");
                     break;
                 case "arachide":
                 case "arachides":

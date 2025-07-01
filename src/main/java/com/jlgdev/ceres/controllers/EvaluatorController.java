@@ -1,10 +1,7 @@
 package com.jlgdev.ceres.controllers;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jlgdev.ceres.models.Utils.SearchUtils;
 import com.jlgdev.ceres.models.dataTransferObject.NoSQL.AlimentDTO;
 import com.jlgdev.ceres.models.dataTransferObject.NoSQL.AllergyDTO;
-import com.jlgdev.ceres.models.dataTransferObject.NoSQL.IngredientDTO;
 import com.jlgdev.ceres.models.dataTransferObject.NoSQL.RecipeDTO;
 import com.jlgdev.ceres.models.mapper.RecipeMapper;
 import com.jlgdev.ceres.services.AlimentService;
@@ -61,16 +58,16 @@ public class EvaluatorController {
     private RecipeDTO evaluateAllergies(RecipeDTO recipe) {
 
         Iterable<AllergyDTO> allAllergies = allergyService.getAllAllergies();
-        Set<AlimentDTO> recipeAliments = getAlimentsFromRecipe(recipe);
+        Set<AlimentDTO> recipeAliments = recipe.getRecipeAliments();
 
         for (AllergyDTO allergy : allAllergies) {
             byte restriction = RecipeDTO.OK;
             for (AlimentDTO aliment : recipeAliments) {
                 String alimentNameFr = aliment.getNameFr();
-                if (isInIterable(allergy.getForbidden(), alimentNameFr)) {
+                if (SearchUtils.isInIterable(allergy.getForbidden(), alimentNameFr)) {
                     restriction = RecipeDTO.FORBIDDEN;
                     break;
-                } else if (isInIterable(allergy.getWarning(), alimentNameFr)) {
+                } else if (SearchUtils.isInIterable(allergy.getWarning(), alimentNameFr)) {
                     restriction = RecipeDTO.WARNING;
                 }
             }
@@ -135,7 +132,7 @@ public class EvaluatorController {
         if (recipe.getVegan() == 1) {
             recipeService.save(recipe);
         } else {
-            Set<AlimentDTO> recipeAliments = getAlimentsFromRecipe(recipe);
+            Set<AlimentDTO> recipeAliments = recipe.getRecipeAliments();
             Set<AlimentDTO> recipeJudaismWarnings = new HashSet<>();
 
             for (AlimentDTO aliment : recipeAliments) {
@@ -190,7 +187,7 @@ public class EvaluatorController {
 
     private RecipeDTO evaluateRecipeVeganism(RecipeDTO recipe) {
 
-        Set<AlimentDTO> recipeAliments = getAlimentsFromRecipe(recipe);
+        Set<AlimentDTO> recipeAliments = recipe.getRecipeAliments();
         byte isVegan = RecipeDTO.OK;
         byte isVegetarian = RecipeDTO.OK;
 
@@ -236,9 +233,9 @@ public class EvaluatorController {
             byte restriction = AlimentDTO.OK;
             String alimentNameFr = aliment.getNameFr();
 
-            if (isInIterable(allergy.getForbidden(), alimentNameFr)) {
+            if (SearchUtils.isInIterable(allergy.getForbidden(), alimentNameFr)) {
                 restriction = AlimentDTO.FORBIDDEN;
-            } else if (isInIterable(allergy.getWarning(), alimentNameFr)) {
+            } else if (SearchUtils.isInIterable(allergy.getWarning(), alimentNameFr)) {
                 restriction = AlimentDTO.WARNING;
             }
 
@@ -357,16 +354,16 @@ public class EvaluatorController {
 
         for (String cat : categoriesPathFr) {
 
-            if (isInIterable(nonVegetarian, cat)) {
+            if (SearchUtils.isInIterable(nonVegetarian, cat)) {
                 vegan = AlimentDTO.FORBIDDEN;
                 vegetarian = AlimentDTO.FORBIDDEN;
                 break;
             }
 
-            if (isInIterable(nonVegan, cat)) {
+            if (SearchUtils.isInIterable(nonVegan, cat)) {
                 vegan = AlimentDTO.FORBIDDEN;
                 if (cat.contains("lait") || cat.contains("yaourt") || cat.contains("yogourt")) {
-                    if (isInIterable(veganMilk, cat)) {
+                    if (SearchUtils.isInIterable(veganMilk, cat)) {
                         vegan = AlimentDTO.OK;
                         break;
                     }
@@ -379,7 +376,7 @@ public class EvaluatorController {
                         break;
                     }
                 }
-            } else if (isInIterable(warningVegan, cat)) {
+            } else if (SearchUtils.isInIterable(warningVegan, cat)) {
                 vegan = AlimentDTO.WARNING;
             }
         }
@@ -407,9 +404,9 @@ public class EvaluatorController {
                 Set<String> categories = aliment.getCategoryPathFr();
 
                 for (String cat : categories) {
-                    if (isInIterable(religion.getForbidden(), cat)) {
+                    if (SearchUtils.isInIterable(religion.getForbidden(), cat)) {
                         restriction = AlimentDTO.FORBIDDEN;
-                    } else if (isInIterable(religion.getWarning(), cat)) {
+                    } else if (SearchUtils.isInIterable(religion.getWarning(), cat)) {
                         restriction = AlimentDTO.WARNING;
                     }
                 }
@@ -433,33 +430,7 @@ public class EvaluatorController {
         }
     }
 
-/**************************************************
- *              Common methods                    *
- **************************************************/
 
-    private Set<AlimentDTO> getAlimentsFromRecipe(RecipeDTO recipe) {
-        Set<AlimentDTO> recipeAliments = new HashSet<>();
-        List<IngredientDTO> recipeIngredients = recipe.getIngredients();
 
-        for (IngredientDTO ingredient : recipeIngredients) {
-            recipeAliments.add(ingredient.getAliment());
-        }
 
-        return recipeAliments;
-    }
-
-    private boolean isInIterable(Iterable<String> haystack, String needle) {
-        if (haystack == null || needle == null) {
-            return false;
-        }
-        for (String hay : haystack) {
-
-            Pattern pattern = Pattern.compile("(.*(\\s|\'))?\\b" + hay + "(s|x)?\\b(\\s.*)?");
-            Matcher matcher = pattern.matcher(needle);
-            if (matcher.matches()) {
-                return true;
-            }
-        }
-        return false;
-    }
 }

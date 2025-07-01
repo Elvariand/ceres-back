@@ -63,7 +63,7 @@ public class RecipeController {
 
     @PostMapping("/search")
     public ResponseEntity<List<RecipeDTO>> getFilteredRecipes(@RequestBody SearchForm searchForm) {
-
+        
         String title = searchForm.getTitle() ;
         String ingredients = searchForm.getFormattedString(searchForm.getIngredients()) ;
         String allIngredient = searchForm.getAllIngredient() ;
@@ -72,10 +72,12 @@ public class RecipeController {
         int cookingTime = searchForm.getCookingTime() ;
         int totalTime = searchForm.getTotalTime() ;
         String restriction = searchForm.getRestriction() ;
+        String restrictionRadio = searchForm.getRestrictionRadio() ;
         String sortBy = searchForm.getSortBy() ;
         int serving = searchForm.getServing() ;
 
         System.out.println("##########################################################");
+        System.out.println("title = " + title);
         System.out.println("ingredients = " + ingredients);
         System.out.println("allIngredient = " + allIngredient);
         System.out.println("withoutIngredient = " + withoutIngredient);
@@ -83,59 +85,12 @@ public class RecipeController {
         System.out.println("cookingTime = " + cookingTime);
         System.out.println("totalTime = " + totalTime);
         System.out.println("restriction = " + restriction);
+        System.out.println("restrictionRadio = " + restrictionRadio);
         System.out.println("sortBy = " + sortBy);
         System.out.println("serving = " + serving);
         System.out.println("##########################################################");
-        
-        String queryString = "{ \"$and\": [\n";
-        // String queryString = "{ \"ingredients.aliment.nameEn\": { \"$in\" : [/chicken/, /beef/] } }";
 
-        if (title != null) {
-            queryString += "\t{\"titleFr\" : /" + title + "/i },\n";
-        }
-
-        if (ingredients != null) {
-            queryString += "\t{\"ingredients.aliment.nameFr\" : { " + (allIngredient.toLowerCase().equals("tous") ? "\"$all\"" : "\"$in\"") + ": [ " + ingredients + " ] } },\n";
-        }
-
-        if (withoutIngredient != null) {
-            queryString += "\t{\"ingredients.aliment.nameFr\" : { \"$nin\": [ " + withoutIngredient + " ] } },\n";
-        }
-
-        if (preparationTime > -1) {
-            queryString += "\t{\"preparationMinutes\" : { $lte : " + preparationTime + " } },\n";
-        }
-
-        if (cookingTime > -1) {
-            queryString += "\t{\"cookingMinutes\" : { $lte : " + cookingTime + " } },\n";
-        }
-
-        if (totalTime > -1) {
-            queryString += "\t{\"totalMinutes\" : { $lte : " + totalTime + " } },\n";
-        }
-
-        queryString = queryString.trim();
-        int queryLength = queryString.length();
-
-        if (queryLength > 1 && queryString.charAt(queryLength-1) == ',') {
-            queryString = queryString.substring(0, queryLength-1);
-        }
-
-        queryString = queryString + "\n\t]\n}";
-
-        System.out.println("=================================================");
-        System.out.println(queryString);
-        System.out.println("=================================================");
-
-        BasicQuery query = new BasicQuery(queryString);
-
-
-        List<RecipeDTO> filteredRecipes = mongoTemplate.find(query, RecipeDTO.class);
-        
-        System.out.println("nombre de recettes trouvees : " + filteredRecipes.size());
-        System.out.println(filteredRecipes.size() > 0 ? filteredRecipes.get(0).getTitleFr() : "none");
-        // return filteredRecipes;
-        return ResponseEntity.ok(filteredRecipes);
+        return ResponseEntity.ok(recipeService.searchByForm(searchForm));
     }
     
 }
