@@ -1,0 +1,29 @@
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "4200:80"
+    networks:
+      - ceres-network
+
+volumes:
+  sql_data:
+  mongo_data:
+
+networks:
+  marchaud-network:
+    driver: bridge
+
+clean:
+  stage: deploy
+  script:
+    - docker compose -f docker-compose.yaml down -v
+  when: manual
+  only:
+    - main
+  tags:
+    - runner-local

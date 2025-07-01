@@ -1,0 +1,155 @@
+stages:
+  - prepare
+  - test
+  - deploy
+  - secret-detection
+
+variables:
+  SECRET_DETECTION_ENABLED: 'true'
+  GIT_SUBMODULE_STRATEGY: none
+
+prepare:
+  stage: prepare
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache git openssh
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo "$SSH_PRIVATE_KEY_F" | base64 -d > ~/.ssh/id_rsa_front
+    - echo "$SSH_PRIVATE_KEY_B" | base64 -d > ~/.ssh/id_rsa_back
+    - chmod 600 ~/.ssh/id_rsa_*
+    - ssh-keyscan github.com >> ~/.ssh/known_hosts
+    - eval "$(ssh-agent -s)"
+    - ssh-add ~/.ssh/id_rsa_front
+    - ssh-add ~/.ssh/id_rsa_back
+
+    - |
+      cat > ~/.ssh/config <<EOF
+      Host github.com-frontend
+        HostName github.com
+        User git
+        IdentityFile ~/.ssh/id_rsa_front
+
+      Host github.com-backend
+        HostName github.com
+        User git
+        IdentityFile ~/.ssh/id_rsa_back
+      EOF
+    - chmod 600 ~/.ssh/config
+
+    - git config --global url."git@github.com-backend:".insteadOf "https://github.com/Elvariand/ceres-back"
+    - git config --global url."git@github.com-frontend:".insteadOf "https://github.com/Elvariand/ceres-front"
+    - git submodule sync
+    - git submodule update --init --recursive
+  script:
+    - echo "$BACK_SECRET" | base64 -d > .env
+    - echo ".env généré :"
+  artifacts:
+    paths:
+      - .env
+      - backend/
+      - frontend/
+
+deploy_local:
+  stage: deploy
+  image: docker:latest
+  variables:
+    DOCKER_HOST: unix:///var/run/docker.sock
+  script:
+    - docker info
+    - docker compose -f docker-compose.yaml --env-file .env up -d --build
+  only:
+    - main
+  tags:
+    - runner-local
+  dependencies:
+    - prepare
+
+test_backend:
+  stage: test
+  image: maven:3.9.5-eclipse-temurin-21
+  script:
+    - cd backend
+    - mvn test 
+  dependencies:
+    - prepare
+  artifacts:
+    reports:
+      junit: backend/target/surefire-reports/TEST-*.xml
+    paths:
+      - backend/target/surefire-reports/
+  only:
+    - main
+
+
+
+include:
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
+  version: '3.8'
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      MYSQL_HOST: ${SQL_HOST}
+      MYSQL_PORT: ${SQL_PORT}
+      SPRING_DATASOURCE_URL: ${SPRING_DATA_URL}
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      SPRING_DATA_MONGODB_URI: mongodb+srv://${MONGO_ROOT}:${MONGO_ROOT_PW}@${MONGO_HOST}/?retryWrites=true&w=majority&appName=${MONGO_APP_NAME}
+
+    networks:
+      - ceres-network
+
+  mysql:
+    image: mysql
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    ports:
+      - "3307:3306"
+    volumes:
+      - sql_data:/var/lib/mysql
+    networks:
+      - ceres-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 30s
+      retries: 5
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: ${MONGO_DB}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PW}
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - ceres-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 60s
+      timeout: 10s
+      retries: 5
+      start_period: 15s
